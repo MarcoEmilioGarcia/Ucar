@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="600dp"
+    android:layout_height="670dp"
     android:id="@+id/item"
     >
 
@@ -23,15 +23,17 @@
         android:id="@+id/btnPerfil"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/white"
+        android:background="@drawable/background_circle"
+        android:clipToOutline="true"
         android:scaleType="centerCrop"
         android:src="@drawable/image_photo"
         app:layout_constraintBottom_toBottomOf="@+id/perfil"
         app:layout_constraintStart_toStartOf="@+id/perfil"
-        app:layout_constraintTop_toTopOf="@+id/perfil" />
+        app:layout_constraintTop_toTopOf="@+id/perfil"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/nombreUsuario"
@@ -39,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="nombre_usuario"
+        android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnPerfil"
         app:layout_constraintStart_toEndOf="@+id/btnPerfil"
@@ -53,19 +56,21 @@
         app:layout_constraintStart_toStartOf="@+id/perfil"
         app:layout_constraintTop_toBottomOf="@+id/perfil"
         android:textSize="15sp"
+        android:textColor="@color/grey"
         android:paddingLeft="20dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"/>
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:srcCompat="@drawable/image_photo"
-        android:scaleType="center" />
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/textView3"
@@ -82,19 +87,96 @@
 
     <ImageButton
         android:id="@+id/btnLike"
-        android:layout_width="56dp"
-        android:layout_height="51dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/transparent"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:srcCompat="@drawable/image_photo" />
+        app:srcCompat="@drawable/icon_like"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/btnSend"
-        android:layout_width="56dp"
-        android:layout_height="51dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLike"
-        app:srcCompat="@drawable/image_photo" />
+        app:srcCompat="@drawable/icon_send"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <View
+        android:id="@+id/comentar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/white"
+        android:elevation="2dp"
+        android:shadowColor="#5C5C5C"
+        app:layout_constraintEnd_toEndOf="@id/item"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/item"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:strokeColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/imageUser"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/background_circle"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/comentar"
+        app:layout_constraintStart_toStartOf="@+id/comentar"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+    <EditText
+        android:id="@+id/editTextComentario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:ems="10"
+        android:hint="Escribe aqui..."
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/comentar"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+        app:layout_constraintStart_toEndOf="@+id/imageUser"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/transparent"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/comentar"
+        app:layout_constraintEnd_toEndOf="@+id/comentar"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:srcCompat="@drawable/icon_comment"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comentarios"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/white"
+        android:elevation="2dp"
+        android:shadowColor="#5C5C5C"
+        app:layout_constraintEnd_toEndOf="@id/item"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/item"
+        app:layout_constraintTop_toBottomOf="@+id/comentar"
+        app:strokeColor="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
