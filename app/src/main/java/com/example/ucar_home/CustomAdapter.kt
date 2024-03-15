@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
+/*
 class CustomAdapter(private val context: Context, private val images: List<Int>) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
@@ -55,4 +56,7 @@ class CustomAdapter(private val context: Context, private val images: List<Int>)
         var imageView1: ImageView = itemView.findViewById(R.id.imageView)
         var imageView2: ImageView = itemView.findViewById(R.id.imageView2)
         var imageView3: ImageView = itemView.findViewById(R.id.imageView3) }
+
+
 }
+*/
