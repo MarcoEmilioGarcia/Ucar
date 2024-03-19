@@ -29,12 +29,14 @@
         android:layout_height="60dp"
         android:background="@color/white"
         android:elevation="8dp"
+        app:itemBackground="@drawable/bg_bottom_navigation_item"
         app:itemIconTint="@color/bottom_navigation_colors"
-        app:itemRippleColor="#00FFFFFF"
+        app:itemRippleColor="#00000000"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation" />
+        app:menu="@menu/bottom_navigation"
+        style="@style/AppBottomNavigationView"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
