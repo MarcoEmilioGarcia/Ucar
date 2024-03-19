@@ -1,6 +1,6 @@
 package com.example.ucar_home
 
-object DataProvider {
+object DataProvider {/*
     val dataLists: List<Pair<String, List<List<List<Any>>>>> = listOf(
         Pair("Cine Negro", listOf(
             listOf(
@@ -56,5 +56,5 @@ object DataProvider {
                 listOf(R.drawable.apartamento, R.drawable.apartamento2, "El apartamento", "9.1", "C.C.Baxter, empleado en una compañía de seguros, intenta ascender en la empresa prestando la llave de su apartamento para las citas de sus jefes.","https://youtu.be/25OjH_B-Nfw?si=1hTfkdSlTk9Ei7SW")
             ))
         ),
-    )
+    )*/
 }
