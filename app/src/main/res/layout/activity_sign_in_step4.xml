@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignInStep4Activity">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--COPLETE BAR-->
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/background_gradient_horizontal" />
+
+        <!--GO BACK BUTTON-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageBtnGoBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/go_back_button_black"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="40dp"
+                android:layout_weight="1"
+                android:text="@string/step4"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/grey"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="40dp"
+            android:text="@string/title4"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="40dp"
+            android:text="@string/subtitle4"
+            android:textSize="16sp" />
+
+        <!--BIBLIOGRAPHY-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="40dp">
+
+            <EditText
+                android:id="@+id/editTextBibliography"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--CHANGE SETTINGS-->
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="131dp"
+            android:layout_marginEnd="60dp"
+            android:text="@string/change_preferences"
+            android:textAlignment="center" />
+
+        <!--CREATE BUTTON-->
+        <Button
+            android:id="@+id/btnCreate"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@color/primaryColor"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="@string/create"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:cornerRadius="15dp"
+            app:strokeColor="@color/white" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

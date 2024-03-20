@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LogInActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewLoginUser"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="50dp"
+        android:background="@color/white"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            >
+
+            <!--GO BACK BUTTON-->
+            <ImageButton
+                android:id="@+id/imageBtnGoBack"
+                android:layout_width="wrap_content"
+                android:layout_height="65dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/go_back_button_black"
+                tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+            <!--LOGO-->
+            <ImageView
+                android:id="@+id/imageLogo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/logo_app_blue" />
+
+            <!--USERNAME-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="40dp">
+
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/icon_mail"
+                    android:drawablePadding="10dp"
+                    android:hint="@string/email"
+                    android:importantForAutofill="no"
+                    android:inputType="textEmailAddress"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--PASSWORD-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/icon_lock"
+                    android:drawablePadding="10dp"
+                    android:hint="@string/password"
+                    android:importantForAutofill="no"
+                    android:inputType="textPassword"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textViewResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/warning"
+                android:textSize="15sp"
+                android:visibility="invisible" />
+
+            <!--BUTON LOGIN-->
+            <Button
+                android:id="@+id/btnLogin"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="60dp"
+                android:backgroundTint="@color/primaryColor"
+                android:elevation="2dp"
+                android:shadowColor="#5C5C5C"
+                android:text="@string/login"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:strokeColor="#FFFFFF" />
+
+            <!--BUTON FORGOT PASSWORD-->
+            <Button
+                android:id="@+id/btnForgotPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="40dp"
+                android:backgroundTint="#00FFFFFF"
+                android:elevation="2dp"
+                android:shadowColor="#00FFFFFF"
+                android:text="@string/forgot_password"
+                android:textColor="@color/blue"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:cornerRadius="5dp"
+                app:strokeColor="#00FFFFFF" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_gradient"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <!--LOGO-->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/logo_app"
+            tools:ignore="ImageContrastCheck" />
+
+        <!--SUBTITLE-->
+        <TextView
+            android:id="@+id/textViewSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="60dp"
+            android:text="@string/subtitle"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
+
+        <!--DESCRIPTION-->
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="85dp"
+            android:layout_marginEnd="60dp"
+            android:text="@string/description"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:ignore="TextContrastCheck" />
+
+        <!--SIGN IN GOOGLE BUTTON-->
+        <Button
+            android:id="@+id/btnLoginGoogle"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="@string/logingoogle"
+            android:textColor="@color/darkgrey"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:cornerRadius="15dp"
+            app:strokeColor="@color/white" />
+
+        <!--SIGN IN FACEBOOK BUTTON-->
+        <Button
+            android:id="@+id/btnLoginFacebook"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="@string/loginfacebook"
+            android:textColor="@color/darkgrey"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:cornerRadius="15dp"
+            app:strokeColor="@color/white" />
+
+        <!--SIGN IN MANUAL BUTTON-->
+        <Button
+            android:id="@+id/btnLoginManual"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="@string/login_by_email"
+            android:textColor="@color/darkgrey"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:cornerRadius="15dp"
+            app:strokeColor="@color/white" />
+
+        <!--SIGN IN MANUAL BUTTON-->
+        <Button
+            android:id="@+id/btnSingInManual"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="#00FFFFFF"
+            android:elevation="2dp"
+            android:text="@string/create_new_account"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:cornerRadius="15dp"
+            app:strokeColor="#00FFFFFF"
+            tools:ignore="TextContrastCheck" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,37 @@
         android:theme="@style/Theme.Ucar_Home"
         tools:targetApi="31">
         <activity
+            android:name=".SignInGoogleStep1"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep4Activity"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep3Activity"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep2Activity"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogInActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".addCarActivity"
             android:exported="false" />
         <activity
@@ -24,11 +55,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

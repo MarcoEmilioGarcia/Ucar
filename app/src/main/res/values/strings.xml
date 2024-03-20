@@ -10,4 +10,63 @@
     <string name="maps">Maps</string>
     <string name="search">Search</string>
     <string name="chat">Chat</string>
+    <string name="prefs_file">com.marcoYLuis.Ucar.PREFERENCE_FILE_KEY</string>
+    <string name="default_web_client_id">504424914935-vqhe6pm8n0pvoi7sba368665v0uq5ct6.apps.googleusercontent.com</string>
+
+    <!--DATA-->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone number (Optional)</string>
+    <string name="login">LOGIN</string>
+
+    <!--LOGIN-->
+    <string name="logingoogle">LOGIN WITH GOOGLE</string>
+    <string name="loginfacebook">LOGIN WITH FACEBOOK</string>
+    <string name="loginuser">LOGIN BY USERNAME</string>
+    <string name="sing_in">SIGN IN</string>
+    <string name="forgot_password">Have you forgotten the password?</string>
+
+    <!--FORGOT PASSWORD-->
+    <string name="sendPassword">Write your email. We send you a mail with the new password. Then you can change it in settings.</string>
+    <string name="newpassword">We already send you a new password, check you email account. This can take few minutes.</string>
+    <string name="send">SEND</string>
+
+    <!--SIGN IN-->
+    <string name="subtitle">Ready to be part of the car community?</string>
+    <string name="description">By clicking "Login", you agree to our terms and conditions. Find out more about how we process your data in our privacy policy and cookie policy.</string>
+    <string name="sing_in_google">SIGN IN WITH GOOGLE</string>
+    <string name="sing_in_facebook">SIGN IN WITH FACEBOOK</string>
+    <string name="sing_in_manual">SIGN IN 4 STEPS</string>
+    <string name="change_preferences">Then you can change your preferences in settings</string>
+    <string name="next">NEXT</string>
+
+    <!--SIGN IN 1-->
+    <string name="step1">Step 1</string>
+    <string name="title1">Create new account:</string>
+    <string name="subtitle1">Select a username for identify your self in the app and add a password for protect your account. </string>
+
+    <!--SIGN IN 2-->
+    <string name="step2">Step 2</string>
+    <string name="title2">Verify your account:</string>
+    <string name="subtitle2">Select an email or phone number for verify your account in the app. </string>
+
+    <!--SIGN IN 3-->
+    <string name="step3">Step 3</string>
+    <string name="title3">Make other users recognize you:</string>
+    <string name="subtitle3">Choose a photo that represents you and put your name, so that everyone can recognize you. </string>
+    <string name="btncamera">Camera</string>
+    <string name="btngaleria">Galery</string>
+
+    <!--SIGN IN 1-->
+    <string name="step4">Step 4</string>
+    <string name="title4">Last Step!</string>
+    <string name="subtitle4">Do you want to add something to your bibliography? (Optional) </string>
+    <string name="bibliography">Bibliography</string>
+    <string name="create">CREATE ACCOUNT</string>
+    <string name="todo">TODO</string>
+    <string name="create_new_account">create new account</string>
+    <string name="login_by_email">LOGIN BY EMAIL</string>
 </resources>
