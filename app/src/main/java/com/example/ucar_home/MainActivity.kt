@@ -98,10 +98,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         val imageUser: ImageButton = findViewById(R.id.btnProfile)
-        /*imageUser.setImageDrawable(GlobalVariables.usuario!!.getImage()!!.drawable)
+        //imageUser.setImageDrawable(GlobalVariables.usuario!!.getImage()!!.drawable)
         imageUser.setOnClickListener {
             val intent = Intent(this,ProfileActivity::class.java)
             startActivity(intent)
-        }*/
+        }
     }
 }
