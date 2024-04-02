@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.ucar_login.databinding.ActivityForgotPasswordBinding
+import com.example.ucar_home.R
+import com.example.ucar_home.databinding.ActivityForgotPasswordBinding
+
 
 class ForgotPasswordActivity : AppCompatActivity() {
 

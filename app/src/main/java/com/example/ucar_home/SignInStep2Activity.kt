@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.example.ucar_login.databinding.ActivitySignInStep2Binding
+import com.example.ucar_home.R
+import com.example.ucar_home.databinding.ActivitySignInStep2Binding
+
 
 class SignInStep2Activity : AppCompatActivity() {
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "63242411643",
+    "project_id": "ucar-fca07",
+    "storage_bucket": "ucar-fca07.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63242411643:android:6cc125f046a6b8ef584cde",
+        "android_client_info": {
+          "package_name": "com.example.ucar_home"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeV_Ae7vYMBWr6weQ539gGX10ogIIEsbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

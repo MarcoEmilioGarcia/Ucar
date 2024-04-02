@@ -2,7 +2,8 @@ import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ucar_login.databinding.ActivitySignInStep4Binding
+import com.example.ucar_home.databinding.ActivitySignInStep4Binding
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 

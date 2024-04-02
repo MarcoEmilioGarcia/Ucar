@@ -1,5 +1,6 @@
 package com.example.ucar_home
 
+import SignInStep4Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -18,7 +19,7 @@ class addCarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_car)
 
 
-
+/*
 
     //RECOGER IMAGENES
     //RECOGER TEXTO DESCRIPTIVO
@@ -91,6 +92,6 @@ class addCarActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 100
-    }
+    }*/
 }
 }
