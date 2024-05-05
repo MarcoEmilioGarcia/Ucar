@@ -1,4 +1,4 @@
-package com.example.ucar_login
+package com.example.ucar_home
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivitySignInStep1Binding
+import  com.example.ucar_home.LogInActivity
 
 
 class SignInStep1Activity : AppCompatActivity() {

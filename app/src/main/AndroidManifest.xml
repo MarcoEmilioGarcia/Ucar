@@ -23,27 +23,28 @@
         <activity
             android:name="SignInStep4Activity"
             android:exported="false" />
+
         <activity
             android:name="SignInStep3Activity"
             android:exported="false" />
-        <activity
-            android:name="com.example.ucar_login.SignInStep2Activity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.ucar_login.SignInStep1Activity"
-            android:exported="false" />
-
-
 
         <activity
-            android:name="com.example.ucar_login.ForgotPasswordActivity"
+            android:name="SignInStep2Activity"
             android:exported="false" />
 
         <activity
-            android:name="com.example.ucar_login.HomeActivity"
+            android:name="SignInStep1Activity"
+            android:exported="false" />
+
+        <activity
+            android:name="ForgotPasswordActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="HomeActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.ucar_login.LogInActivity"
+            android:name="LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
