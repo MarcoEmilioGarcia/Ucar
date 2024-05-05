@@ -1,6 +1,8 @@
 package com.example.ucar_home
 
 import SignInGoogleStep1
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -9,20 +11,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.preference.PreferenceManager.OnActivityResultListener
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivityLogInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 
@@ -45,7 +41,6 @@ class LogInActivity : AppCompatActivity() {
 
       session()
 
-
         binding = ActivityLogInBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -53,8 +48,7 @@ class LogInActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
 
 
-
-        //LOGIN GOOGLE
+        //LOGIN GOOGLE ------------------------------------------------------------------------------NO FUNCIONA
         binding.btnLoginGoogle.setOnClickListener {
             val googleConf =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -65,25 +59,12 @@ class LogInActivity : AppCompatActivity() {
             startActivityForResult(googleClient.signInIntent, GOOGLE_SIGN_IN)
         }
 
-        //LOGIN FACEBOOK
-        binding.btnLoginFacebook.setOnClickListener {
 
-
-        }
-
-        //SING IN MANUAL, registrarse
-        binding.btnSingInManual.setOnClickListener {
-            val intent = Intent(this, SignInStep1Activity::class.java)
-            startActivity(intent)
-
-
-        }
-
-
-    // ---------------------------------- AUTHENTICATION ----------------------------------
+    // ---------------------------------- AUTHENTICATION ------------------------------------------
         //LOGIN MANUAL
         binding.btnLoginManual.setOnClickListener {
             binding.viewLoginUser.visibility = View.VISIBLE
+            binding.viewLoginUser.alpha=1f
 
             // Animación de escala en X
             val scaleX = ObjectAnimator.ofFloat(binding.viewLoginUser, View.SCALE_X, 0f, 1f)
@@ -123,7 +104,9 @@ class LogInActivity : AppCompatActivity() {
                                 dialog.show()
                             }
                         }
-                    }else{ Log.d(ContentValues.TAG, "Debes rellenar los campos") }
+                    }else{
+                        Log.d(ContentValues.TAG, "Debes rellenar los campos")
+                        }
                 }
             } catch (e: Exception) {
                 Log.d(ContentValues.TAG, "Error en la autentificacion del usuario")
@@ -136,10 +119,17 @@ class LogInActivity : AppCompatActivity() {
 
             // Crear un objeto de animación de transparencia
             val fadeOut = ObjectAnimator.ofFloat(binding.viewLoginUser, View.ALPHA, 1f, 0f)
-            fadeOut.duration = 1000 // Duración de la animación en milisegundos
+            fadeOut.duration = 900 // Duración de la animación en milisegundos
 
             // Iniciar la animación
             fadeOut.start()
+
+            // Listener para saber cuándo finaliza la animación
+            fadeOut.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    binding.viewLoginUser.visibility = View.GONE
+                }
+            })
         }
 
         //FORGOT PASSWORD BUTTON
@@ -148,6 +138,59 @@ class LogInActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+    // ---------------------------------- CREATE ACCOUNT ------------------------------------------
+        //CREATE ACCOUNT
+        binding.btnSingIn.setOnClickListener {
+            binding.viewCreateAccount.visibility=View.VISIBLE
+            binding.viewCreateAccount.alpha=1f
+
+            // Animación de escala en X
+            val scaleX = ObjectAnimator.ofFloat(binding.viewCreateAccount, View.SCALE_X, 0f, 1f)
+            scaleX.duration = 500
+
+            // Animación de escala en Y
+            val scaleY = ObjectAnimator.ofFloat(binding.viewCreateAccount, View.SCALE_Y, 0f, 1f)
+            scaleY.duration = 500
+
+            // Establecer el punto central de la vista como punto de escala
+            binding.viewCreateAccount.pivotX = (binding.viewCreateAccount.width / 2).toFloat()
+            binding.viewCreateAccount.pivotY = (binding.viewCreateAccount.height / 2).toFloat()
+
+            // Crear un conjunto de animaciones y ejecutarlas
+            val animatorSet = AnimatorSet()
+            animatorSet.play(scaleX).with(scaleY)
+            animatorSet.start()
+        }
+
+        //GO BACK BUTTON 2
+        binding.imageBtnGoBack2.setOnClickListener {
+
+            // Crear un objeto de animación de transparencia
+            val fadeOut = ObjectAnimator.ofFloat(binding.viewCreateAccount, View.ALPHA, 1f, 0f)
+            fadeOut.duration = 900 // Duración de la animación en milisegundos
+
+            // Iniciar la animación
+            fadeOut.start()
+
+            // Listener para saber cuándo finaliza la animación
+            fadeOut.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    binding.viewCreateAccount.visibility = View.GONE
+                }
+            })
+        }
+
+        //SIGN IN GOOGLE ----------------------------------------------------------------------------CREAR registro con google
+        binding.btnSignInGoogle.setOnClickListener {
+            //Añadir funcionalidad al boton para poder registrarse con Google
+        }
+
+        //SING IN MANUAL, registrarse
+        binding.btnSignInManual.setOnClickListener {
+            val intent = Intent(this, SignInStep1Activity::class.java)
+            startActivity(intent)
+        }
     }
 
 

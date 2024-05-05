@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ucar_login.LogInActivity">
+    tools:context="com.example.ucar_home.LogInActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewLoginUser"
@@ -153,6 +153,95 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewCreateAccount"
+        android:background="@color/white"
+        android:elevation="5dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="195dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="140dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <!--GO BACK BUTTON-->
+        <ImageButton
+            android:id="@+id/imageBtnGoBack2"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/go_back_button_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+
+        <TextView
+            android:id="@+id/textViewCreate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_your_new_account"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="23sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnSignInGoogle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageBtnGoBack2" />
+
+        <!--SIGN IN GOOGLE BUTTON-->
+        <Button
+            android:id="@+id/btnSignInGoogle"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/primaryColor"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="@string/create_with_google"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnSignInManual"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="#FFFFFF" />
+
+        <!--SIGN IN MANUAL BUTTON-->
+        <Button
+            android:id="@+id/btnSignInManual"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/primaryColor"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="@string/create_account"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="#FFFFFF"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="90dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat2"
         android:layout_width="0dp"
@@ -161,8 +250,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <!--LOGO-->
@@ -205,7 +296,7 @@
             android:textSize="16sp"
             tools:ignore="TextContrastCheck" />
 
-        <!--SIGN IN GOOGLE BUTTON-->
+        <!--LOGIN GOOGLE BUTTON-->
         <Button
             android:id="@+id/btnLoginGoogle"
             style="?attr/materialButtonOutlinedStyle"
@@ -224,26 +315,7 @@
             app:cornerRadius="15dp"
             app:strokeColor="@color/white" />
 
-        <!--SIGN IN FACEBOOK BUTTON-->
-        <Button
-            android:id="@+id/btnLoginFacebook"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="60dp"
-            android:backgroundTint="@color/white"
-            android:elevation="2dp"
-            android:shadowColor="#5C5C5C"
-            android:text="@string/loginfacebook"
-            android:textColor="@color/darkgrey"
-            android:textSize="18sp"
-            android:textStyle="normal"
-            app:cornerRadius="15dp"
-            app:strokeColor="@color/white" />
-
-        <!--SIGN IN MANUAL BUTTON-->
+        <!--LOGIN MANUAL BUTTON-->
         <Button
             android:id="@+id/btnLoginManual"
             style="?attr/materialButtonOutlinedStyle"
@@ -264,7 +336,7 @@
 
         <!--SIGN IN MANUAL BUTTON-->
         <Button
-            android:id="@+id/btnSingInManual"
+            android:id="@+id/btnSingIn"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="55dp"

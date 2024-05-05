@@ -69,4 +69,8 @@
     <string name="todo">TODO</string>
     <string name="create_new_account">create new account</string>
     <string name="login_by_email">LOGIN BY EMAIL</string>
+    <string name="sign_in_with_google">SIGN IN WITH GOOGLE</string>
+    <string name="create_account">CREATE ACCOUNT</string>
+    <string name="create_with_google">CREATE WITH GOOGLE</string>
+    <string name="create_your_new_account">Create your new account:</string>
 </resources>
