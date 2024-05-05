@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <!--COPLETE BAR-->
+
         <View
             android:id="@+id/view2"
             android:layout_width="match_parent"
@@ -70,23 +71,30 @@
             android:text="@string/subtitle4"
             android:textSize="16sp" />
 
-        <!--BIBLIOGRAPHY-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="40dp">
 
-            <EditText
-                android:id="@+id/editTextBibliography"
+            <!--BIBLIOGRAPHY-->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="40dp"
+                app:layout_constraintTop_toBottomOf="@id/textView4"
+                app:layout_constraintStart_toStartOf="parent">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/editTextBibliography"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLines="5"
+                    android:gravity="top|start" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         <!--CHANGE SETTINGS-->
         <TextView
@@ -118,7 +126,6 @@
             app:cornerRadius="15dp"
             app:strokeColor="@color/white" />
 
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

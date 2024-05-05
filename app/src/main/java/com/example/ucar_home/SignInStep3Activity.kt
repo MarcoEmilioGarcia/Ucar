@@ -1,5 +1,6 @@
 package com.example.ucar_home
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
@@ -18,6 +19,8 @@ class SignInStep3Activity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInStep3Binding
     private var imageUri: Uri? = null
 
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInStep3Binding.inflate(layoutInflater)
@@ -32,7 +35,7 @@ class SignInStep3Activity : AppCompatActivity() {
                 uploadImageToFirebaseStorage()
             } else {
                 binding.textViewResult.setTextColor(ContextCompat.getColor(this, R.color.warning))
-                binding.textViewResult.text = "You have to select an image and put your name."
+                binding.textViewResult.text = "You have to put your name."
             }
         }
     }
@@ -82,6 +85,7 @@ class SignInStep3Activity : AppCompatActivity() {
             }
         }
     }
+
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 100
