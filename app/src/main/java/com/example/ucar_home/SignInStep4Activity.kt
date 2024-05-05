@@ -1,6 +1,7 @@
 package com.example.ucar_home
 
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +36,11 @@ class SignInStep4Activity : AppCompatActivity() {
                             val bibliography = binding.editTextBibliography.text.toString()
                             Log.d(ContentValues.TAG, "User registered successfully.")
                             saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography)
+                            variables.Email == email
+                            variables.Password == password
+
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
                         } else {
                             Log.d(ContentValues.TAG, "User registration failed.")
                         }
@@ -55,9 +61,9 @@ class SignInStep4Activity : AppCompatActivity() {
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-
         val user = User(username, email, phoneNumber, name, imageUrl, bibliography)
         uid?.let {
+
             database.child("users").child(it).setValue(user)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "User data saved successfully.")
