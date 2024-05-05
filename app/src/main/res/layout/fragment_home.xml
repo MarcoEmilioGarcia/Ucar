@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comentarios"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="HOMEEEEEE" />
+        android:layout_height="80dp"
+        android:backgroundTint="@color/white"
+        android:elevation="2dp"
+        android:shadowColor="#5C5C5C" />
 
 </FrameLayout>
