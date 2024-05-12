@@ -8,8 +8,8 @@ import java.net.URL
 object variables {
 
 
-    const val Email: String = ""
-    const val Password: String = ""
+    var Email: String = ""
+    var Password: String = ""
 
 
 }

@@ -89,10 +89,10 @@ class LogInActivity : AppCompatActivity() {
                         auth.signInWithEmailAndPassword(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString()).addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 Log.d(ContentValues.TAG, "Autenticacion del ususario Correcta")
-                                variables.Email == binding.editTextEmail.text.toString()
-                                variables.Password == binding.editTextPassword.text.toString()
+                                variables.Email = binding.editTextEmail.text.toString()
+                                variables.Password = binding.editTextPassword.text.toString()
 
-                                val intent = Intent(this, HomeActivity::class.java)
+                                val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                             }
                             else {

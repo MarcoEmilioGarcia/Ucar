@@ -36,8 +36,10 @@ class SignInStep4Activity : AppCompatActivity() {
                             val bibliography = binding.editTextBibliography.text.toString()
                             Log.d(ContentValues.TAG, "User registered successfully.")
                             saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography)
-                            variables.Email == email
-                            variables.Password == password
+                            variables.Email = email
+                            variables.Password = password
+
+
 
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)

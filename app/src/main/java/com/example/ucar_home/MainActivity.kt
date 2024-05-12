@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.FirebaseStorage
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val searchFragment = SearchFragment()
     private val mapsFragment = MapsFragment()
     private val chatFragment = ChatFragment()
+    private lateinit var auth: FirebaseAuth
 
     // Mapa para mantener las referencias a los íconos originales
     private val originalIconsMap = mutableMapOf<Int, Int>()
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        auth = FirebaseAuth.getInstance()
 
         // Inicializar los íconos originales
         originalIconsMap[R.id.homeFragment] = R.drawable.icon_home
@@ -114,53 +117,73 @@ class MainActivity : AppCompatActivity() {
         val imageUser: ImageButton = findViewById(R.id.btnProfile)
 
         val userReference = FirebaseDatabase.getInstance().getReference("users")
-        val email = variables.Email // correo electrónico del usuario
-        val email2 = "elvira@gmail.com"
+
+
 
         Log.d(ContentValues.TAG, "traza prueba 2")
+        try {
+            Log.d(ContentValues.TAG, variables.Email)
+            Log.d(ContentValues.TAG, variables.Password)
+            if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()){
+                Log.d(ContentValues.TAG, "efectivamente")
 
+                auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener(this) { task ->
+                   // Log.d(ContentValues.TAG, "efectivamente 2")
 
-        Log.d(ContentValues.TAG, "Email en cuestion $variables.Email")
-        Log.d(ContentValues.TAG, "Email en cuestion2 $email")
-        Log.d(ContentValues.TAG, "Email en cuestion3 $email2")
-        userReference.orderByChild("email").equalTo(email2).addListenerForSingleValueEvent(object :
-            ValueEventListener {
+                    if (task.isSuccessful) {
+                        Log.d(ContentValues.TAG, "Identificacion adecuada")
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Obtener el primer hijo de dataSnapshot (si existe)
-                Log.d(ContentValues.TAG, "Traza 3")
-                val userSnapshot = dataSnapshot.children.firstOrNull()
+                        userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object :
+                            ValueEventListener {
 
-                // Verificar si se encontró algún resultado
-                if (userSnapshot != null) {
-                    Log.d(ContentValues.TAG, "Traza 4")
-                    // Obtener el usuario desde el primer hijo
-                    val user = userSnapshot.getValue(User::class.java)
-                    user?.imageUrl?.let { imageUrl ->
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                // Obtener el primer hijo de dataSnapshot (si existe)
+                                Log.d(ContentValues.TAG, "Traza 3")
+                                val userSnapshot = dataSnapshot.children.firstOrNull()
 
-                        // Obtener la referencia de Storage desde la URL
-                        val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
+                                // Verificar si se encontró algún resultado
+                                if (userSnapshot != null) {
+                                    Log.d(ContentValues.TAG, "Traza 4")
+                                    // Obtener el usuario desde el primer hijo
+                                    val user = userSnapshot.getValue(User::class.java)
+                                    user?.imageUrl?.let { imageUrl ->
 
-                        // Descargar la URL de la imagen desde Storage
-                        storageReference.downloadUrl.addOnSuccessListener { uri ->
-                            // Cargar la imagen en el ImageButton usando Glide
-                            Glide.with(this@MainActivity)
-                                .load(uri)
-                                .into(binding.toolbar.btnProfile)
-                        }.addOnFailureListener { exception ->
-                            // Manejar errores de descarga de imagen
-                        }
+                                        // Obtener la referencia de Storage desde la URL
+                                        val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
+
+                                        // Descargar la URL de la imagen desde Storage
+                                        storageReference.downloadUrl.addOnSuccessListener { uri ->
+                                            // Cargar la imagen en el ImageButton usando Glide
+                                            Glide.with(this@MainActivity)
+                                                .load(uri)
+                                                .into(binding.toolbar.btnProfile)
+                                        }.addOnFailureListener { exception ->
+                                            // Manejar errores de descarga de imagen
+                                        }
+                                    }
+                                } else {
+                                    // Manejar el caso en el que no se encontraron resultados
+                                    Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
+                                }
+                            }
+
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                // Manejar errores de cancelación
+                            }
+                        })
+
+                    } else {
+                        val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
+                        Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
+                        // Aquí podrías mostrar un mensaje de error al usuario, dependiendo del tipo de error
                     }
-                } else {
-                    // Manejar el caso en el que no se encontraron resultados
-                    Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Manejar errores de cancelación
-            }
-        })
+        }catch (e: Exception){      Log.d(ContentValues.TAG, "Error fatal")}
+
+
+
 
 
 
@@ -173,11 +196,11 @@ class MainActivity : AppCompatActivity() {
 
     }
     data class User(
-        val username: String?,
-        val email: String?, // Added email field
-        val phoneNumber: String?,
-        val name: String?,
-        val imageUrl: String?,
-        val bibliography: String?
+        val username: String = "",
+        val email: String = "", // Added email field
+        val phoneNumber: String ="",
+        val name: String = "",
+        val imageUrl: String ="",
+        val bibliography: String =""
     )
 }
