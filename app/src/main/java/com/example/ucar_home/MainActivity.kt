@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                                 // Verificar si se encontró algún resultado
                                 if (userSnapshot != null) {
                                     // Obtener el usuario desde el primer hijo
-                                    val user = userSnapshot.getValue(User::class.java)
+                                    val user = userSnapshot.getValue(com.example.ucar_home.User::class.java)
                                     user?.imageUrl?.let { imageUrl ->
 
                                         // Obtener la referencia de Storage desde la URL
@@ -186,12 +186,5 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    data class User(
-        val username: String = "",
-        val email: String = "", // Added email field
-        val phoneNumber: String ="",
-        val name: String = "",
-        val imageUrl: String ="",
-        val bibliography: String =""
-    )
+
 }

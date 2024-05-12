@@ -22,6 +22,13 @@ data class User(
     val bibliography: String =""
 )
 
+data class Evento(
+    val nombre: String = "",
+    val fecha: String = "",
+    val direccion: String ="",
+    val imageUrl: String ="",
+    val descripcion: String =""
+)
 
 object DataProvider {
     val publicaciones: List<Any> = listOf(

@@ -63,7 +63,7 @@ class SignInStep4Activity : AppCompatActivity() {
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val user = User(username, email, phoneNumber, name, imageUrl, bibliography)
+        val user = User(username!!, email!!, phoneNumber!!, name!!, imageUrl!!, bibliography!!)
         uid?.let {
 
             database.child("users").child(it).setValue(user)
@@ -77,12 +77,5 @@ class SignInStep4Activity : AppCompatActivity() {
         }
     }
 
-    data class User(
-        val username: String?,
-        val email: String?, // Added email field
-        val phoneNumber: String?,
-        val name: String?,
-        val imageUrl: String?,
-        val bibliography: String?
-    )
+
 }
