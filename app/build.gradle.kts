@@ -59,6 +59,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
+//Para maps
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
