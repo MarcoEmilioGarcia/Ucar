@@ -3,6 +3,7 @@ package com.example.ucar_home
 
 
 import java.net.URL
+import java.time.LocalDate
 
 
 object variables {
@@ -22,13 +23,15 @@ data class User(
     val bibliography: String =""
 )
 
-data class Evento(
-    val nombre: String = "",
-    val fecha: String = "",
-    val direccion: String ="",
-    val imageUrl: String ="",
-    val descripcion: String =""
+data class EventObject(
+     var title: String,
+     var imageUrl: String,
+     var date: LocalDate,
+     var address: String,
+     var description: String
 )
+
+
 
 object DataProvider {
     val publicaciones: List<Any> = listOf(

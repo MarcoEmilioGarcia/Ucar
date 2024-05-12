@@ -2,6 +2,7 @@ package com.example.ucar_home
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -97,6 +98,10 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
+        binding.btnAdd.setOnClickListener {
+            val intent = Intent(this,CreateEventActivity::class.java)
+            startActivity(intent)
+
 /*
         userReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -125,4 +130,4 @@ class ProfileActivity : AppCompatActivity() {
 
 
 
-}
+}}
