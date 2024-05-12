@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ucar_home.databinding.ActivityCreateEventBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -18,13 +19,14 @@ class CreateEventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateEventBinding
 
+ //  @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val buttonCreateEvent = binding.buttonCreateEvent
-
+/*
         buttonCreateEvent.setOnClickListener {
             val title = binding.editTextTitle.text.toString()
             val imageUrl = binding.editTextImageUrl.text.toString()
@@ -54,7 +56,10 @@ class CreateEventActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             }
         }
+        */
+
     }
+    /*
     private fun saveEventToDatabase(
         title: String?,
         imageUrl: String?,
@@ -76,5 +81,5 @@ class CreateEventActivity : AppCompatActivity() {
                     Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
                 }
         }
-    }
+    }*/
 }

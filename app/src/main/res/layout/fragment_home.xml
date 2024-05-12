@@ -13,4 +13,12 @@
         android:elevation="2dp"
         android:shadowColor="#5C5C5C" />
 
+    <Button
+        android:id="@+id/boton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp">
+
+    </Button>
+
 </FrameLayout>
