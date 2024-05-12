@@ -88,10 +88,11 @@
                     android:layout_height="200dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginRight="0dp"
+                    android:gravity="top|start"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxLines="5"
-                    android:gravity="top|start" />
+                    tools:ignore="SpeakableTextPresentCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,37 +14,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ucar_Home"
         tools:targetApi="31">
-
-
         <activity
-            android:name="SignInGoogleStep1"
-            android:exported="false"/>
-
-        <activity
-            android:name="SignInStep4Activity"
-            android:exported="false" />
-
-        <activity
-            android:name="SignInStep3Activity"
-            android:exported="false" />
-
-        <activity
-            android:name="SignInStep2Activity"
-            android:exported="false" />
-
-        <activity
-            android:name="SignInStep1Activity"
-            android:exported="false" />
-
-        <activity
-            android:name="ForgotPasswordActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="HomeActivity"
+            android:name=".CreateEventActivity"
             android:exported="false" />
         <activity
-            android:name="LogInActivity"
+            android:name=".SignInGoogleStep1"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep4Activity"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep3Activity"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep2Activity"
+            android:exported="false" />
+        <activity
+            android:name=".SignInStep1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".addCarActivity"
             android:exported="false" />
@@ -61,9 +55,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>
