@@ -18,15 +18,18 @@ import java.time.format.DateTimeFormatter
 class CreateEventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateEventBinding
+    private lateinit var auth: FirebaseAuth
 
  //  @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        auth = FirebaseAuth.getInstance()
 
         val buttonCreateEvent = binding.buttonCreateEvent
-/*
+
         buttonCreateEvent.setOnClickListener {
             val title = binding.editTextTitle.text.toString()
             val imageUrl = binding.editTextImageUrl.text.toString()
@@ -43,12 +46,12 @@ class CreateEventActivity : AppCompatActivity() {
                 }
 
                 if (date != null) {
-                    val event = EventObject(title, imageUrl, date, address, description)
+                    val evento = EventObject(title, imageUrl, date, address, description)
 
                     // Aquí puedes hacer lo que quieras con el evento, como guardarlo en una base de datos, etc.
-                    saveEventToDatabase(event.title, event.imageUrl, event.date, event.address, event.description)
+                    saveEvent(evento)
 
-                    Toast.makeText(this, "Event created: $event", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Event created: $evento", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Invalid date format", Toast.LENGTH_SHORT).show()
                 }
@@ -56,30 +59,52 @@ class CreateEventActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             }
         }
-        */
+
 
     }
     /*
+
     private fun saveEventToDatabase(
         title: String?,
         imageUrl: String?,
-        date: LocalDate?,
+        date: String?, // Cambiado de LocalDate a String para Firebase
         address: String?,
         description: String?
     ) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val event = EventObject(title!!, imageUrl!!, date!!, address!!, description!! )
-        uid?.let {
+        val event = EventObject(title ?: "", imageUrl ?: "", date ?: "", address ?: "", description ?: "")
 
-            database.child("events").child(it).setValue(event)
-                .addOnSuccessListener {
-                    Log.d(ContentValues.TAG, "User data saved successfully.")
-                    // Proceed to next activity or whatever you need to do
-                }
-                .addOnFailureListener { e ->
-                    Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
-                }
-        }
+        database.child("events").push().setValue(event)
+            .addOnSuccessListener {
+                Log.d("TAG", "Evento guardado exitosamente.")
+                // Continuar con la siguiente actividad o cualquier otra acción necesaria
+            }
+            .addOnFailureListener { e ->
+                Log.d("TAG", "Error al guardar el evento: ", e)
+            }
     }*/
+    fun saveEvent(event: EventObject) {
+        // Obtener la instancia de Firebase Database
+        val database = FirebaseDatabase.getInstance()
+
+        // Obtener una referencia a la ubicación donde se guardarán los eventos
+        val eventsRef = database.getReference("events")
+
+        // Generar una nueva clave única para el evento
+        val eventKey = eventsRef.push().key ?: ""
+
+        // Asignar el evento a esa clave
+        eventsRef.child(eventKey).setValue(event)
+            .addOnSuccessListener {
+                // Éxito al guardar el evento
+                println("Evento guardado exitosamente en Firebase!")
+            }
+            .addOnFailureListener { e ->
+                // Error al guardar el evento
+                println("Error al guardar el evento en Firebase: $e")
+            }
+    }
+
+
+
 }
