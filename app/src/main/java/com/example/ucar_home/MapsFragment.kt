@@ -32,6 +32,8 @@ class MapsFragment : AppCompatActivity(), OnMapReadyCallback {
     private val DEFAULT_ZOOM = 11f
     private val markers = mutableListOf<Marker>()
 
+
+
     /* Este método se llama cuando la actividad se está creando. Es donde se inicializan las
     vistas, se configuran los listeners y se obtiene la referencia al mapa utilizando el fragmento
     de soporte SupportMapFragment*/
