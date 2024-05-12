@@ -113,37 +113,28 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this,HomeFragment::class.java)
             startActivity(intent)
         }
-        Log.d(ContentValues.TAG, "traza prueba")
+
         val imageUser: ImageButton = findViewById(R.id.btnProfile)
 
         val userReference = FirebaseDatabase.getInstance().getReference("users")
 
-
-
-        Log.d(ContentValues.TAG, "traza prueba 2")
         try {
-            Log.d(ContentValues.TAG, variables.Email)
-            Log.d(ContentValues.TAG, variables.Password)
+
             if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()){
-                Log.d(ContentValues.TAG, "efectivamente")
 
                 auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener(this) { task ->
                    // Log.d(ContentValues.TAG, "efectivamente 2")
 
                     if (task.isSuccessful) {
-                        Log.d(ContentValues.TAG, "Identificacion adecuada")
-
                         userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object :
                             ValueEventListener {
 
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 // Obtener el primer hijo de dataSnapshot (si existe)
-                                Log.d(ContentValues.TAG, "Traza 3")
                                 val userSnapshot = dataSnapshot.children.firstOrNull()
 
                                 // Verificar si se encontró algún resultado
                                 if (userSnapshot != null) {
-                                    Log.d(ContentValues.TAG, "Traza 4")
                                     // Obtener el usuario desde el primer hijo
                                     val user = userSnapshot.getValue(User::class.java)
                                     user?.imageUrl?.let { imageUrl ->

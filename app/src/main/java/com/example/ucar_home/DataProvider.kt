@@ -13,6 +13,14 @@ object variables {
 
 
 }
+data class User(
+    val username: String = "",
+    val email: String = "", // Added email field
+    val phoneNumber: String ="",
+    val name: String = "",
+    val imageUrl: String ="",
+    val bibliography: String =""
+)
 
 
 object DataProvider {
