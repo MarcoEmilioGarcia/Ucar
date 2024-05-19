@@ -219,7 +219,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 val longitude = location[0].longitude
                 val position = LatLng(latitude, longitude)
 
-                val bitmap = resizeBitmap(R.drawable.marcador, 100, 110)
+                val bitmap = resizeBitmap(R.drawable.alfiler__1_, 100, 110)
 
                 val marker = mMap.addMarker(MarkerOptions().position(position).title(event.title)
                     .icon(BitmapDescriptorFactory.fromBitmap(bitmap)))
