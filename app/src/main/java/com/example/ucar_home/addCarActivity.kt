@@ -1,13 +1,8 @@
 package com.example.ucar_home
 
-import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import androidx.core.content.ContextCompat
-import java.io.ByteArrayOutputStream
 
 class addCarActivity : AppCompatActivity() {
 
@@ -15,7 +10,7 @@ class addCarActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_car)
+        setContentView(R.layout.activity_add_car1)
 
 
 /*

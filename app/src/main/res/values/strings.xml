@@ -73,4 +73,18 @@
     <string name="create_account">CREATE ACCOUNT</string>
     <string name="create_with_google">CREATE WITH GOOGLE</string>
     <string name="create_your_new_account">Create your new account:</string>
+
+    <!--add car 1-->
+    <string name="addcar1">Step 1</string>
+    <string name="addtextcar1">add new car:</string>
+    <string name="addcartitle">title</string>
+    <string name="addcardescription">description</string>
+    <string name="cv">CV</string>
+    <string name="fuel">fuel</string>
+    <string name="brand">brand</string>
+    <string name="model">model</string>
+    <string name="year">year</string>
+    <string name="cyclindrated">CC</string>
+
+
 </resources>

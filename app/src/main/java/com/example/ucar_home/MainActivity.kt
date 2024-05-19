@@ -25,7 +25,6 @@ import com.google.firebase.storage.FirebaseStorage
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
     private val homeFragment = HomeFragment()
     private val searchFragment = SearchFragment()
     private val mapsFragment = MapsFragment()
@@ -148,6 +147,7 @@ class MainActivity : AppCompatActivity() {
                                             Glide.with(this@MainActivity)
                                                 .load(uri)
                                                 .into(binding.toolbar.btnProfile)
+
                                         }.addOnFailureListener { exception ->
                                             // Manejar errores de descarga de imagen
                                         }

@@ -15,6 +15,7 @@ class SignInStep4Activity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInStep4Binding
     private lateinit var auth: FirebaseAuth
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInStep4Binding.inflate(layoutInflater)
