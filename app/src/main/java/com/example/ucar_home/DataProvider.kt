@@ -21,7 +21,7 @@ data class User(
 data class Event(
     var title: String = "",
     var imageUrl: String = "",
-    var date: LocalDate = LocalDate.now(),
+    var date: String = "",
     var address: String = "",
     var description: String = "",
     var idUser: String = ""

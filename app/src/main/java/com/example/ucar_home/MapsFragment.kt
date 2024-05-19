@@ -53,10 +53,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val markers = mutableListOf<Marker>()
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private val eventsList = mutableListOf<Event>(
-
-
-    )
+    private val eventsList = mutableListOf<Event>( )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,30 +86,22 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                             Log.d(ContentValues.TAG, "traza 4")
                             val event = it.getValue(Event::class.java)
 
+
                             if (event != null && idUser != null) {
-                                Event(event.title, event.imageUrl, LocalDate.now(), event.address, event.description, idUser)
-
+                                Log.d(ContentValues.TAG, "traza 5")
                                 /*
-                                event.imageUrl?.let { imageUrl ->
-                                    // Obtener la referencia de Storage desde la URL
-                                    val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
-                                    // Descargar la URL de la imagen desde Storage
-                                    storageReference.downloadUrl.addOnSuccessListener { uri ->
-                                        // Cargar la imagen en el ImageButton usando Glide
-                                        Log.d(ContentValues.TAG, "URI de la imagen: $uri")
-                                        Glide.with(this@ProfileActivity)
-                                            .load(uri)
-                                            .into(binding.toolbar.btnProfile)
+                                val dateString = it.child("date").getValue(String::class.java)
+                                if (dateString != null) {
+                                    val date = LocalDate.parse(dateString)
+                                   */
 
-                                        Glide.with(this@ProfileActivity)
-                                            .load(uri)
-                                            .into(binding.imageView2)
-                                    }.addOnFailureListener { exception ->
-                                        // Manejar errores de descarga de imagen
-                                    }
-                                }
-                                */
+                                eventsList.add( Event(event.title, event.imageUrl, event.date, event.address, event.description, idUser))
+/*
+                                } else {
+                                    // Manejar el caso donde la fecha es nula
+                                }*/
                             }
+
                         }
 
 
@@ -252,7 +241,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -262,7 +250,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
+                val selectedDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay).toString()
                 filterEventsByDate(selectedDate)
             },
             year, month, day
@@ -270,8 +258,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         datePickerDialog.show()
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun filterEventsByDate(date: LocalDate) {
+    private fun filterEventsByDate(date: String) {
         markers.forEach { it.remove() }
         markers.clear()
         eventsList.filter { it.date == date }.forEach { event ->
@@ -279,7 +268,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showStartDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -289,7 +277,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
-                val startDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
+                val startDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay).toString()
                 showEndDatePickerDialog(startDate)
             },
             year, month, day
@@ -297,8 +285,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         datePickerDialog.show()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showEndDatePickerDialog(startDate: LocalDate) {
+
+    private fun showEndDatePickerDialog(startDate: String) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -307,7 +295,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
-                val endDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
+                val endDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay).toString()
                 filterEventsByDateRange(startDate, endDate)
             },
             year, month, day
@@ -315,12 +303,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         datePickerDialog.show()
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun filterEventsByDateRange(startDate: LocalDate, endDate: LocalDate) {
+    private fun filterEventsByDateRange(startDate: String, endDate: String) {
         markers.forEach { it.remove() }
         markers.clear()
 
-        eventsList.filter { it.date.isAfter(startDate.minusDays(1)) && it.date.isBefore(endDate.plusDays(1)) }
+        eventsList.filter { it.date >= startDate && it.date <= endDate }
             .forEach { event ->
                 addEventMarker(event)
             }
