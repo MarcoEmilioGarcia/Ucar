@@ -70,9 +70,6 @@ class ProfileActivity : AppCompatActivity() {
                                     storageReference.downloadUrl.addOnSuccessListener { uri ->
                                         // Cargar la imagen en el ImageButton usando Glide
                                         Log.d(ContentValues.TAG, "URI de la imagen: $uri")
-                                        Glide.with(this@ProfileActivity)
-                                            .load(uri)
-                                            .into(binding.toolbar.btnProfile)
 
                                         Glide.with(this@ProfileActivity)
                                             .load(uri)
