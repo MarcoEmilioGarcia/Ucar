@@ -88,24 +88,26 @@ class ProfileActivity : AppCompatActivity() {
                         }
                     })
 
+
                     carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object :
                         ValueEventListener {
 
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             // Obtener el primer hijo de dataSnapshot (si existe)
-                            /*
+
+
                             val userSnapshot = dataSnapshot.children.firstOrNull()
 
                             // Verificar si se encontró algún resultado
                             if (userSnapshot != null) {
                                 // Obtener el usuario desde el primer hijo
-                                val user = userSnapshot.getValue(User::class.java)
-                                binding.textViewName.text = user?.name
-                                binding.textViewUsername.text = user?.username
-                                binding.textViewBibliography.text = user?.bibliography
+                                val car = userSnapshot.getValue(CarObject::class.java)
+                                binding.textViewName.text = car?.title
 
 
-                                user?.imageUrl?.let { imageUrl ->
+
+
+                                car?.imageUrl?.let { imageUrl ->
 
                                     // Obtener la referencia de Storage desde la URL
                                     val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
@@ -117,9 +119,6 @@ class ProfileActivity : AppCompatActivity() {
                                             .load(uri)
                                             .into(binding.toolbar.btnProfile)
 
-                                        Glide.with(this@ProfileActivity)
-                                            .load(uri)
-                                            .into(binding.imageView2)
                                     }.addOnFailureListener { exception ->
                                         // Manejar errores de descarga de imagen
                                     }
@@ -128,7 +127,7 @@ class ProfileActivity : AppCompatActivity() {
                                 // Manejar el caso en el que no se encontraron resultados
                                 Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
                             }
-                            */
+
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
