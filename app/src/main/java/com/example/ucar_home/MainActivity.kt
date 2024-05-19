@@ -50,7 +50,15 @@ class MainActivity : AppCompatActivity() {
         toolbar()
 
         // Cargar el fragmento de inicio
-        loadFragment(homeFragment)
+        val selectedFragmentClassName = intent.getStringExtra("selected_fragment")
+        val selectedFragment = when (selectedFragmentClassName) {
+            HomeFragment::class.java.name -> homeFragment
+            SearchFragment::class.java.name -> searchFragment
+            MapsFragment::class.java.name -> mapsFragment
+            ChatFragment::class.java.name -> chatFragment
+            else -> homeFragment // Fragmento por defecto
+        }
+        loadFragment(selectedFragment)
 
         // Establecer el listener para la selección de elementos del menú
         binding.bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -172,12 +180,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         }catch (e: Exception){      Log.d(ContentValues.TAG, "Error fatal")}
-
-
-
-
-
-
 
 
         imageUser.setOnClickListener {

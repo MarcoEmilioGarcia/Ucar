@@ -6,13 +6,16 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.ucar_home.databinding.ActivityMainBinding
 import com.example.ucar_home.databinding.ActivityProfileBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -20,13 +23,25 @@ import com.google.firebase.storage.FirebaseStorage
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-
+    private val homeFragment = HomeFragment()
+    private val searchFragment = SearchFragment()
+    private val mapsFragment = MapsFragment()
+    private val chatFragment = ChatFragment()
     private lateinit var auth: FirebaseAuth
+
+    // Mapa para mantener las referencias a los íconos originales
+    private val originalIconsMap = mutableMapOf<Int, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inicializar los íconos originales
+        originalIconsMap[R.id.homeFragment] = R.drawable.icon_home
+        originalIconsMap[R.id.searchFragment] = R.drawable.icon_search
+        originalIconsMap[R.id.mapsFragment] = R.drawable.icon_maps
+        originalIconsMap[R.id.chatFragment] = R.drawable.icon_chat
 
         //val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         // val email = prefs.getString("email", null)
@@ -97,12 +112,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.btnAdd.setOnClickListener {
-
             val intent = Intent(this,CreateEventActivity::class.java)
             startActivity(intent)
-
-
-
+        }
     }
-
-}}
+}
