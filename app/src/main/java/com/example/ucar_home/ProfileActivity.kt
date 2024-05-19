@@ -37,7 +37,6 @@ class ProfileActivity : AppCompatActivity() {
         //val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         // val email = prefs.getString("email", null)
         auth = FirebaseAuth.getInstance()
-        val imageUser: ImageButton = findViewById(R.id.btnProfile)
         val userReference = FirebaseDatabase.getInstance().getReference("users")
         // val currentUser: FirebaseUser? = auth.currentUser //val uid: String = currentUser?.uid ?: ""
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()){
