@@ -46,7 +46,7 @@ class CreateEventActivity : AppCompatActivity() {
                 }
 
                 if (date != null) {
-                    val evento = EventObject(title, imageUrl, date, address, description)
+                    val evento = Event(title, imageUrl, date, address, description)
 
                     // Aquí puedes hacer lo que quieras con el evento, como guardarlo en una base de datos, etc.
                     saveEvent(evento)
@@ -83,7 +83,7 @@ class CreateEventActivity : AppCompatActivity() {
                 Log.d("TAG", "Error al guardar el evento: ", e)
             }
     }*/
-    fun saveEvent(event: EventObject) {
+    fun saveEvent(event: Event) {
         // Obtener la instancia de Firebase Database
         val database = FirebaseDatabase.getInstance()
 
