@@ -44,9 +44,10 @@ class CreateEventActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     null
                 }
-
+                val user = auth.currentUser
+                val idUser = user?.uid
                 if (date != null) {
-                    val evento = Event(title, imageUrl, date, address, description)
+                    val evento = Event(title, imageUrl, date, address, description, idUser!!)
 
                     // Aquí puedes hacer lo que quieras con el evento, como guardarlo en una base de datos, etc.
                     saveEvent(evento)
@@ -62,27 +63,7 @@ class CreateEventActivity : AppCompatActivity() {
 
 
     }
-    /*
 
-    private fun saveEventToDatabase(
-        title: String?,
-        imageUrl: String?,
-        date: String?, // Cambiado de LocalDate a String para Firebase
-        address: String?,
-        description: String?
-    ) {
-        val database = FirebaseDatabase.getInstance().reference
-        val event = EventObject(title ?: "", imageUrl ?: "", date ?: "", address ?: "", description ?: "")
-
-        database.child("events").push().setValue(event)
-            .addOnSuccessListener {
-                Log.d("TAG", "Evento guardado exitosamente.")
-                // Continuar con la siguiente actividad o cualquier otra acción necesaria
-            }
-            .addOnFailureListener { e ->
-                Log.d("TAG", "Error al guardar el evento: ", e)
-            }
-    }*/
     fun saveEvent(event: Event) {
         // Obtener la instancia de Firebase Database
         val database = FirebaseDatabase.getInstance()

@@ -19,13 +19,13 @@ data class User(
 )
 
 data class Event(
-     var title: String,
-     var imageUrl: String,
-     var date: LocalDate,
-     var address: String,
-     var description: String
+    var title: String = "",
+    var imageUrl: String = "",
+    var date: LocalDate = LocalDate.now(),
+    var address: String = "",
+    var description: String = "",
+    var idUser: String = ""
 )
-
 data class CarObject(
     var title: String="",
     var brand: String="",

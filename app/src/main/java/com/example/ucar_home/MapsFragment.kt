@@ -2,12 +2,14 @@ package com.example.ucar_home
 
 import android.Manifest
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.ucar_home.databinding.FragmentMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -28,6 +31,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import java.io.IOException
 import java.time.LocalDate
 import java.util.Calendar
@@ -37,16 +46,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapsBinding
     private lateinit var geocoder: Geocoder
+    private lateinit var auth: FirebaseAuth
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private val DEFAULT_LOCATION = LatLng(40.416775, -3.70379) // Madrid, España
     private val DEFAULT_ZOOM = 11f
-
     private val markers = mutableListOf<Marker>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val eventsList = mutableListOf<Event>(
-        Event("Evento 1", "url_imagen_1", LocalDate.now(), "Av de burgos 32", "Descripción 1"),
-        Event("Evento 2", "url_imagen_2", LocalDate.now(), "condesa de venadito 1", "Descripción 2")
+
+
     )
 
     override fun onCreateView(
@@ -61,12 +70,69 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(ContentValues.TAG, "traza 1")
 
         geocoder = Geocoder(requireContext())
+        auth = FirebaseAuth.getInstance()
+        val eventsReference = FirebaseDatabase.getInstance().getReference("events")
+        auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d(ContentValues.TAG, "traza 2")
+                val user = auth.currentUser
+                val idUser = user?.uid
+
+                eventsReference.orderByChild("idUser").equalTo(idUser).addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        Log.d(ContentValues.TAG, "traza 3")
+                        val userSnapshot = dataSnapshot.children.forEach {
+
+                            Log.d(ContentValues.TAG, "traza 4")
+                            val event = it.getValue(Event::class.java)
+
+                            if (event != null && idUser != null) {
+                                Event(event.title, event.imageUrl, LocalDate.now(), event.address, event.description, idUser)
+
+                                /*
+                                event.imageUrl?.let { imageUrl ->
+                                    // Obtener la referencia de Storage desde la URL
+                                    val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
+                                    // Descargar la URL de la imagen desde Storage
+                                    storageReference.downloadUrl.addOnSuccessListener { uri ->
+                                        // Cargar la imagen en el ImageButton usando Glide
+                                        Log.d(ContentValues.TAG, "URI de la imagen: $uri")
+                                        Glide.with(this@ProfileActivity)
+                                            .load(uri)
+                                            .into(binding.toolbar.btnProfile)
+
+                                        Glide.with(this@ProfileActivity)
+                                            .load(uri)
+                                            .into(binding.imageView2)
+                                    }.addOnFailureListener { exception ->
+                                        // Manejar errores de descarga de imagen
+                                    }
+                                }
+                                */
+                            }
+                        }
+
+
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        // Manejar errores de cancelación
+                        Log.e(ContentValues.TAG, "Error en la consulta de eventos: ${databaseError.message}")
+                    }
+                })
+            } else {
+                val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
+                Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
+                // Aquí podrías mostrar un mensaje de error al usuario, dependiendo del tipo de error
+            }
+        }
+
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -85,6 +151,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setInfoWindowAdapter(CustomInfoWindowAdapter(requireContext()))
