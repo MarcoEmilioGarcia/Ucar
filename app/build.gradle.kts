@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.ucar_home"
-        minSdk = 28
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -64,7 +64,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("androidx.room:room-runtime:2.4.0")
-    implementation("com.android.car.ui:car-ui-lib:2.6.0")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

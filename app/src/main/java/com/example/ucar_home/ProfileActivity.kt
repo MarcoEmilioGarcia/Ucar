@@ -32,7 +32,6 @@ class ProfileActivity : AppCompatActivity() {
         // val email = prefs.getString("email", null)
         auth = FirebaseAuth.getInstance()
         val imageUser: ImageButton = findViewById(R.id.btnProfile)
-
         val userReference = FirebaseDatabase.getInstance().getReference("users")
         val carsReference = FirebaseDatabase.getInstance().getReference("cars")
         // val currentUser: FirebaseUser? = auth.currentUser //val uid: String = currentUser?.uid ?: ""
@@ -52,6 +51,7 @@ class ProfileActivity : AppCompatActivity() {
                             // Verificar si se encontró algún resultado
                             if (userSnapshot != null) {
                                 // Obtener el usuario desde el primer hijo
+
                                 val user = userSnapshot.getValue(User::class.java)
                                 binding.textViewName.text = user?.name
                                 binding.textViewUsername.text = user?.username
