@@ -35,7 +35,8 @@ data class CarObject(
     var year: Int,
     val fuel: String ="",
     val imageUrl: String ="",
-    var description: String=""
+    var description: String="",
+    var idUser: String=""
 )
 
 

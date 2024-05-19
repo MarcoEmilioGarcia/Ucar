@@ -37,14 +37,14 @@ class AddCarActivity3: AppCompatActivity() {
                     // Log.d(ContentValues.TAG, "efectivamente 2")
 
                     if (task.isSuccessful) {
-                            val description = binding.editTextDescription.text.toString()
-                            Log.d(ContentValues.TAG, "User registered successfully.")
-                            saveCarToDatabase(title,brand,model, cv, cc, year,fuel, imageUrl, description )
+                        val user = auth.currentUser
+                        val idUser = user?.uid
+                        val description = binding.editTextDescription.text.toString()
+                        Log.d(ContentValues.TAG, "User registered successfully.")
+                        saveCarToDatabase(title,brand,model, cv, cc, year,fuel, imageUrl, description ,idUser)
 
-
-
-                            val intent = Intent(this, ProfileActivity::class.java)
-                            startActivity(intent)
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        startActivity(intent)
                         } else {
                             Log.d(ContentValues.TAG, "User registration failed.")
                         }
@@ -67,11 +67,12 @@ class AddCarActivity3: AppCompatActivity() {
         year: Int?,
         fuel: String?,
         imageUrl: String?,
-        description: String?
+        description: String?,
+        idUser: String?
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val car = CarObject(title!!, brand!!,model!!,cv!!, cc!!, year!!,fuel!!,imageUrl!!, description!!)
+        val car = CarObject(title!!, brand!!,model!!,cv!!, cc!!, year!!,fuel!!,imageUrl!!, description!!,idUser!!)
         uid?.let {
 
             database.child("cars").child(it).setValue(car)

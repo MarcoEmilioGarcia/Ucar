@@ -34,6 +34,7 @@ class ProfileActivity : AppCompatActivity() {
         val imageUser: ImageButton = findViewById(R.id.btnProfile)
 
         val userReference = FirebaseDatabase.getInstance().getReference("users")
+        val carsReference = FirebaseDatabase.getInstance().getReference("cars")
         // val currentUser: FirebaseUser? = auth.currentUser //val uid: String = currentUser?.uid ?: ""
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()){
 
@@ -82,6 +83,53 @@ class ProfileActivity : AppCompatActivity() {
                             }
                         }
 
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            // Manejar errores de cancelación
+                        }
+                    })
+
+                    carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object :
+                        ValueEventListener {
+
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            // Obtener el primer hijo de dataSnapshot (si existe)
+                            /*
+                            val userSnapshot = dataSnapshot.children.firstOrNull()
+
+                            // Verificar si se encontró algún resultado
+                            if (userSnapshot != null) {
+                                // Obtener el usuario desde el primer hijo
+                                val user = userSnapshot.getValue(User::class.java)
+                                binding.textViewName.text = user?.name
+                                binding.textViewUsername.text = user?.username
+                                binding.textViewBibliography.text = user?.bibliography
+
+
+                                user?.imageUrl?.let { imageUrl ->
+
+                                    // Obtener la referencia de Storage desde la URL
+                                    val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
+                                    // Descargar la URL de la imagen desde Storage
+                                    storageReference.downloadUrl.addOnSuccessListener { uri ->
+                                        // Cargar la imagen en el ImageButton usando Glide
+                                        Log.d(ContentValues.TAG, "URI de la imagen: $uri")
+                                        Glide.with(this@ProfileActivity)
+                                            .load(uri)
+                                            .into(binding.toolbar.btnProfile)
+
+                                        Glide.with(this@ProfileActivity)
+                                            .load(uri)
+                                            .into(binding.imageView2)
+                                    }.addOnFailureListener { exception ->
+                                        // Manejar errores de descarga de imagen
+                                    }
+                                }
+                            } else {
+                                // Manejar el caso en el que no se encontraron resultados
+                                Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
+                            }
+                            */
+                        }
 
                         override fun onCancelled(databaseError: DatabaseError) {
                             // Manejar errores de cancelación
