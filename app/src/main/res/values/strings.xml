@@ -76,6 +76,7 @@
 
     <!--add car 1-->
     <string name="addcar1">Step 1</string>
+    <string name="addcar">Add car</string>
     <string name="addtextcar1">add new car:</string>
     <string name="addcartitle">title</string>
     <string name="addcardescription">description</string>

@@ -126,8 +126,6 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
         <!--CHANGE SETTINGS-->
         <TextView
             android:id="@+id/textViewResult"

@@ -31,6 +31,17 @@ data class EventObject(
      var description: String
 )
 
+data class CarObject(
+    var title: String="",
+    var brand: String="",
+    var model: String="",
+    var cv: Int,
+    var cc: Int,
+    var year: Int,
+    val fuel: String ="",
+    val imageUrl: String ="",
+    var description: String=""
+)
 
 
 object DataProvider {

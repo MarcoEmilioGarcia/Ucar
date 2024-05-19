@@ -98,7 +98,7 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener {
 
-            val intent = Intent(this,CreateEventActivity::class.java)
+            val intent = Intent(this,AddCarActivity::class.java)
             startActivity(intent)
 
 
