@@ -87,7 +87,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginRight="40dp">
             <EditText
-                android:id="@+id/editTextTitle"
+                android:id="@+id/editTextDescription"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:drawableStart="@drawable/icon_comment"
@@ -111,7 +111,7 @@
 
         <!--NEXT BUTTON-->
         <Button
-            android:id="@+id/btnNext"
+            android:id="@+id/btnCreate"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -121,13 +121,12 @@
             android:backgroundTint="@color/primaryColor"
             android:elevation="2dp"
             android:shadowColor="#5C5C5C"
-            android:text="@string/next"
+            android:text="@string/addcar"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="normal"
             app:cornerRadius="15dp"
-            app:strokeColor="@color/white"
-            tools:ignore="TextContrastCheck" />
+            app:strokeColor="@color/white" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

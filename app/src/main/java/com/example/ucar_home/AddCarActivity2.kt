@@ -1,27 +1,29 @@
 package com.example.ucar_home
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.ucar_home.databinding.ActivityAddCar2Binding
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
-class addCarActivity : AppCompatActivity() {
+class AddCarActivity2 : AppCompatActivity() {
 
-    private lateinit var binding: addCarActivity
+    private lateinit var binding: ActivityAddCar2Binding
     private var imageUri: Uri? = null
+
+    companion object {
+        const val REQUEST_IMAGE_PICK = 1 // Definir constante para la solicitud de selección de imagen
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_car1)
-
-
-/*
-
-    //RECOGER IMAGENES
-    //RECOGER TEXTO DESCRIPTIVO
-
-    //SUBIR A BBDD REMOTA
-
-
-        binding = activity_add_car.inflate(layoutInflater)
+        binding = ActivityAddCar2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.btnGallery.setOnClickListener {
@@ -29,11 +31,11 @@ class addCarActivity : AppCompatActivity() {
         }
 
         binding.btnNext.setOnClickListener {
-            if (imageUri != null && binding.editTextName.text.toString().isNotEmpty()) {
+            if (imageUri != null) {
                 uploadImageToFirebaseStorage()
             } else {
                 binding.textViewResult.setTextColor(ContextCompat.getColor(this, R.color.warning))
-                binding.textViewResult.text = "You have to select an image and put your name."
+                binding.textViewResult.text = "You have to put your name."
             }
         }
     }
@@ -53,18 +55,23 @@ class addCarActivity : AppCompatActivity() {
         val uploadTask = storageReference.putBytes(imageData)
         uploadTask.addOnSuccessListener { taskSnapshot ->
             storageReference.downloadUrl.addOnSuccessListener { uri ->
-                val username = intent.getStringExtra("Username")
-                val password = intent.getStringExtra("Password")
-                val email = intent.getStringExtra("Email")
-                val phoneNumber = intent.getStringExtra("PhoneNumber")
-                val name = binding.editTextName.text.toString()
 
-                val intent = Intent(this, SignInStep4Activity::class.java)
-                intent.putExtra("Username", username)
-                intent.putExtra("Password", password)
-                intent.putExtra("Email", email)
-                intent.putExtra("PhoneNumber", phoneNumber)
-                intent.putExtra("Name", name)
+                val title = intent.getStringExtra("Title")
+                val brand = intent.getStringExtra("Brand")
+                val model = intent.getStringExtra("Model")
+                val cv = binding.editCV.text.toString().toIntOrNull() ?: 0
+                val cc = binding.editcyclindrated.text.toString().toIntOrNull() ?: 0
+                val fuel = binding.editFuel.text.toString()
+                val year = binding.edityear.text.toString().toIntOrNull() ?: 0
+
+                val intent = Intent(this, AddCarActivity3::class.java)
+                intent.putExtra("Title", title)
+                intent.putExtra("Brand", brand)
+                intent.putExtra("Model", model)
+                intent.putExtra("Cv", cv)
+                intent.putExtra("Cc", cc)
+                intent.putExtra("Fuel", fuel)
+                intent.putExtra("Year", year)
                 intent.putExtra("ImageUrl", uri.toString())
                 startActivity(intent)
             }
@@ -83,9 +90,4 @@ class addCarActivity : AppCompatActivity() {
             }
         }
     }
-
-    companion object {
-        private const val REQUEST_IMAGE_PICK = 100
-    }*/
-}
 }

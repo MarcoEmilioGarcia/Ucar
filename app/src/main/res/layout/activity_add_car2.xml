@@ -128,7 +128,7 @@
                     android:drawablePadding="10dp"
                     android:hint="@string/cv"
                     android:importantForAutofill="no"
-                    android:inputType="text"
+                    android:inputType="number"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -176,7 +176,7 @@
                     android:drawablePadding="10dp"
                     android:hint="@string/cyclindrated"
                     android:importantForAutofill="no"
-                    android:inputType="text"
+                    android:inputType="number"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -197,7 +197,7 @@
                     android:drawablePadding="10dp"
                     android:hint="@string/year"
                     android:importantForAutofill="no"
-                    android:inputType="text"
+                    android:inputType="number"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
