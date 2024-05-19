@@ -1,0 +1,7 @@
+{
+  "version": "1",
+  "settings": {
+    "mapType": "normal",
+    "style": "feature:poi|visibility:off"
+  }
+}

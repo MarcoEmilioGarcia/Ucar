@@ -1,19 +1,14 @@
 package com.example.ucar_home
 
-
-
 import java.net.URL
 import java.time.LocalDate
 
 
 object variables {
-
-
     var Email: String = ""
     var Password: String = ""
-
-
 }
+
 data class User(
     val username: String = "",
     val email: String = "", // Added email field
@@ -23,7 +18,7 @@ data class User(
     val bibliography: String =""
 )
 
-data class EventObject(
+data class Event(
      var title: String,
      var imageUrl: String,
      var date: LocalDate,
