@@ -1,6 +1,4 @@
 package com.example.ucar_home
-
-
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -34,15 +32,16 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        // val email = prefs.getString("email", null)
         auth = FirebaseAuth.getInstance()
         val userReference = FirebaseDatabase.getInstance().getReference("users")
+        val carsReference = FirebaseDatabase.getInstance().getReference("cars")
         // val currentUser: FirebaseUser? = auth.currentUser //val uid: String = currentUser?.uid ?: ""
+        var carList: MutableList<CarObject> = mutableListOf()
+
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()){
 
             auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener(this) { task ->
-                // Log.d(ContentValues.TAG, "efectivamente 2")
+
 
                 if (task.isSuccessful) {
                     userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object :
@@ -78,17 +77,42 @@ class ProfileActivity : AppCompatActivity() {
                                         // Manejar errores de descarga de imagen
                                     }
                                 }
+
                             } else {
                                 // Manejar el caso en el que no se encontraron resultados
                                 Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
                             }
                         }
 
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            // Manejar errores de cancelación
+                        }
+                    })
+
+                    Log.d("TAG", "traza1")
+                    carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object : ValueEventListener {
+
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            Log.d("TAG", "traza2")
+                            dataSnapshot.children.forEach {
+                                val car = it.getValue(CarObject::class.java)
+                                car?.let {
+                                    carList.add(it)
+                                    Log.d("TAG", "se añade")
+                                }
+
+                            }
+                            val adapter = CarAdapter(carList)
+                            binding.publicaciones.adapter = adapter
+
+                            adapter.notifyDataSetChanged()
+                        }
 
                         override fun onCancelled(databaseError: DatabaseError) {
                             // Manejar errores de cancelación
                         }
                     })
+
 
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
@@ -99,7 +123,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.btnAdd.setOnClickListener {
-            val intent = Intent(this,CreateEventActivity::class.java)
+            val intent = Intent(this,AddCarActivity::class.java)
             startActivity(intent)
         }
 
