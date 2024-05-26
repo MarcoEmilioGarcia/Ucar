@@ -27,16 +27,16 @@ data class Event(
     var idUser: String = ""
 )
 data class CarObject(
-    var title: String="",
-    var brand: String="",
-    var model: String="",
-    var cv: Int,
-    var cc: Int,
-    var year: Int,
-    val fuel: String ="",
-    val imageUrl: String ="",
-    var description: String="",
-    var idUser: String=""
+    var title: String = "",
+    var brand: String = "",
+    var model: String = "",
+    var cv: Int = 0,
+    var cc: Int = 0,
+    var year: Int = 0,
+    val fuel: String = "",
+    val imageUrl: String = "",
+    var description: String = "",
+    var idUser: String = ""
 )
 
 
