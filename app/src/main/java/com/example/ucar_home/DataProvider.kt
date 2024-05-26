@@ -36,7 +36,6 @@ data class CarObject(
     val fuel: String = "",
     val imageUrl: String = "",
     var description: String = "",
-    var idUser: String = ""
 )
 
 

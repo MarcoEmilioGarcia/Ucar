@@ -72,7 +72,10 @@ class ProfileActivity : AppCompatActivity() {
                     })
 
                     if (auth.uid != null) {
-                        carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object : ValueEventListener {
+                        // Referencia directa a la ruta del usuario específico
+                        val userCarsReference = carsReference.child(auth.uid!!)
+
+                        userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 Log.d(ContentValues.TAG, "Consulta de coches exitosa, número de resultados: ${dataSnapshot.childrenCount}")
                                 dataSnapshot.children.forEach {
@@ -99,6 +102,7 @@ class ProfileActivity : AppCompatActivity() {
                     } else {
                         Log.e(ContentValues.TAG, "El UID de auth es nulo")
                     }
+
 
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
