@@ -103,7 +103,6 @@ class ProfileActivity : AppCompatActivity() {
                         Log.e(ContentValues.TAG, "El UID de auth es nulo")
                     }
 
-
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
                     Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
