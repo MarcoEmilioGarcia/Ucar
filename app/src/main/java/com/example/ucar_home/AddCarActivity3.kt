@@ -38,17 +38,18 @@ class AddCarActivity3: AppCompatActivity() {
                     // Log.d(ContentValues.TAG, "efectivamente 2")
 
                     if (task.isSuccessful) {
+
                         val user = auth.currentUser
                         val idUser = user?.uid
                         val description = binding.editTextDescription.text.toString()
                         Log.d(ContentValues.TAG, "User registered successfully.")
-                        saveCarToDatabase(title,brand,model, cv, cc, year,fuel, imageUrl, description ,idUser)
-
+                        saveCarToDatabase(title,brand,model, cv, cc, year,fuel, imageUrl, description )
                         val intent = Intent(this, ProfileActivity::class.java)
                         startActivity(intent)
                         } else {
                             Log.d(ContentValues.TAG, "User registration failed.")
                         }
+
                     }
             } else {
                 Log.d(ContentValues.TAG, "Email or password is empty.")
@@ -69,21 +70,21 @@ class AddCarActivity3: AppCompatActivity() {
         fuel: String?,
         imageUrl: String?,
         description: String?,
-        idUser: String?
+
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val car = CarObject(title!!, brand!!,model!!,cv!!, cc!!, year!!,fuel!!,imageUrl!!, description!!,idUser!!)
+        val car = CarObject(title!!, brand!!, model!!, cv!!, cc!!, year!!, fuel!!, imageUrl!!, description!!)
         uid?.let {
-
-            database.child("cars").child(it).setValue(car)
+            database.child("cars").child(it).push().setValue(car)
                 .addOnSuccessListener {
-                    Log.d(ContentValues.TAG, "User data saved successfully.")
+                    Log.d(ContentValues.TAG, "Car data saved successfully.")
                     // Proceed to next activity or whatever you need to do
                 }
                 .addOnFailureListener { e ->
-                    Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
+                    Log.d(ContentValues.TAG, "Error saving car data: ${e.message}")
                 }
         }
     }
+
 }
