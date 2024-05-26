@@ -1,22 +1,13 @@
 package com.example.ucar_home
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.example.ucar_home.databinding.ActivityMainBinding
 import com.example.ucar_home.databinding.ActivityProfileBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 
@@ -31,6 +22,8 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.publicaciones.layoutManager = LinearLayoutManager(this)
+
 
         auth = FirebaseAuth.getInstance()
         val userReference = FirebaseDatabase.getInstance().getReference("users")
@@ -38,89 +31,85 @@ class ProfileActivity : AppCompatActivity() {
         // val currentUser: FirebaseUser? = auth.currentUser //val uid: String = currentUser?.uid ?: ""
         var carList: MutableList<CarObject> = mutableListOf()
 
-        if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()){
-
+        if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener(this) { task ->
 
-
                 if (task.isSuccessful) {
-                    userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object :
-                        ValueEventListener {
+                    Log.d(ContentValues.TAG, "Autenticación exitosa, uid: ${auth.uid}")
 
+                    userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            // Obtener el primer hijo de dataSnapshot (si existe)
                             val userSnapshot = dataSnapshot.children.firstOrNull()
-
-                            // Verificar si se encontró algún resultado
                             if (userSnapshot != null) {
-                                // Obtener el usuario desde el primer hijo
-
                                 val user = userSnapshot.getValue(User::class.java)
-                                binding.textViewName.text = user?.name
-                                binding.textViewUsername.text = user?.username
-                                binding.textViewBibliography.text = user?.bibliography
+                                if (user != null) {
+                                    binding.textViewName.text = user.name
+                                    binding.textViewUsername.text = user.username
+                                    binding.textViewBibliography.text = user.bibliography
 
+                                    user.imageUrl?.let { imageUrl ->
+                                        val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
+                                        storageReference.downloadUrl.addOnSuccessListener { uri ->
+                                            Glide.with(this@ProfileActivity)
+                                                .load(uri)
+                                                .into(binding.imageView2)
+                                        }.addOnFailureListener { exception ->
+                                            Log.e(ContentValues.TAG, "Error al descargar la imagen", exception)
+                                            // Mostrar mensaje de error al usuario
+                                        }
+                                    }
+                                } else {
+                                    Log.d(ContentValues.TAG, "El usuario es nulo")
+                                }
+                            } else {
+                                Log.d(ContentValues.TAG, "No se encontraron resultados para el correo electrónico proporcionado")
+                            }
+                        }
 
-                                user?.imageUrl?.let { imageUrl ->
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
+                        }
+                    })
 
-                                    // Obtener la referencia de Storage desde la URL
-                                    val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
-                                    // Descargar la URL de la imagen desde Storage
-                                    storageReference.downloadUrl.addOnSuccessListener { uri ->
-                                        // Cargar la imagen en el ImageButton usando Glide
-                                        Log.d(ContentValues.TAG, "URI de la imagen: $uri")
-
-                                        Glide.with(this@ProfileActivity)
-                                            .load(uri)
-                                            .into(binding.imageView2)
-                                    }.addOnFailureListener { exception ->
-                                        // Manejar errores de descarga de imagen
+                    if (auth.uid != null) {
+                        carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                Log.d(ContentValues.TAG, "Consulta de coches exitosa, número de resultados: ${dataSnapshot.childrenCount}")
+                                dataSnapshot.children.forEach {
+                                    val car = it.getValue(CarObject::class.java)
+                                    car?.let {
+                                        carList.add(it)
+                                        Log.d(ContentValues.TAG, "Coche añadido: ${car}")
                                     }
                                 }
-
-                            } else {
-                                // Manejar el caso en el que no se encontraron resultados
-                                Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
-                            }
-                        }
-
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            // Manejar errores de cancelación
-                        }
-                    })
-
-                    Log.d("TAG", "traza1")
-                    carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object : ValueEventListener {
-
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            Log.d("TAG", "traza2")
-                            dataSnapshot.children.forEach {
-                                val car = it.getValue(CarObject::class.java)
-                                car?.let {
-                                    carList.add(it)
-                                    Log.d("TAG", "se añade")
+                                if (carList.isNotEmpty()) {
+                                    Log.d(ContentValues.TAG, "Número de coches en la lista: ${carList.size}")
+                                    val adapter = CarAdapter(carList)
+                                    binding.publicaciones.adapter = adapter
+                                    adapter.notifyDataSetChanged()
+                                } else {
+                                    Log.d(ContentValues.TAG, "La lista de coches está vacía")
                                 }
-
                             }
-                            val adapter = CarAdapter(carList)
-                            binding.publicaciones.adapter = adapter
 
-                            adapter.notifyDataSetChanged()
-                        }
-
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            // Manejar errores de cancelación
-                        }
-                    })
-
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
+                            }
+                        })
+                    } else {
+                        Log.e(ContentValues.TAG, "El UID de auth es nulo")
+                    }
 
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
                     Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
-                    // Aquí podrías mostrar un mensaje de error al usuario, dependiendo del tipo de error
+                    // Mostrar mensaje de error al usuario
                 }
             }
         }
+
+
+
 
         binding.btnAdd.setOnClickListener {
             val intent = Intent(this,AddCarActivity::class.java)
