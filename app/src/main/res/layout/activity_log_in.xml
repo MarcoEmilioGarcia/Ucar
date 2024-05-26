@@ -32,8 +32,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            >
+            app:layout_constraintVertical_bias="0.0">
 
             <!--GO BACK BUTTON-->
             <ImageButton
@@ -59,9 +58,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="50dp"
-                android:layout_marginRight="40dp">
+                android:layout_marginEnd="40dp">
 
                 <EditText
                     android:id="@+id/editTextEmail"
@@ -80,9 +79,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp"
                 app:passwordToggleEnabled="true">
 
                 <EditText
@@ -102,9 +101,9 @@
                 android:id="@+id/textViewResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp"
                 android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/warning"
@@ -138,7 +137,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="40dp"
-                android:backgroundTint="#00FFFFFF"
+                android:background="@android:color/transparent"
                 android:elevation="2dp"
                 android:shadowColor="#00FFFFFF"
                 android:text="@string/forgot_password"
@@ -147,7 +146,6 @@
                 android:textStyle="normal"
                 app:cornerRadius="5dp"
                 app:strokeColor="#00FFFFFF" />
-
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -180,7 +178,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
-
 
         <TextView
             android:id="@+id/textViewCreate"
@@ -237,8 +234,7 @@
             app:strokeColor="#FFFFFF"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
-            android:layout_marginBottom="90dp"/>
-
+            android:layout_marginBottom="90dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -254,7 +250,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
-
 
         <!--LOGO-->
         <ImageView
@@ -343,7 +338,7 @@
             android:layout_marginStart="60dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="60dp"
-            android:backgroundTint="#00FFFFFF"
+            android:background="@android:color/transparent"
             android:elevation="2dp"
             android:text="@string/create_new_account"
             android:textColor="@color/white"

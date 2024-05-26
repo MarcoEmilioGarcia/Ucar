@@ -88,4 +88,13 @@
     <string name="cyclindrated">CC</string>
 
 
+    <string name="error_empty_fields">There cannot be empty fields.</string>
+    <string name="error_password_mismatch">Password must be the same.</string>
+    <string name="error_invalid_password">Password must have 8 characters, numbers, and capital letters on it.</string>
+    <string name="error_invalid_email">You must provide a valid email address.</string>
+    <string name="error_missing_name_or_image">You have to put your name and select an image.</string>
+    <string name="error_upload_failed">Image upload failed. Please try again.</string>
+    <string name="error_email_exists">An account with this email already exists.</string>
+    <string name="error_checking_email">Error checking email. Please try again.</string>
+
 </resources>

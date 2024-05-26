@@ -53,7 +53,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val markers = mutableListOf<Marker>()
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private val eventsList = mutableListOf<Event>( )
+    private val eventsList = mutableListOf<Event>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,6 +72,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         geocoder = Geocoder(requireContext())
         auth = FirebaseAuth.getInstance()
         val eventsReference = FirebaseDatabase.getInstance().getReference("events")
+
         auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.d(ContentValues.TAG, "traza 2")
@@ -81,44 +82,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 eventsReference.orderByChild("idUser").equalTo(idUser).addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         Log.d(ContentValues.TAG, "traza 3")
-                        val userSnapshot = dataSnapshot.children.forEach {
-
+                        dataSnapshot.children.forEach {
                             Log.d(ContentValues.TAG, "traza 4")
                             val event = it.getValue(Event::class.java)
-
-
                             if (event != null && idUser != null) {
                                 Log.d(ContentValues.TAG, "traza 5")
-                                /*
-                                val dateString = it.child("date").getValue(String::class.java)
-                                if (dateString != null) {
-                                    val date = LocalDate.parse(dateString)
-                                   */
-
-                                eventsList.add( Event(event.title, event.imageUrl, event.date, event.address, event.description, idUser))
-/*
-                                } else {
-                                    // Manejar el caso donde la fecha es nula
-                                }*/
+                                eventsList.add(event)
                             }
-
                         }
-
-
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
-                        // Manejar errores de cancelación
                         Log.e(ContentValues.TAG, "Error en la consulta de eventos: ${databaseError.message}")
                     }
                 })
             } else {
                 val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
                 Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
-                // Aquí podrías mostrar un mensaje de error al usuario, dependiendo del tipo de error
             }
         }
-
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -140,19 +122,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setInfoWindowAdapter(CustomInfoWindowAdapter(requireContext()))
 
-        // Ocultar etiquetas de puntos de interés
         mMap.isIndoorEnabled = false
-
-        // Primero habilita la ubicación actual
         enableMyLocation()
-
-        // Luego aplica el estilo del mapa
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style))
 
         if (!mMap.isMyLocationEnabled) {
@@ -169,45 +145,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
     private fun filterMarkers(query: String?) {
         markers.forEach { marker ->
-            val title = marker.title
-            if (title!!.contains(query ?: "", ignoreCase = true)) {
-                marker.isVisible = true
-            } else {
-                marker.isVisible = false
-            }
+            marker.isVisible = marker.title!!.contains(query ?: "", ignoreCase = true)
         }
     }
 
     private fun enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
             return
         }
         mMap.isMyLocationEnabled = true
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, DEFAULT_ZOOM))
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                enableMyLocation()
-            }
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            enableMyLocation()
         }
     }
 
@@ -224,48 +180,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 val marker = mMap.addMarker(MarkerOptions().position(position).title(event.title)
                     .icon(BitmapDescriptorFactory.fromBitmap(bitmap)))
                 marker!!.tag = event
-                markers.add(marker!!)
+                markers.add(marker)
             } else {
-                Toast.makeText(requireContext(), "Dirección no encontrada para ${event.title}", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Dirección no encontrada para ${event.title}", Toast.LENGTH_SHORT).show()
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(requireContext(), "Error al obtener la dirección para ${event.title}", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(requireContext(), "Error al obtener la dirección para ${event.title}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun resizeBitmap(drawableRes: Int, width: Int, height: Int): Bitmap {
         val imageBitmap = BitmapFactory.decodeResource(resources, drawableRes)
         return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
-    }
-
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay).toString()
-                filterEventsByDate(selectedDate)
-            },
-            year, month, day
-        )
-        datePickerDialog.show()
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun filterEventsByDate(date: String) {
-        markers.forEach { it.remove() }
-        markers.clear()
-        eventsList.filter { it.date == date }.forEach { event ->
-            addEventMarker(event)
-        }
     }
 
     private fun showStartDatePickerDialog() {
@@ -285,7 +212,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         datePickerDialog.show()
     }
 
-
     private fun showEndDatePickerDialog(startDate: String) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -302,7 +228,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         )
         datePickerDialog.show()
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun filterEventsByDateRange(startDate: String, endDate: String) {

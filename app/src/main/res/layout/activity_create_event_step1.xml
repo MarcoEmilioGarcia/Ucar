@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInStep1Activity">
+    tools:context=".CreateEventStep1Activity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
@@ -14,17 +14,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/white">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!--COPLETE BAR-->
+        <!-- COMPLETE BAR -->
         <View
             android:id="@+id/view2"
-            android:layout_width="100dp"
+            android:layout_width="133dp"
             android:layout_height="10dp"
             android:background="@drawable/background_gradient_horizontal" />
 
-        <!--GO BACK BUTTON-->
+        <!-- GO BACK BUTTON -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +58,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="40dp"
-            android:text="@string/title1"
+            android:text="Create new Event:"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -70,10 +69,9 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="40dp"
-            android:text="@string/subtitle1"
+            android:text="Select a name for your new event. Choose a date and the place where it will be."
             android:textSize="16sp" />
 
-        <!--USERNAME-->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,74 +80,98 @@
             android:layout_marginRight="40dp">
 
             <EditText
-                android:id="@+id/editTextUsername"
+                android:id="@+id/editTextTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_account"
-                android:drawablePadding="10dp"
-                android:hint="@string/username"
-                android:importantForAutofill="no"
-                android:inputType="textEmailAddress"
-                tools:ignore="TextContrastCheck" />
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:hint="Title"
+                tools:ignore="TouchTargetSizeCheck"
+                android:drawableStart="@drawable/icon_car"
+                android:drawablePadding="10dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--PASSWORD-->
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            app:passwordToggleEnabled="true">
+            android:layout_marginRight="40dp">
 
             <EditText
-                android:id="@+id/editTextPassword"
+                android:id="@+id/editTextDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_lock"
-                android:drawablePadding="10dp"
-                android:hint="@string/password"
-                android:importantForAutofill="no"
-                android:inputType="textPassword"
-                tools:ignore="TextContrastCheck" />
-
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:focusable="false"
+                android:hint="Date (YYYY-MM-DD)"
+                tools:ignore="TouchTargetSizeCheck"
+                android:drawableStart="@drawable/icon_calendar"
+                android:drawablePadding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--REPEAT PASSWORD-->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            app:passwordToggleEnabled="true">
+            android:layout_marginRight="40dp">
 
             <EditText
-                android:id="@+id/editTextRepeatPassword"
+                android:id="@+id/editTextTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_lock"
-                android:drawablePadding="10dp"
-                android:hint="@string/repeat_password"
-                android:importantForAutofill="no"
-                android:inputType="textPassword"
-                tools:ignore="TextContrastCheck" />
-
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:focusable="false"
+                android:hint="Time (HH:MM)"
+                tools:ignore="TouchTargetSizeCheck"
+                android:drawableStart="@drawable/icon_time"
+                android:drawablePadding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--CHANGE SETTINGS-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp">
+
+            <EditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:hint="Address"
+                tools:ignore="TouchTargetSizeCheck"
+                android:drawableStart="@drawable/icon_maps"
+                android:drawablePadding="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- CHANGE SETTINGS -->
         <TextView
             android:id="@+id/textViewResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="73dp"
-            android:layout_marginEnd="60dp"
-            android:text="@string/change_preferences"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="40dp"
+            android:text=""
             android:textAlignment="center" />
 
-        <!--NEXT BUTTON-->
+        <!-- NEXT BUTTON -->
         <Button
             android:id="@+id/btnNext"
             style="?attr/materialButtonOutlinedStyle"
@@ -168,7 +190,6 @@
             app:cornerRadius="15dp"
             app:strokeColor="@color/white"
             tools:ignore="TextContrastCheck" />
-
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

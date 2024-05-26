@@ -2,23 +2,13 @@ package com.example.ucar_home
 
 
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.example.ucar_home.databinding.ActivityMainBinding
 import com.example.ucar_home.databinding.ActivityProfileBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 
@@ -99,7 +89,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.btnAdd.setOnClickListener {
-            val intent = Intent(this,CreateEventActivity::class.java)
+            val intent = Intent(this,CreateEventStep1Activity::class.java)
             startActivity(intent)
         }
 

@@ -1,6 +1,5 @@
 package com.example.ucar_home
 
-
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
@@ -19,10 +18,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
-
-
 
 class LogInActivity : AppCompatActivity() {
 
@@ -30,49 +28,40 @@ class LogInActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var googleSignInClient: GoogleSignInClient
-    private var GOOGLE_SIGN_IN = 100
-
+    private val GOOGLE_SIGN_IN = 100
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_log_in)
-
-      session()
-
         binding = ActivityLogInBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
+
+        session()
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
-
-        //LOGIN GOOGLE ------------------------------------------------------------------------------NO FUNCIONA
+        //LOGIN GOOGLE
         binding.btnLoginGoogle.setOnClickListener {
-            val googleConf =
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build()
-            val googleClient = GoogleSignIn.getClient(this, googleConf)
-            startActivityForResult(googleClient.signInIntent, GOOGLE_SIGN_IN)
+            val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            googleSignInClient = GoogleSignIn.getClient(this, googleConf)
+            startActivityForResult(googleSignInClient.signInIntent, GOOGLE_SIGN_IN)
         }
 
-
-    // ---------------------------------- AUTHENTICATION ------------------------------------------
         //LOGIN MANUAL
         binding.btnLoginManual.setOnClickListener {
             binding.viewLoginUser.visibility = View.VISIBLE
-            binding.viewLoginUser.alpha=1f
+            binding.viewLoginUser.alpha = 1f
 
             // Animación de escala en X
             val scaleX = ObjectAnimator.ofFloat(binding.viewLoginUser, View.SCALE_X, 0f, 1f)
-            scaleX.duration = 500
+            scaleX.duration = 250 // Duración reducida a la mitad
 
             // Animación de escala en Y
             val scaleY = ObjectAnimator.ofFloat(binding.viewLoginUser, View.SCALE_Y, 0f, 1f)
-            scaleY.duration = 500
+            scaleY.duration = 250 // Duración reducida a la mitad
 
             // Establecer el punto central de la vista como punto de escala
             binding.viewLoginUser.pivotX = (binding.viewLoginUser.width / 2).toFloat()
@@ -84,34 +73,35 @@ class LogInActivity : AppCompatActivity() {
             animatorSet.start()
 
             try {
-                binding.btnLogin.setOnClickListener{
-                    if (binding.editTextEmail.text.isNotEmpty() && binding.editTextPassword.text.isNotEmpty()){
-                        auth.signInWithEmailAndPassword(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString()).addOnCompleteListener(this) { task ->
+                binding.btnLogin.setOnClickListener {
+                    if (binding.editTextEmail.text.isNotEmpty() && binding.editTextPassword.text.isNotEmpty()) {
+                        auth.signInWithEmailAndPassword(
+                            binding.editTextEmail.text.toString(),
+                            binding.editTextPassword.text.toString()
+                        ).addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
-                                Log.d(ContentValues.TAG, "Autenticacion del ususario Correcta")
+                                Log.d(ContentValues.TAG, "Autenticación del usuario correcta")
                                 variables.Email = binding.editTextEmail.text.toString()
                                 variables.Password = binding.editTextPassword.text.toString()
 
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
-                            }
-                            else {
+                            } else {
                                 val builder = android.app.AlertDialog.Builder(this)
                                 builder.setTitle("Error")
-                                builder.setMessage("Usuario o Contraseña Incorrecta")
-                                builder.setPositiveButton("Aceptar",null)
+                                builder.setMessage("Usuario o contraseña incorrecta")
+                                builder.setPositiveButton("Aceptar", null)
                                 val dialog: android.app.AlertDialog = builder.create()
                                 dialog.show()
                             }
                         }
-                    }else{
+                    } else {
                         Log.d(ContentValues.TAG, "Debes rellenar los campos")
-                        }
+                    }
                 }
-            } catch (e: Exception) {
-                Log.d(ContentValues.TAG, "Error en la autentificacion del usuario")
+            } catch (e: FirebaseAuthException) {
+                Log.d(ContentValues.TAG, "Error en la autentificación del usuario: ${e.message}")
             }
-
         }
 
         //GO BACK BUTTON
@@ -119,7 +109,7 @@ class LogInActivity : AppCompatActivity() {
 
             // Crear un objeto de animación de transparencia
             val fadeOut = ObjectAnimator.ofFloat(binding.viewLoginUser, View.ALPHA, 1f, 0f)
-            fadeOut.duration = 900 // Duración de la animación en milisegundos
+            fadeOut.duration = 450 // Duración reducida a la mitad
 
             // Iniciar la animación
             fadeOut.start()
@@ -138,20 +128,18 @@ class LogInActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-    // ---------------------------------- CREATE ACCOUNT ------------------------------------------
         //CREATE ACCOUNT
         binding.btnSingIn.setOnClickListener {
-            binding.viewCreateAccount.visibility=View.VISIBLE
-            binding.viewCreateAccount.alpha=1f
+            binding.viewCreateAccount.visibility = View.VISIBLE
+            binding.viewCreateAccount.alpha = 1f
 
             // Animación de escala en X
             val scaleX = ObjectAnimator.ofFloat(binding.viewCreateAccount, View.SCALE_X, 0f, 1f)
-            scaleX.duration = 500
+            scaleX.duration = 250 // Duración reducida a la mitad
 
             // Animación de escala en Y
             val scaleY = ObjectAnimator.ofFloat(binding.viewCreateAccount, View.SCALE_Y, 0f, 1f)
-            scaleY.duration = 500
+            scaleY.duration = 250 // Duración reducida a la mitad
 
             // Establecer el punto central de la vista como punto de escala
             binding.viewCreateAccount.pivotX = (binding.viewCreateAccount.width / 2).toFloat()
@@ -168,7 +156,7 @@ class LogInActivity : AppCompatActivity() {
 
             // Crear un objeto de animación de transparencia
             val fadeOut = ObjectAnimator.ofFloat(binding.viewCreateAccount, View.ALPHA, 1f, 0f)
-            fadeOut.duration = 900 // Duración de la animación en milisegundos
+            fadeOut.duration = 450 // Duración reducida a la mitad
 
             // Iniciar la animación
             fadeOut.start()
@@ -181,18 +169,17 @@ class LogInActivity : AppCompatActivity() {
             })
         }
 
-        //SIGN IN GOOGLE ----------------------------------------------------------------------------CREAR registro con google
+        //SIGN IN GOOGLE
         binding.btnSignInGoogle.setOnClickListener {
-            //Añadir funcionalidad al boton para poder registrarse con Google
+            //Añadir funcionalidad al botón para poder registrarse con Google
         }
 
-        //SING IN MANUAL, registrarse
+        //SIGN IN MANUAL, registrarse
         binding.btnSignInManual.setOnClickListener {
             val intent = Intent(this, SignInStep1Activity::class.java)
             startActivity(intent)
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -204,37 +191,28 @@ class LogInActivity : AppCompatActivity() {
 
                 if (account != null) {
                     val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                    FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { signInTask ->
-                        if (signInTask.isSuccessful) {
-                            val intent = Intent(this, SignInGoogleStep1::class.java)
-                            startActivity(intent)
-                        } else {
-                            Log.d(ContentValues.TAG, "El usuario no fue registrado correctamente.")
+                    FirebaseAuth.getInstance().signInWithCredential(credential)
+                        .addOnCompleteListener { signInTask ->
+                            if (signInTask.isSuccessful) {
+                                val intent = Intent(this, SignInGoogleStep1::class.java)
+                                startActivity(intent)
+                            } else {
+                                Log.d(ContentValues.TAG, "El usuario no fue registrado correctamente.")
+                            }
                         }
-                    }
                 }
             } catch (e: ApiException) {
-                Log.d(ContentValues.TAG, "Error bien gordo")
+                Log.d(ContentValues.TAG, "Error bien gordo: ${e.message}")
             }
         }
     }
+
     private fun session() {
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        val email = prefs.getString("email",null)
-        if(email != null) {
+        val email = prefs.getString("email", null)
+        if (email != null) {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
         }
-
     }
-
-
 }
-
-
-
-
-
-
-
-
