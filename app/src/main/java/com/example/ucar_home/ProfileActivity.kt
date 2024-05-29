@@ -46,6 +46,8 @@ class ProfileActivity : AppCompatActivity() {
                                     binding.textViewName.text = user.name
                                     binding.textViewUsername.text = user.username
                                     binding.textViewBibliography.text = user.bibliography
+                                    binding.textView7.text = user.followers.toString()
+                                    binding.textView9.text = user.following.toString()
 
                                     user.imageUrl?.let { imageUrl ->
                                         val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
@@ -116,6 +118,10 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener {
             val intent = Intent(this,AddCarActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnAdd2.setOnClickListener {
+            val intent = Intent(this,AddPostActivity::class.java)
             startActivity(intent)
         }
 

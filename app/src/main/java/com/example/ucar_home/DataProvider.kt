@@ -15,7 +15,9 @@ data class User(
     val phoneNumber: String ="",
     val name: String = "",
     val imageUrl: String ="",
-    val bibliography: String =""
+    val bibliography: String ="",
+    var followers: Int = 0,
+    var following: Int = 0,
 )
 
 data class Event(
@@ -38,11 +40,10 @@ data class CarObject(
     var description: String = "",
 )
 
+data class PostObject(
+    var description: String = "",
+    var imageUrl: String = "",
+    var likes: Int = 0,
+)
 
-object DataProvider {
-    val publicaciones: List<Any> = listOf(
-        1, listOf(URL("R.drawable.porche"), URL("R.drawable.porche2")), "Nuevo Coche", 24, listOf("Esta muy chulo", "Dabuti Colega"),
-        2, listOf(URL("R.drawable.bmw"), URL("R.drawable.bmw2")), "Nuevo Coche", 23, listOf("Esta muy chulo", "Dabuti Colega")
-    )
-}
 

@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,13 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ucar_Home"
         tools:targetApi="31">
+        <activity
+            android:name=".AddPostActivity2"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCIlEheFUdjmHq3ZbOyWxlgQp-VpkXno68" />
+
         <activity
             android:name=".MapsFragment"
             android:exported="true"
-            android:label="MapsFragment"/>
+            android:label="MapsFragment" />
         <activity
             android:name=".CreateEventActivity"
             android:exported="false" />
@@ -58,23 +62,23 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".AddPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddCarActivity"
             android:exported="false" />
         <activity
             android:name=".AddCarActivity2"
             android:exported="false" />
-
         <activity
             android:name=".AddCarActivity3"
             android:exported="false" />
-
-
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

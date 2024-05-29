@@ -39,8 +39,6 @@ class AddCarActivity3: AppCompatActivity() {
 
                     if (task.isSuccessful) {
 
-                        val user = auth.currentUser
-                        val idUser = user?.uid
                         val description = binding.editTextDescription.text.toString()
                         Log.d(ContentValues.TAG, "User registered successfully.")
                         saveCarToDatabase(title,brand,model, cv, cc, year,fuel, imageUrl, description )

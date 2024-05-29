@@ -36,7 +36,7 @@ class SignInStep4Activity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             val bibliography = binding.editTextBibliography.text.toString()
                             Log.d(ContentValues.TAG, "User registered successfully.")
-                            saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography)
+                            saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography,0,0)
                             variables.Email = email
                             variables.Password = password
 
@@ -60,11 +60,13 @@ class SignInStep4Activity : AppCompatActivity() {
         phoneNumber: String?,
         name: String?,
         imageUrl: String?,
-        bibliography: String?
+        bibliography: String?,
+        followers: Int ?,
+        following: Int ?
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val user = User(username!!, email!!, phoneNumber!!, name!!, imageUrl!!, bibliography!!)
+        val user = User(username!!, email!!, phoneNumber!!, name!!, imageUrl!!, bibliography!!,followers!!,following!!)
         uid?.let {
 
             database.child("users").child(it).setValue(user)
