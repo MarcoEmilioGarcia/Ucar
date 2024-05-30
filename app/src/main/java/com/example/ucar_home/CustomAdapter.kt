@@ -34,6 +34,31 @@ class CarAdapter(private val carList: List<CarObject>) : RecyclerView.Adapter<Ca
         return carList.size
     }
 }
+
+
+class SearchAdapter(private val postList: List<PostObject>) : RecyclerView.Adapter<SearchAdapter.PostViewHolder>() {
+
+    inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val postImageView: ImageView = itemView.findViewById(R.id.imageView)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_search, parent, false)
+        return PostViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        val currentPost = postList[position]
+        Glide.with(holder.itemView.context).load(currentPost.imageUrl).into(holder.postImageView)
+    }
+
+    override fun getItemCount(): Int {
+        return postList.size
+    }
+}
+
+
+
 class PostAdapter(private var postsList: MutableMap<PostObject, User>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {

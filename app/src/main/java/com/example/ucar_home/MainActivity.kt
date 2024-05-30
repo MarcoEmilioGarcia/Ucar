@@ -175,19 +175,16 @@ class MainActivity : AppCompatActivity() {
         val userCarsReference = postsReference.child(uid)
         userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d(ContentValues.TAG, "Consulta de publicaciones exitosa, número de resultados: ${dataSnapshot.childrenCount}")
                 val postsList = mutableMapOf<PostObject, User>()
                 dataSnapshot.children.forEach { snapshot ->
                     val post = snapshot.getValue(PostObject::class.java)
                     val user = snapshot.getValue(User::class.java)
                     if (post != null && user != null) {
                         postsList[post] = user
-                        Log.d(ContentValues.TAG, "Publicación añadida: $post")
                     }
                 }
 
                 if (postsList.isNotEmpty()) {
-                    Log.d(ContentValues.TAG, "Número de publicaciones en la lista: ${postsList.size}")
                     // Asumiendo que el fragmento actualmente visible es HomeFragment
                     (supportFragmentManager.findFragmentById(R.id.frame_container) as? HomeFragment)?.updatePosts(postsList)
                 } else {

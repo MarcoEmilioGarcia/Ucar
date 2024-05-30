@@ -61,14 +61,30 @@ class SignInStep4Activity : AppCompatActivity() {
         name: String?,
         imageUrl: String?,
         bibliography: String?,
-        followers: Int ?,
-        following: Int ?
+        followers: Int?,
+        following: Int?
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val user = User(username!!, email!!, phoneNumber!!, name!!, imageUrl!!, bibliography!!,followers!!,following!!)
-        uid?.let {
 
+        // Inicializa las listas de seguidores y seguidos vacías
+        val followersList = emptyList<String>()
+        val followingList = emptyList<String>()
+
+        val user = User(
+            username = username!!,
+            email = email!!,
+            phoneNumber = phoneNumber!!,
+            name = name!!,
+            imageUrl = imageUrl!!,
+            bibliography = bibliography!!,
+            followers = followers ?: 0,
+            following = following ?: 0,
+            followersList = followersList,
+            followingList = followingList
+        )
+
+        uid?.let {
             database.child("users").child(it).setValue(user)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "User data saved successfully.")
@@ -79,6 +95,7 @@ class SignInStep4Activity : AppCompatActivity() {
                 }
         }
     }
+
 
 
 }

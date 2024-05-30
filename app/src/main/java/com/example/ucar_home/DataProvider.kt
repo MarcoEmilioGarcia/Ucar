@@ -11,14 +11,17 @@ object variables {
 
 data class User(
     val username: String = "",
-    val email: String = "", // Added email field
-    val phoneNumber: String ="",
+    val email: String = "",
+    val phoneNumber: String = "",
     val name: String = "",
-    val imageUrl: String ="",
-    val bibliography: String ="",
+    val imageUrl: String = "",
+    val bibliography: String = "",
     var followers: Int = 0,
     var following: Int = 0,
+    val followersList: List<String> = emptyList(), // List of user IDs following this user
+    val followingList: List<String> = emptyList() // List of user IDs this user is following
 )
+
 
 data class Event(
     var title: String = "",
