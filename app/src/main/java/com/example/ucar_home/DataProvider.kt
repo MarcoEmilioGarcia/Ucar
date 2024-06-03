@@ -22,6 +22,26 @@ data class User(
     val followingList: List<String> = emptyList() // List of user IDs this user is following
 )
 
+data class Chat(
+    var idUser1: String = "",
+    var idUser2: String = "",
+    var username: String = "",
+    val imageUrl: String = "",
+    val lastMessage: String = "",
+    val unreadMessages: String = "",
+    var timestamp: Long = System.currentTimeMillis(),
+    val messages: Map<String, Message> = emptyMap()
+)
+
+
+data class Message(
+    var senderId: String = "",
+    var timestamp: Long = System.currentTimeMillis(), // Unix timestamp
+    var content: String = ""
+)
+
+
+
 
 data class Event(
     var title: String = "",

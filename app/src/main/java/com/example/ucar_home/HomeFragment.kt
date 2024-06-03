@@ -1,6 +1,8 @@
 package com.example.ucar_home
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,7 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view
+
     }
 
     fun updatePosts(newPostsList: MutableMap<PostObject, User>) {
