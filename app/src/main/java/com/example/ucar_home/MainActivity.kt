@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.ucar_home.databinding.ActivityMainBinding
 import com.example.ucar_home.fragment.ChatFragment
-import com.example.ucar_home.fragment.HomeFragment
 import com.example.ucar_home.fragment.MapsFragment
 import com.example.ucar_home.fragment.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -34,7 +33,9 @@ class MainActivity : AppCompatActivity() {
 
     // Mapa para mantener las referencias a los íconos originales
     private val originalIconsMap = mutableMapOf<Int, Int>()
+
     val postsReference = FirebaseDatabase.getInstance().getReference("posts")
+    val usersReference = FirebaseDatabase.getInstance().getReference("users")
     var postsList = mutableMapOf<CarObject, User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     Log.d(ContentValues.TAG, "Autenticación exitosa, uid: ${auth.uid}")
                     auth.uid?.let { uid ->
-                        loadUserPosts(uid)
+                        loadFollowingUserPosts(uid)
                     } ?: Log.e(ContentValues.TAG, "El UID de auth es nulo")
                 } else {
                     Log.d(ContentValues.TAG, "Error al autenticar: ${task.exception?.message ?: "Error desconocido"}")
@@ -175,24 +176,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadUserPosts(uid: String) {
-        val userCarsReference = postsReference.child(uid)
-        userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+    private fun loadFollowingUserPosts(uid: String) {
+        usersReference.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val postsList = mutableMapOf<PostObject, User>()
-                dataSnapshot.children.forEach { snapshot ->
-                    val post = snapshot.getValue(PostObject::class.java)
-                    val user = snapshot.getValue(User::class.java)
-                    if (post != null && user != null) {
-                        postsList[post] = user
-                    }
-                }
+                val user = dataSnapshot.getValue(User::class.java)
+                if (user != null) {
+                    val followingList = user.followingList
+                    if (followingList.isNotEmpty()) {
+                        val postsList = mutableMapOf<PostObject, User>()
+                        followingList.forEach { userId ->
+                            postsReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    dataSnapshot.children.forEach { snapshot ->
+                                        val post = snapshot.getValue(PostObject::class.java)
+                                        usersReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                            override fun onDataChange(userSnapshot: DataSnapshot) {
+                                                val user = userSnapshot.getValue(User::class.java)
+                                                if (post != null && user != null) {
+                                                    postsList[post] = user
+                                                }
+                                                if (postsList.isNotEmpty()) {
+                                                    // Asumiendo que el fragmento actualmente visible es HomeFragment
+                                                    (supportFragmentManager.findFragmentById(R.id.frame_container) as? HomeFragment)?.updatePosts(postsList)
+                                                } else {
+                                                    Log.d(ContentValues.TAG, "La lista de publicaciones está vacía")
+                                                }
+                                            }
 
-                if (postsList.isNotEmpty()) {
-                    // Asumiendo que el fragmento actualmente visible es HomeFragment
-                    (supportFragmentManager.findFragmentById(R.id.frame_container) as? HomeFragment)?.updatePosts(postsList)
+                                            override fun onCancelled(databaseError: DatabaseError) {
+                                                Log.e(ContentValues.TAG, "Error al obtener el usuario", databaseError.toException())
+                                            }
+                                        })
+                                    }
+                                }
+
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    Log.e(ContentValues.TAG, "Error al obtener las publicaciones", databaseError.toException())
+                                }
+                            })
+                        }
+                    } else {
+                        Log.d(ContentValues.TAG, "El usuario no sigue a nadie")
+                    }
                 } else {
-                    Log.d(ContentValues.TAG, "La lista de publicaciones está vacía")
+                    Log.e(ContentValues.TAG, "Error al obtener el usuario")
                 }
             }
 
