@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.ucar_home.R
@@ -71,8 +72,7 @@ class SignInStep3Activity : AppCompatActivity() {
                 startActivity(intent)
             }
         }.addOnFailureListener { exception ->
-            // Handle failure
-            // You can display a toast or log the error
+            Log.e(ContentValues.TAG, "Error al cargar la imagen", exception)
         }
     }
 

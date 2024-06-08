@@ -160,7 +160,7 @@ class ChatProfileAdapter(private var userList: List<Chat>) : RecyclerView.Adapte
     }
 }
 
-class UserProfileAdapter(private var userList: List<User>) : RecyclerView.Adapter<UserProfileAdapter.ViewHolder>() {
+class UserProfileAdapter(private var userList: List<User>, private val onItemClickListener: (User) -> Unit) : RecyclerView.Adapter<UserProfileAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val profilePic: ImageView = view.findViewById(R.id.chat_profile_pic)
@@ -168,6 +168,16 @@ class UserProfileAdapter(private var userList: List<User>) : RecyclerView.Adapte
         val lastMessage: TextView = view.findViewById(R.id.chat_last_message)
         val messageTime: TextView = view.findViewById(R.id.chat_time)
         val messageCount: TextView = view.findViewById(R.id.message_count)
+
+        fun bind(user: User, onItemClickListener: (User) -> Unit) {
+            Glide.with(profilePic.context).load(user.imageUrl).into(profilePic)
+            userName.text = user.username
+            lastMessage.text = user.bibliography
+
+            itemView.setOnClickListener {
+                onItemClickListener(user)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -178,9 +188,7 @@ class UserProfileAdapter(private var userList: List<User>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = userList[position]
-        Glide.with(holder.profilePic.context).load(user.imageUrl).into(holder.profilePic)
-        holder.userName.text = user.username
-        holder.lastMessage.text = user.bibliography
+        holder.bind(user, onItemClickListener)
     }
 
     override fun getItemCount(): Int {

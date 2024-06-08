@@ -1,6 +1,7 @@
 package com.example.ucar_home
 
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -112,24 +113,25 @@ class SearchFragment : Fragment() {
     private fun searchUsers(query: String, usersReference: DatabaseReference) {
         usersReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                chatsList = mutableListOf() // Inicializar la lista antes de agregar nuevos elementos
+                chatsList = mutableListOf()
                 dataSnapshot.children.forEach {
                     val chat = it.getValue(User::class.java)
                     chat?.let {
-                        if (chat.username.contains(query, true)) { // Filtrar por nombre de usuario
+                        if (chat.username.contains(query, true)) {
                             (chatsList as MutableList).add(it)
-                            Log.d(ContentValues.TAG, "Usuario añadido: ${chat}")
                         }
                     }
                 }
                 if (chatsList.isNotEmpty()) {
-                    Log.d(ContentValues.TAG, "Número de usuarios en la lista: ${chatsList.size}")
                     binding.publicaciones.layoutManager = LinearLayoutManager(context)
-                    val adapter = UserProfileAdapter(chatsList)
+                    val adapter = UserProfileAdapter(chatsList) { user ->
+                        val intent = Intent(context, OtherProfileActivity::class.java).apply {
+                            putExtra("idUser", user.idUser)
+                        }
+                        startActivity(intent)
+                    }
                     binding.publicaciones.adapter = adapter
                     adapter.notifyDataSetChanged()
-                } else {
-                    Log.d(ContentValues.TAG, "La lista de usuarios está vacía")
                 }
             }
 
@@ -138,6 +140,7 @@ class SearchFragment : Fragment() {
             }
         })
     }
+
 
     companion object {
         @JvmStatic

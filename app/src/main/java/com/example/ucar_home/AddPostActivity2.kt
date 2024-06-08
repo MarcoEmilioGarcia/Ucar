@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.example.ucar_home.databinding.ActivityAddCar2Binding
 import com.example.ucar_home.databinding.ActivityAddPost2Binding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -101,11 +100,14 @@ class AddPostActivity2 : AppCompatActivity() {
             }
         }
     }
-    private fun savePostToDatabase(description: String?, imageUrl: String?, likes: Int?) {
+    private fun savePostToDatabase(
+        description: String?,
+        imageUrl: String?,
+        likes: Int?) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
         if (description != null && imageUrl != null && likes != null) {
-            val post = PostObject(description, imageUrl, likes)
+            val post = PostObject(uid!!,description, imageUrl, likes)
             uid?.let {
                 database.child("posts").child(it).push().setValue(post)
                     .addOnSuccessListener {

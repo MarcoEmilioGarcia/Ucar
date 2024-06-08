@@ -4,7 +4,9 @@
     android:padding="10dp"
     android:background="@android:color/white"
     android:layout_marginBottom="10dp"
-    android:elevation="1dp">
+    android:elevation="1dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/chat_profile_pic"
@@ -52,7 +54,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true" />
 
-    <!-- Nuevo TextView para mostrar el número de mensajes -->
     <TextView
         android:id="@+id/message_count"
         android:layout_width="30dp"
