@@ -182,10 +182,17 @@ class OtherProfileActivity : AppCompatActivity() {
 
     private fun setupRefreshButton(idUser: String?) {
         binding.button4.setOnClickListener {
-            val intent = Intent(this, ChatFragment::class.java).apply {
-                putExtra("idUser", idUser)
+            if (idUser != null) {
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    putExtra("idUser", idUser)
+                    putExtra("selected_fragment", ChatFragment::class.java.name)
+                }
+                startActivity(intent)
+            } else {
+                Log.d(ContentValues.TAG, "idUser es nulo")
             }
-            startActivity(intent)
         }
     }
+
+
 }

@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -23,7 +24,6 @@
             android:textColor="@color/iconColor"
             android:textSize="20sp"
             android:textStyle="bold" />
-
     </LinearLayout>
 
     <!-- Tabs section -->
@@ -35,7 +35,7 @@
         android:background="@color/iconColor"
         android:padding="10dp"
         android:layout_below="@id/header"
-        android:visibility= "gone">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/chats_tab"
@@ -56,7 +56,6 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:gravity="center" />
-
     </LinearLayout>
 
     <!-- Chats section with RecyclerView -->
@@ -68,15 +67,50 @@
         android:padding="10dp"
         android:clipToPadding="false"
         android:scrollbars="vertical"
-        android:visibility= "gone"/>
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_chat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_below="@id/tabs"
+        android:layout_above="@+id/message_input_container"
         android:padding="10dp"
         android:clipToPadding="false"
+        android:backgroundTint="@color/black"
         android:scrollbars="vertical"
-        android:visibility= "visible"/>
+        android:visibility="visible"/>
+
+    <!-- Message input section -->
+    <LinearLayout
+        android:id="@+id/message_input_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/message_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Escribe un mensaje"
+            android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+            android:maxLines="4"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <ImageButton
+            android:id="@+id/send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="Enviar"
+            android:padding="10dp"
+            android:src="@drawable/icon_add"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
 </RelativeLayout>

@@ -80,14 +80,10 @@ class SearchFragment : Fragment() {
                     val car = it.getValue(PostObject::class.java)
                     car?.let {
                         postList.add(it)
-                        Log.d(ContentValues.TAG, "Publicación añadida: ${car}")
                     }
                 }
                 if (postList.isNotEmpty()) {
-                    Log.d(
-                        ContentValues.TAG,
-                        "Número de publicaciones en la lista: ${postList.size}"
-                    )
+
                     binding.publicaciones.layoutManager = GridLayoutManager(context, 3)
                     val adapter = SearchAdapter(postList)
                     binding.publicaciones.adapter = adapter

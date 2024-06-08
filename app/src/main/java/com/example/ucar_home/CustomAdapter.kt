@@ -125,7 +125,7 @@ class PostAdapter(private var postsList: MutableMap<PostObject, User>) : Recycle
     }
 }
 
-class ChatProfileAdapter(private var userList: List<Chat>) : RecyclerView.Adapter<ChatProfileAdapter.ViewHolder>() {
+class ChatProfileAdapter(private var userList: List<Chat>, private val onItemClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatProfileAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val profilePic: ImageView = view.findViewById(R.id.chat_profile_pic)
@@ -142,12 +142,25 @@ class ChatProfileAdapter(private var userList: List<Chat>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = userList[position]
-        Glide.with(holder.profilePic.context).load(user.imageUrl).into(holder.profilePic)
-        holder.userName.text = user.username
-        holder.lastMessage.text = user.lastMessage
-        holder.messageTime.text = user.timestamp.toString()
-        holder.messageCount.text = user.unreadMessages
+        val chat = userList[position]
+        Glide.with(holder.profilePic.context).load(chat.imageUrl).into(holder.profilePic)
+        holder.userName.text = chat.username
+        holder.lastMessage.text = chat.lastMessage
+
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val formattedTime = sdf.format(Date(chat.timestamp))
+        holder.messageTime.text = formattedTime
+
+        if (chat.unreadMessages.isNotEmpty()) {
+            holder.messageCount.text = chat.unreadMessages
+            holder.messageCount.visibility = View.VISIBLE
+        } else {
+            holder.messageCount.visibility = View.GONE
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClick(chat)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -159,6 +172,8 @@ class ChatProfileAdapter(private var userList: List<Chat>) : RecyclerView.Adapte
         notifyDataSetChanged()
     }
 }
+
+
 class UserProfileAdapter(private var userList: List<User>, private val onItemClickListener: (User) -> Unit) : RecyclerView.Adapter<UserProfileAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

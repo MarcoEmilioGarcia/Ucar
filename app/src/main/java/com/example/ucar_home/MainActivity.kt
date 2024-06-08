@@ -53,9 +53,17 @@ class MainActivity : AppCompatActivity() {
         // Funcionalidad del toolbar
         setupToolbar()
 
-        // Cargar el fragmento de inicio
+        // Obtener el fragmento seleccionado y el idUser
         val selectedFragmentClassName = intent.getStringExtra("selected_fragment")
         val selectedFragment = when (selectedFragmentClassName) {
+            ChatFragment::class.java.name -> {
+                val idUser = intent.getStringExtra("idUser")
+                val chatFragment = ChatFragment.newInstance("", "")
+                val args = Bundle()
+                args.putString("idUser", idUser)
+                chatFragment.arguments = args
+                chatFragment
+            }
             HomeFragment::class.java.name -> homeFragment
             SearchFragment::class.java.name -> searchFragment
             MapsFragment::class.java.name -> mapsFragment
@@ -81,6 +89,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

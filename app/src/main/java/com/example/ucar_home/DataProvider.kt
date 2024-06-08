@@ -38,7 +38,6 @@ data class Chat(
 
 
 data class Message(
-    var senderId: String = "",
     var timestamp: Long = System.currentTimeMillis(), // Unix timestamp
     var content: String = ""
 )
