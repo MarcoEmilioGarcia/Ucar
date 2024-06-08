@@ -159,7 +159,6 @@ class ChatProfileAdapter(private var userList: List<Chat>) : RecyclerView.Adapte
         notifyDataSetChanged()
     }
 }
-
 class UserProfileAdapter(private var userList: List<User>, private val onItemClickListener: (User) -> Unit) : RecyclerView.Adapter<UserProfileAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -173,6 +172,10 @@ class UserProfileAdapter(private var userList: List<User>, private val onItemCli
             Glide.with(profilePic.context).load(user.imageUrl).into(profilePic)
             userName.text = user.username
             lastMessage.text = user.bibliography
+
+            // Ocultar messageTime y messageCount
+            messageTime.visibility = View.GONE
+            messageCount.visibility = View.GONE
 
             itemView.setOnClickListener {
                 onItemClickListener(user)
