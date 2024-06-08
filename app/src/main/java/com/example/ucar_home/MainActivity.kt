@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.ucar_home.databinding.ActivityMainBinding
 import com.example.ucar_home.fragment.ChatFragment
-import com.example.ucar_home.fragment.HomeFragment
 import com.example.ucar_home.fragment.MapsFragment
 import com.example.ucar_home.fragment.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView

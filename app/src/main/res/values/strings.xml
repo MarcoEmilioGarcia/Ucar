@@ -88,6 +88,10 @@
     <string name="cyclindrated">CC</string>
 
 
+    <string name="error_password_mismatch">PRueba</string>
+    <string name="error_invalid_password">PReubaaa</string>
+
+
     <!--add post 1-->
     <string name="addpost1">Step 1</string>
     <string name="addpost">Add Post</string>
@@ -95,6 +99,9 @@
     <string name="subtitle5">Select a caption for the post</string>
     <string name="title5">Choose the photos for the post:</string>
     <string name="error_empty_fields">error: empty fields</string>
+    <string name="error_invalid_email">invalid Email</string>
+    <string name="error_email_exists">Email exists</string>
+    <string name="error_checking_email">Error checking Email</string>
 
 
 </resources>
