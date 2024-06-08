@@ -159,7 +159,6 @@ class ChatProfileAdapter(private var userList: List<Chat>) : RecyclerView.Adapte
         notifyDataSetChanged()
     }
 }
-
 class UserProfileAdapter(private var userList: List<User>, private val onItemClickListener: (User) -> Unit) : RecyclerView.Adapter<UserProfileAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -173,6 +172,10 @@ class UserProfileAdapter(private var userList: List<User>, private val onItemCli
             Glide.with(profilePic.context).load(user.imageUrl).into(profilePic)
             userName.text = user.username
             lastMessage.text = user.bibliography
+
+            // Ocultar messageTime y messageCount
+            messageTime.visibility = View.GONE
+            messageCount.visibility = View.GONE
 
             itemView.setOnClickListener {
                 onItemClickListener(user)
@@ -199,4 +202,27 @@ class UserProfileAdapter(private var userList: List<User>, private val onItemCli
         userList = filteredList
         notifyDataSetChanged()
     }
+}
+
+class ChatAdapter(private val messagesList: List<Message>) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
+
+    class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val messageContent: TextView = itemView.findViewById(R.id.textView11)
+        val messageTimestamp: TextView = itemView.findViewById(R.id.textViewTimestamp)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_message, parent, false)
+        return ChatViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
+        val message = messagesList[position]
+        holder.messageContent.text = message.content
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        holder.messageTimestamp.text = sdf.format(Date(message.timestamp))
+    }
+
+    override fun getItemCount() = messagesList.size
 }

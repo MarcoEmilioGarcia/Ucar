@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ucar_home.Chat
+import com.example.ucar_home.ChatAdapter
 import com.example.ucar_home.ChatProfileAdapter
 import com.example.ucar_home.Message
 import com.example.ucar_home.databinding.FragmentChatBinding
@@ -40,6 +42,7 @@ class ChatFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         auth = FirebaseAuth.getInstance()
+
     }
 
     override fun onCreateView(
@@ -53,6 +56,14 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
+        val userId = auth.currentUser?.uid
+        val idUser = activity?.intent?.getStringExtra("idUser")
+        if (userId != null && idUser != null) {
+            setupChat(userId, idUser)
+        }
+        if (userId != null && idUser != null) {
+            setupChat(userId, idUser)
+        }
 
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(
@@ -100,16 +111,42 @@ class ChatFragment : Fragment() {
             }
         }
 
-        setupChat()
+
+
     }
 
-    private fun setupChat() {
-        val idUser1 = auth.currentUser?.uid ?: ""
-        val idUser2 = param1 ?: ""
-        chatId = generateChatId(idUser1, idUser2)
-        messagesRef = FirebaseDatabase.getInstance().getReference("chats/$chatId/messages")
-        loadMessages()
+    private fun setupChat(currentUserId: String, targetUserId: String) {
+        // Aquí es donde se configura el chat con los dos IDs de usuario
+        chatId = if (currentUserId < targetUserId) {
+            "$currentUserId-$targetUserId"
+        } else {
+            "$targetUserId-$currentUserId"
+        }
+
+        messagesRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
+
+        recyclerView = binding.recyclerViewChat
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = ChatAdapter(messagesList.sortedByDescending { it.timestamp })
+
+        messagesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                messagesList.clear()
+                for (snapshot in dataSnapshot.children) {
+                    val message = snapshot.getValue(Message::class.java)
+                    message?.let { messagesList.add(it) }
+                }
+                // Ordenar mensajes por timestamp antes de notificarlos al adaptador
+                messagesList.sortByDescending { it.timestamp }
+                recyclerView.adapter?.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Failed to read messages", databaseError.toException())
+            }
+        })
     }
+
 
     private fun loadMessages() {
         messagesRef.orderByChild("timestamp").addValueEventListener(object : ValueEventListener {

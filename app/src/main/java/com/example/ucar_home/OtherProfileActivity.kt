@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.ucar_home.databinding.ActivityProfileBinding
+import com.example.ucar_home.fragment.ChatFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -181,7 +182,7 @@ class OtherProfileActivity : AppCompatActivity() {
 
     private fun setupRefreshButton(idUser: String?) {
         binding.button4.setOnClickListener {
-            val intent = Intent(this, OtherProfileActivity::class.java).apply {
+            val intent = Intent(this, ChatFragment::class.java).apply {
                 putExtra("idUser", idUser)
             }
             startActivity(intent)
