@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ucar_home.databinding.ActivitySignInStep4Binding
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -14,7 +13,6 @@ class SignInStep4Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInStep4Binding
     private lateinit var auth: FirebaseAuth
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +34,9 @@ class SignInStep4Activity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             val bibliography = binding.editTextBibliography.text.toString()
                             Log.d(ContentValues.TAG, "User registered successfully.")
-                            saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography,0,0)
+                            saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography)
                             variables.Email = email
                             variables.Password = password
-
-
 
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
@@ -60,32 +56,31 @@ class SignInStep4Activity : AppCompatActivity() {
         phoneNumber: String?,
         name: String?,
         imageUrl: String?,
-        bibliography: String?,
-        followers: Int?,
-        following: Int?
+        bibliography: String?
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
 
         // Inicializa las listas de seguidores y seguidos vacías
-        val followersList = emptyList<String>()
-        val followingList = emptyList<String>()
+        val followersList = mutableListOf<String>()
+        val followingList = mutableListOf<String>()
 
-        val user = User(
-            username = username!!,
-            email = email!!,
-            phoneNumber = phoneNumber!!,
-            name = name!!,
-            imageUrl = imageUrl!!,
-            bibliography = bibliography!!,
-            followers = followers ?: 0,
-            following = following ?: 0,
-            followersList = followersList,
-            followingList = followingList
-        )
+        if (uid != null && username != null && email != null && phoneNumber != null && name != null && imageUrl != null && bibliography != null) {
+            val user = User(
+                idUser = uid,
+                username = username,
+                email = email,
+                phoneNumber = phoneNumber,
+                name = name,
+                imageUrl = imageUrl,
+                bibliography = bibliography,
+                followers = 0,
+                following = 0,
+                followersList = followersList,
+                followingList = followingList
+            )
 
-        uid?.let {
-            database.child("users").child(it).setValue(user)
+            database.child("users").child(uid).setValue(user)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "User data saved successfully.")
                     // Proceed to next activity or whatever you need to do
@@ -93,9 +88,8 @@ class SignInStep4Activity : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
                 }
+        } else {
+            Log.d(ContentValues.TAG, "One or more user details are null.")
         }
     }
-
-
-
 }

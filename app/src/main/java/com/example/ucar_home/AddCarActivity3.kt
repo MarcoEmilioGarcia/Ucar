@@ -67,22 +67,35 @@ class AddCarActivity3: AppCompatActivity() {
         year: Int?,
         fuel: String?,
         imageUrl: String?,
-        description: String?,
-
+        description: String?
     ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val car = CarObject(title!!, brand!!, model!!, cv!!, cc!!, year!!, fuel!!, imageUrl!!, description!!)
-        uid?.let {
-            database.child("cars").child(it).push().setValue(car)
+
+        // Verifica que el UID no sea nulo antes de continuar
+        if (uid != null) {
+            val car = CarObject(
+                idUser = uid,
+                title = title!!,
+                brand = brand!!,
+                model = model!!,
+                cv = cv!!,
+                cc = cc!!,
+                year = year!!,
+                fuel = fuel!!,
+                imageUrl = imageUrl!!,
+                description = description!!
+            )
+
+            // Guarda el objeto de coche en la base de datos bajo el nodo "cars" con el UID del usuario
+            database.child("cars").child(uid).push().setValue(car)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Car data saved successfully.")
                     // Proceed to next activity or whatever you need to do
                 }
-                .addOnFailureListener { e ->
-                    Log.d(ContentValues.TAG, "Error saving car data: ${e.message}")
-                }
+
+
+
         }
     }
-
 }

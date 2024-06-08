@@ -80,6 +80,11 @@
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".OtherProfileActivity"
+            android:exported="false" />
+
+
+        <activity
             android:name=".MainActivity"
             android:exported="true" />
     </application>

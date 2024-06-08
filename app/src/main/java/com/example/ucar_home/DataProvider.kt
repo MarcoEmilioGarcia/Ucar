@@ -10,6 +10,7 @@ object variables {
 }
 
 data class User(
+    var idUser: String = "",
     val username: String = "",
     val email: String = "",
     val phoneNumber: String = "",
@@ -18,9 +19,11 @@ data class User(
     val bibliography: String = "",
     var followers: Int = 0,
     var following: Int = 0,
-    val followersList: List<String> = emptyList(), // List of user IDs following this user
-    val followingList: List<String> = emptyList() // List of user IDs this user is following
+    val followersList: MutableList<String> = mutableListOf(), // List of user IDs following this user
+    val followingList: MutableList<String> = mutableListOf() // List of user IDs this user is following
 )
+
+
 
 data class Chat(
     var idUser1: String = "",
@@ -44,14 +47,16 @@ data class Message(
 
 
 data class Event(
+    var idUser: String = "",
     var title: String = "",
     var imageUrl: String = "",
     var date: String = "",
     var address: String = "",
-    var description: String = "",
-    var idUser: String = ""
+    var description: String = ""
+
 )
 data class CarObject(
+    var idUser: String = "",
     var title: String = "",
     var brand: String = "",
     var model: String = "",
@@ -64,9 +69,10 @@ data class CarObject(
 )
 
 data class PostObject(
+    var idUser: String = "",
     var description: String = "",
     var imageUrl: String = "",
-    var likes: Int = 0,
+    var likes: Int = 0
 )
 
 

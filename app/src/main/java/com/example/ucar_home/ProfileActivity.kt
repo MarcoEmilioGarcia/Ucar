@@ -1,8 +1,10 @@
 package com.example.ucar_home
+
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -24,18 +26,17 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.publicaciones.layoutManager = LinearLayoutManager(this)
 
-
         auth = FirebaseAuth.getInstance()
         val userReference = FirebaseDatabase.getInstance().getReference("users")
         val carsReference = FirebaseDatabase.getInstance().getReference("cars")
-        // val currentUser: FirebaseUser? = auth.currentUser //val uid: String = currentUser?.uid ?: ""
         var carList: MutableList<CarObject> = mutableListOf()
+
+        // Ocultar el LinearLayout con ID linnear
+        binding.linnear.visibility = View.GONE
 
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener(this) { task ->
-
                 if (task.isSuccessful) {
-
                     userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             val userSnapshot = dataSnapshot.children.firstOrNull()
@@ -73,14 +74,14 @@ class ProfileActivity : AppCompatActivity() {
                     })
 
                     if (auth.uid != null) {
-                        carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val userCarsReference = carsReference.child(auth.uid!!)
 
+                        userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 dataSnapshot.children.forEach {
                                     val car = it.getValue(CarObject::class.java)
                                     car?.let {
                                         carList.add(it)
-
                                     }
                                 }
                                 if (carList.isNotEmpty()) {
@@ -99,7 +100,6 @@ class ProfileActivity : AppCompatActivity() {
                     } else {
                         Log.e(ContentValues.TAG, "El UID de auth es nulo")
                     }
-
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
                     Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
@@ -108,20 +108,17 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
-
-
-
         binding.btnAdd.setOnClickListener {
-            val intent = Intent(this,AddCarActivity::class.java)
+            val intent = Intent(this, AddCarActivity::class.java)
             startActivity(intent)
         }
         binding.btnAdd2.setOnClickListener {
-            val intent = Intent(this,AddPostActivity::class.java)
+            val intent = Intent(this, AddPostActivity::class.java)
             startActivity(intent)
         }
 
         binding.imageBtnGoBack.setOnClickListener {
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
