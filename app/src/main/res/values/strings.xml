@@ -94,6 +94,7 @@
     <string name="addtextpost1">add new post:</string>
     <string name="subtitle5">Select a caption for the post</string>
     <string name="title5">Choose the photos for the post:</string>
+    <string name="error_empty_fields">error: empty fields</string>
 
 
 </resources>

@@ -13,6 +13,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.example.ucar_home.databinding.ActivityLogInBinding
+import com.example.ucar_home.sign_in.SignInGoogleStep1
+import com.example.ucar_home.sign_in.SignInStep1Activity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

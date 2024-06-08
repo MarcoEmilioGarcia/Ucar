@@ -1,6 +1,5 @@
-package com.example.ucar_home
+package com.example.ucar_home.add_car
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -8,6 +7,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivityAddCar2Binding
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream

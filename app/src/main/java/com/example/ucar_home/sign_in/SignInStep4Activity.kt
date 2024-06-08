@@ -1,11 +1,14 @@
-package com.example.ucar_home
+package com.example.ucar_home.sign_in
 
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ucar_home.MainActivity
+import com.example.ucar_home.User
 import com.example.ucar_home.databinding.ActivitySignInStep4Binding
+import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 

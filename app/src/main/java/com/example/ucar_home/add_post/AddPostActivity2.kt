@@ -1,4 +1,4 @@
-package com.example.ucar_home
+package com.example.ucar_home.add_post
 
 import android.content.ContentValues
 import android.content.Intent
@@ -9,7 +9,12 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.ucar_home.MainActivity
+import com.example.ucar_home.PostObject
+import com.example.ucar_home.ProfileActivity
+import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivityAddPost2Binding
+import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -47,7 +52,7 @@ class AddPostActivity2 : AppCompatActivity() {
     }
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, AddPostActivity2.REQUEST_IMAGE_PICK)
+        startActivityForResult(intent, REQUEST_IMAGE_PICK)
     }
 
     private fun uploadImageToFirebaseStorage() {
@@ -93,7 +98,7 @@ class AddPostActivity2 : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AddPostActivity2.REQUEST_IMAGE_PICK && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
                 imageUri = uri
                 binding.imageUser.setImageURI(uri)

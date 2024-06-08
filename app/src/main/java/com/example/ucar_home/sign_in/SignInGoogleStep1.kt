@@ -1,27 +1,27 @@
-package com.example.ucar_home
+package com.example.ucar_home.sign_in
 
-import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.ucar_home.HomeActivity
 import com.example.ucar_home.R
+import com.example.ucar_home.User
 import com.example.ucar_home.databinding.ActivitySignInStep3Binding
+
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
-class SignInStep3Activity : AppCompatActivity() {
+class SignInGoogleStep1 : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInStep3Binding
     private var imageUri: Uri? = null
 
-
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInStep3Binding.inflate(layoutInflater)
@@ -36,7 +36,7 @@ class SignInStep3Activity : AppCompatActivity() {
                 uploadImageToFirebaseStorage()
             } else {
                 binding.textViewResult.setTextColor(ContextCompat.getColor(this, R.color.warning))
-                binding.textViewResult.text = "You have to put your name."
+                binding.textViewResult.text = "You have to select an image and put your name."
             }
         }
     }
@@ -56,24 +56,46 @@ class SignInStep3Activity : AppCompatActivity() {
         val uploadTask = storageReference.putBytes(imageData)
         uploadTask.addOnSuccessListener { taskSnapshot ->
             storageReference.downloadUrl.addOnSuccessListener { uri ->
-                val username = intent.getStringExtra("Username")
-                val password = intent.getStringExtra("Password")
-                val email = intent.getStringExtra("Email")
-                val phoneNumber = intent.getStringExtra("PhoneNumber")
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val username = currentUser?.displayName
+                val email = currentUser?.email
+                val phoneNumber = currentUser?.phoneNumber
                 val name = binding.editTextName.text.toString()
+                val biography = ""
 
-                val intent = Intent(this, SignInStep4Activity::class.java)
-                intent.putExtra("Username", username)
-                intent.putExtra("Password", password)
-                intent.putExtra("Email", email)
-                intent.putExtra("PhoneNumber", phoneNumber)
-                intent.putExtra("Name", name)
-                intent.putExtra("ImageUrl", uri.toString())
-                startActivity(intent)
+                currentUser?.let {
+                    saveUserToDatabase(it.uid, username, email, phoneNumber, name, biography, uri.toString())
+                }
             }
         }.addOnFailureListener { exception ->
-            Log.e(ContentValues.TAG, "Error al cargar la imagen", exception)
+            // Handle failure
+            // You can display a toast or log the error
         }
+    }
+
+    private fun saveUserToDatabase(
+        uid: String,
+        username: String?,
+        email: String?,
+        phoneNumber: String?,
+        name: String,
+        biography: String,
+        imageUrl: String
+    ) {
+        val database = FirebaseDatabase.getInstance().reference
+
+        val user = User(username!!, email!!, phoneNumber!!, name, biography, imageUrl)
+
+        database.child("users").child(uid).setValue(user)
+            .addOnSuccessListener {
+                // User data saved successfully.
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener { e ->
+                // Error saving user data
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,7 +107,6 @@ class SignInStep3Activity : AppCompatActivity() {
             }
         }
     }
-
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 100

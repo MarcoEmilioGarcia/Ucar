@@ -1,10 +1,11 @@
-package com.example.ucar_home
+package com.example.ucar_home.add_car
 
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivityAddCar1Binding
 
 
@@ -34,7 +35,7 @@ class AddCarActivity : AppCompatActivity() {
 
 
             }else {
-                binding.textViewResult.setTextColor(ContextCompat.getColor(this,R.color.warning))
+                binding.textViewResult.setTextColor(ContextCompat.getColor(this, R.color.warning))
                 binding.textViewResult.text = "Fill in all the fields."
             }
         }

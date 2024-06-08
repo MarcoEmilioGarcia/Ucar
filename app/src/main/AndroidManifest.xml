@@ -20,7 +20,7 @@
             android:name=".SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".AddPostActivity2"
+            android:name=".add_post.AddPostActivity2"
             android:exported="false" />
 
         <meta-data
@@ -28,26 +28,26 @@
             android:value="AIzaSyCIlEheFUdjmHq3ZbOyWxlgQp-VpkXno68" />
 
         <activity
-            android:name=".MapsFragment"
+            android:name=".fragment.MapsFragment"
             android:exported="true"
             android:label="MapsFragment" />
         <activity
             android:name=".CreateEventActivity"
             android:exported="false" />
         <activity
-            android:name=".SignInGoogleStep1"
+            android:name=".sign_in.SignInGoogleStep1"
             android:exported="false" />
         <activity
-            android:name=".SignInStep4Activity"
+            android:name=".sign_in.SignInStep4Activity"
             android:exported="false" />
         <activity
-            android:name=".SignInStep3Activity"
+            android:name=".sign_in.SignInStep3Activity"
             android:exported="false" />
         <activity
-            android:name=".SignInStep2Activity"
+            android:name=".sign_in.SignInStep2Activity"
             android:exported="false" />
         <activity
-            android:name=".SignInStep1Activity"
+            android:name=".sign_in.SignInStep1Activity"
             android:exported="false" />
         <activity
             android:name=".ForgotPasswordActivity"
@@ -65,16 +65,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddPostActivity"
+            android:name=".add_post.AddPostActivity"
             android:exported="false" />
         <activity
-            android:name=".AddCarActivity"
+            android:name=".add_car.AddCarActivity"
             android:exported="false" />
         <activity
-            android:name=".AddCarActivity2"
+            android:name=".add_car.AddCarActivity2"
             android:exported="false" />
         <activity
-            android:name=".AddCarActivity3"
+            android:name=".add_car.AddCarActivity3"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"

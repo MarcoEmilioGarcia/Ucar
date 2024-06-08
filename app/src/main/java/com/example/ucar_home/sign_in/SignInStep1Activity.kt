@@ -1,10 +1,12 @@
-package com.example.ucar_home
+package com.example.ucar_home.sign_in
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import com.example.ucar_home.LogInActivity
+import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivitySignInStep1Binding
 
 class SignInStep1Activity : AppCompatActivity() {
