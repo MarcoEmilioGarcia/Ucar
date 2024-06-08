@@ -42,7 +42,6 @@ class ChatFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         auth = FirebaseAuth.getInstance()
-
     }
 
     override fun onCreateView(
@@ -54,15 +53,27 @@ class ChatFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
+
+        // Initialize RecyclerView for chats
+        recyclerView = binding.recyclerViewChats
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
         val userId = auth.currentUser?.uid
         val idUser = activity?.intent?.getStringExtra("idUser")
+
         if (userId != null && idUser != null) {
             setupChat(userId, idUser)
-        }
-        if (userId != null && idUser != null) {
-            setupChat(userId, idUser)
+            binding.recyclerViewChat.visibility = View.VISIBLE
+            binding.messageInputContainer.visibility = View.VISIBLE
+            binding.recyclerViewChats.visibility = View.GONE
+            binding.tabs.visibility = View.GONE
+        } else {
+            binding.recyclerViewChat.visibility = View.GONE
+            binding.messageInputContainer.visibility = View.GONE
+            binding.recyclerViewChats.visibility = View.VISIBLE
+            binding.tabs.visibility = View.VISIBLE
+            loadChats()
         }
 
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
@@ -75,23 +86,18 @@ class ChatFragment : Fragment() {
                     userReference.orderByChild("idUser1").equalTo(auth.uid).addListenerForSingleValueEvent(object :
                         ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-
                             chatsList = mutableListOf()
                             dataSnapshot.children.forEach {
                                 val chat = it.getValue(Chat::class.java)
                                 chat?.let {
-
-                                        (chatsList as MutableList).add(it)
-
+                                    (chatsList as MutableList).add(it)
                                 }
                             }
                             if (chatsList.isNotEmpty()) {
-                              val adapter = ChatProfileAdapter(chatsList)
-
+                                val adapter = ChatProfileAdapter(chatsList)
                                 binding.recyclerViewChats.adapter = adapter
                                 adapter.notifyDataSetChanged()
                             }
-
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
@@ -102,21 +108,15 @@ class ChatFragment : Fragment() {
                             )
                         }
                     })
-
-
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
                     Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
                 }
             }
         }
-
-
-
     }
 
     private fun setupChat(currentUserId: String, targetUserId: String) {
-        // Aquí es donde se configura el chat con los dos IDs de usuario
         chatId = if (currentUserId < targetUserId) {
             "$currentUserId-$targetUserId"
         } else {
@@ -136,7 +136,6 @@ class ChatFragment : Fragment() {
                     val message = snapshot.getValue(Message::class.java)
                     message?.let { messagesList.add(it) }
                 }
-                // Ordenar mensajes por timestamp antes de notificarlos al adaptador
                 messagesList.sortByDescending { it.timestamp }
                 recyclerView.adapter?.notifyDataSetChanged()
             }
@@ -147,33 +146,28 @@ class ChatFragment : Fragment() {
         })
     }
 
-
-    private fun loadMessages() {
-        messagesRef.orderByChild("timestamp").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                messagesList.clear()
-                for (messageSnapshot in snapshot.children) {
-                    val message = messageSnapshot.getValue(Message::class.java)
-                    if (message != null) {
-                        messagesList.add(message)
+    private fun loadChats() {
+        val userReference = FirebaseDatabase.getInstance().getReference("chats")
+        userReference.orderByChild("idUser1").equalTo(auth.uid).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                chatsList = mutableListOf()
+                dataSnapshot.children.forEach {
+                    val chat = it.getValue(Chat::class.java)
+                    chat?.let {
+                        (chatsList as MutableList).add(it)
                     }
                 }
-                // Aquí deberías notificar al adaptador de mensajes que los datos han cambiado
-                // messagesAdapter.notifyDataSetChanged()
+                if (chatsList.isNotEmpty()) {
+                    val adapter = ChatProfileAdapter(chatsList)
+                    binding.recyclerViewChats.adapter = adapter
+                    adapter.notifyDataSetChanged()
+                }
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(ContentValues.TAG, "Error loading messages: ${error.message}")
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
             }
         })
-    }
-
-    private fun generateChatId(idUser1: String, idUser2: String): String {
-        return if (idUser1 < idUser2) {
-            "$idUser1-$idUser2"
-        } else {
-            "$idUser2-$idUser1"
-        }
     }
 
     override fun onDestroyView() {
