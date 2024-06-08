@@ -11,15 +11,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.ucar_home.databinding.ActivityMainBinding
-
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     // Mapa para mantener las referencias a los íconos originales
     private val originalIconsMap = mutableMapOf<Int, Int>()
+    val postsReference = FirebaseDatabase.getInstance().getReference("posts")
+    var postsList = mutableMapOf<CarObject, User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         originalIconsMap[R.id.chatFragment] = R.drawable.icon_chat
 
         // Funcionalidad del toolbar
-        toolbar()
+        setupToolbar()
 
         // Cargar el fragmento de inicio
         val selectedFragmentClassName = intent.getStringExtra("selected_fragment")
@@ -62,6 +61,20 @@ class MainActivity : AppCompatActivity() {
 
         // Establecer el listener para la selección de elementos del menú
         binding.bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        // Autenticar y cargar datos si hay credenciales
+        if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
+            auth.signInWithEmailAndPassword(variables.Email, variables.Password).addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(ContentValues.TAG, "Autenticación exitosa, uid: ${auth.uid}")
+                    auth.uid?.let { uid ->
+                        loadUserPosts(uid)
+                    } ?: Log.e(ContentValues.TAG, "El UID de auth es nulo")
+                } else {
+                    Log.d(ContentValues.TAG, "Error al autenticar: ${task.exception?.message ?: "Error desconocido"}")
+                }
+            }
+        }
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -70,36 +83,34 @@ class MainActivity : AppCompatActivity() {
                 loadFragment(homeFragment)
                 item.setIcon(R.drawable.icon_home_bold)
                 restoreOriginalIcon(item)
-                return@OnNavigationItemSelectedListener true
+                true
             }
             R.id.searchFragment -> {
                 loadFragment(searchFragment)
                 item.setIcon(R.drawable.icon_search_bold)
                 restoreOriginalIcon(item)
-                return@OnNavigationItemSelectedListener true
+                true
             }
             R.id.mapsFragment -> {
                 loadFragment(mapsFragment)
                 item.setIcon(R.drawable.icon_maps_bold)
                 restoreOriginalIcon(item)
-                return@OnNavigationItemSelectedListener true
+                true
             }
             R.id.chatFragment -> {
                 loadFragment(chatFragment)
                 item.setIcon(R.drawable.icon_chat_bold)
                 restoreOriginalIcon(item)
-                return@OnNavigationItemSelectedListener true
+                true
             }
-            else -> return@OnNavigationItemSelectedListener false
+            else -> false
         }
     }
 
-    // Función para cargar un fragmento en el contenedor
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
     }
 
-    // Función para restaurar el ícono original del elemento previamente seleccionado
     private fun restoreOriginalIcon(selectedItem: MenuItem) {
         val itemId = selectedItem.itemId
         originalIconsMap.keys.forEach { id ->
@@ -109,84 +120,81 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // FUNCION PARA LA FUNCIONALIDAD DEL TOOLBAR
-    fun toolbar(){
+    private fun setupToolbar() {
         Log.d(ContentValues.TAG, "empiezo funcion toolbar")
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         val imageButton: ImageButton = findViewById(R.id.btnHome)
         imageButton.setOnClickListener {
-            val intent = Intent(this,HomeFragment::class.java)
+            val intent = Intent(this, HomeFragment::class.java)
             startActivity(intent)
         }
 
         val imageUser: ImageButton = findViewById(R.id.btnProfile)
-
         val userReference = FirebaseDatabase.getInstance().getReference("users")
 
         try {
-
-            if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()){
-
-                auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener(this) { task ->
-                   // Log.d(ContentValues.TAG, "efectivamente 2")
-
+            if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
+                auth.signInWithEmailAndPassword(variables.Email, variables.Password).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object :
-                            ValueEventListener {
-
+                        userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                // Obtener el primer hijo de dataSnapshot (si existe)
                                 val userSnapshot = dataSnapshot.children.firstOrNull()
-
-                                // Verificar si se encontró algún resultado
-                                if (userSnapshot != null) {
-                                    // Obtener el usuario desde el primer hijo
-                                    val user = userSnapshot.getValue(com.example.ucar_home.User::class.java)
-                                    user?.imageUrl?.let { imageUrl ->
-
-                                        // Obtener la referencia de Storage desde la URL
-                                        val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
-
-                                        // Descargar la URL de la imagen desde Storage
-                                        storageReference.downloadUrl.addOnSuccessListener { uri ->
-                                            // Cargar la imagen en el ImageButton usando Glide
-                                            Glide.with(this@MainActivity)
-                                                .load(uri)
-                                                .into(binding.toolbar.btnProfile)
-
-                                        }.addOnFailureListener { exception ->
-                                            // Manejar errores de descarga de imagen
-                                        }
+                                userSnapshot?.getValue(com.example.ucar_home.User::class.java)?.imageUrl?.let { imageUrl ->
+                                    FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl).downloadUrl.addOnSuccessListener { uri ->
+                                        Glide.with(this@MainActivity)
+                                            .load(uri)
+                                            .into(binding.toolbar.btnProfile)
+                                    }.addOnFailureListener { exception ->
+                                        Log.e(ContentValues.TAG, "Error al descargar la imagen: ${exception.message}")
                                     }
-                                } else {
-                                    // Manejar el caso en el que no se encontraron resultados
-                                    Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
-                                }
+                                } ?: Log.d("TAG", "No se encontraron resultados para el correo electrónico proporcionado")
                             }
 
                             override fun onCancelled(databaseError: DatabaseError) {
-                                // Manejar errores de cancelación
+                                Log.e(ContentValues.TAG, "Error en la consulta del usuario: ${databaseError.toException()}")
                             }
                         })
-
                     } else {
-                        val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
-                        Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
-                        // Aquí podrías mostrar un mensaje de error al usuario, dependiendo del tipo de error
+                        Log.d(ContentValues.TAG, "Error al autenticar: ${task.exception?.message ?: "Error desconocido"}")
                     }
                 }
             }
-
-        }catch (e: Exception){      Log.d(ContentValues.TAG, "Error fatal")}
-
-
-        imageUser.setOnClickListener {
-            val intent = Intent(this,ProfileActivity::class.java)
-            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(ContentValues.TAG, "Error fatal en toolbar", e)
         }
 
+        imageUser.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
 
+    private fun loadUserPosts(uid: String) {
+        val userCarsReference = postsReference.child(uid)
+        userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val postsList = mutableMapOf<PostObject, User>()
+                dataSnapshot.children.forEach { snapshot ->
+                    val post = snapshot.getValue(PostObject::class.java)
+                    val user = snapshot.getValue(User::class.java)
+                    if (post != null && user != null) {
+                        postsList[post] = user
+                    }
+                }
+
+                if (postsList.isNotEmpty()) {
+                    // Asumiendo que el fragmento actualmente visible es HomeFragment
+                    (supportFragmentManager.findFragmentById(R.id.frame_container) as? HomeFragment)?.updatePosts(postsList)
+                } else {
+                    Log.d(ContentValues.TAG, "La lista de publicaciones está vacía")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
+            }
+        })
+    }
 }

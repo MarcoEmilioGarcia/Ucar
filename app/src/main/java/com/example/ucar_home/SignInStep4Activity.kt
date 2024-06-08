@@ -4,9 +4,9 @@ import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ucar_home.databinding.ActivitySignInStep4Binding
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -14,6 +14,7 @@ class SignInStep4Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInStep4Binding
     private lateinit var auth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,91 +29,73 @@ class SignInStep4Activity : AppCompatActivity() {
         val name = intent.getStringExtra("Name")
         val imageUrl = intent.getStringExtra("ImageUrl")
 
-        // Verificar que los datos obligatorios no sean nulos
-        if (username.isNullOrEmpty() || password.isNullOrEmpty() || email.isNullOrEmpty() || name.isNullOrEmpty()) {
-            showToast("Some data is missing. Please go back and fill all the fields.")
-            val intent = Intent(this, SignInStep3Activity::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
-
-        // Configurar el botón Go Back
-        binding.imageBtnGoBack.setOnClickListener {
-            val intent = Intent(this, SignInStep3Activity::class.java)
-            startActivity(intent)
-        }
-
         binding.btnCreate.setOnClickListener {
-            if (isInputValid(email, password)) {
-                registerUser(email, password, username, phoneNumber, name, imageUrl)
+            if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+                auth.createUserWithEmailAndPassword(email.toString(), password.toString())
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val bibliography = binding.editTextBibliography.text.toString()
+                            Log.d(ContentValues.TAG, "User registered successfully.")
+                            saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography,0,0)
+                            variables.Email = email
+                            variables.Password = password
+
+
+
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Log.d(ContentValues.TAG, "User registration failed.")
+                        }
+                    }
             } else {
-                showToast("Email or password is empty.")
+                Log.d(ContentValues.TAG, "Email or password is empty.")
             }
         }
-    }
-
-    private fun isInputValid(email: String?, password: String?): Boolean {
-        return !email.isNullOrEmpty() && !password.isNullOrEmpty()
-    }
-
-    private fun registerUser(
-        email: String,
-        password: String,
-        username: String,
-        phoneNumber: String?,
-        name: String,
-        imageUrl: String?
-    ) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val bibliography = binding.editTextBibliography.text.toString()
-                    Log.d(TAG, "User registered successfully.")
-                    saveUserToDatabase(username, email, phoneNumber, name, imageUrl, bibliography)
-                    navigateToMainActivity(email, password)
-                } else {
-                    Log.d(TAG, "User registration failed.", task.exception)
-                    showToast("Registration failed: ${task.exception?.message}")
-                }
-            }
     }
 
     private fun saveUserToDatabase(
-        username: String,
-        email: String,
+        username: String?,
+        email: String?,
         phoneNumber: String?,
-        name: String,
+        name: String?,
         imageUrl: String?,
-        bibliography: String?
+        bibliography: String?,
+        followers: Int?,
+        following: Int?
     ) {
-        val uid = auth.currentUser?.uid
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
-        val user = User(username, email, phoneNumber.orEmpty(), name, imageUrl.orEmpty(), bibliography.orEmpty())
+
+        // Inicializa las listas de seguidores y seguidos vacías
+        val followersList = emptyList<String>()
+        val followingList = emptyList<String>()
+
+        val user = User(
+            username = username!!,
+            email = email!!,
+            phoneNumber = phoneNumber!!,
+            name = name!!,
+            imageUrl = imageUrl!!,
+            bibliography = bibliography!!,
+            followers = followers ?: 0,
+            following = following ?: 0,
+            followersList = followersList,
+            followingList = followingList
+        )
+
         uid?.let {
             database.child("users").child(it).setValue(user)
                 .addOnSuccessListener {
-                    Log.d(TAG, "User data saved successfully.")
+                    Log.d(ContentValues.TAG, "User data saved successfully.")
+                    // Proceed to next activity or whatever you need to do
                 }
                 .addOnFailureListener { e ->
-                    Log.d(TAG, "Error saving user data: ${e.message}")
-                    showToast("Error saving user data: ${e.message}")
+                    Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
                 }
         }
     }
 
-    private fun navigateToMainActivity(email: String, password: String) {
-        variables.Email = email
-        variables.Password = password
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
 
-    companion object {
-        private const val TAG = "SignInStep4Activity"
-    }
 }

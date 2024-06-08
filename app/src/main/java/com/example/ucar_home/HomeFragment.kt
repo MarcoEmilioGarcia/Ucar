@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
         val buttonCreateEvent = binding.boton
 
         binding.boton.setOnClickListener {
-            val intent = Intent(requireContext(), CreateEventStep1Activity::class.java)
+            val intent = Intent(requireContext(), CreateEventActivity::class.java)
             startActivity(intent)
         }
     }

@@ -11,12 +11,37 @@ object variables {
 
 data class User(
     val username: String = "",
-    val email: String = "", // Added email field
-    val phoneNumber: String ="",
+    val email: String = "",
+    val phoneNumber: String = "",
     val name: String = "",
-    val imageUrl: String ="",
-    val bibliography: String =""
+    val imageUrl: String = "",
+    val bibliography: String = "",
+    var followers: Int = 0,
+    var following: Int = 0,
+    val followersList: List<String> = emptyList(), // List of user IDs following this user
+    val followingList: List<String> = emptyList() // List of user IDs this user is following
 )
+
+data class Chat(
+    var idUser1: String = "",
+    var idUser2: String = "",
+    var username: String = "",
+    val imageUrl: String = "",
+    val lastMessage: String = "",
+    val unreadMessages: String = "",
+    var timestamp: Long = System.currentTimeMillis(),
+    val messages: Map<String, Message> = emptyMap()
+)
+
+
+data class Message(
+    var senderId: String = "",
+    var timestamp: Long = System.currentTimeMillis(), // Unix timestamp
+    var content: String = ""
+)
+
+
+
 
 data class Event(
     var title: String = "",
@@ -38,11 +63,10 @@ data class CarObject(
     var description: String = "",
 )
 
+data class PostObject(
+    var description: String = "",
+    var imageUrl: String = "",
+    var likes: Int = 0,
+)
 
-object DataProvider {
-    val publicaciones: List<Any> = listOf(
-        1, listOf(URL("R.drawable.porche"), URL("R.drawable.porche2")), "Nuevo Coche", 24, listOf("Esta muy chulo", "Dabuti Colega"),
-        2, listOf(URL("R.drawable.bmw"), URL("R.drawable.bmw2")), "Nuevo Coche", 23, listOf("Esta muy chulo", "Dabuti Colega")
-    )
-}
 

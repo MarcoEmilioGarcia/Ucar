@@ -35,7 +35,6 @@ class ProfileActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(variables.Email.toString(), variables.Password.toString()).addOnCompleteListener(this) { task ->
 
                 if (task.isSuccessful) {
-                    Log.d(ContentValues.TAG, "Autenticación exitosa, uid: ${auth.uid}")
 
                     userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -46,6 +45,8 @@ class ProfileActivity : AppCompatActivity() {
                                     binding.textViewName.text = user.name
                                     binding.textViewUsername.text = user.username
                                     binding.textViewBibliography.text = user.bibliography
+                                    binding.textView7.text = user.followers.toString()
+                                    binding.textView9.text = user.following.toString()
 
                                     user.imageUrl?.let { imageUrl ->
                                         val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
@@ -74,16 +75,15 @@ class ProfileActivity : AppCompatActivity() {
                     if (auth.uid != null) {
                         carsReference.orderByChild("idUser").equalTo(auth.uid).addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                Log.d(ContentValues.TAG, "Consulta de coches exitosa, número de resultados: ${dataSnapshot.childrenCount}")
+
                                 dataSnapshot.children.forEach {
                                     val car = it.getValue(CarObject::class.java)
                                     car?.let {
                                         carList.add(it)
-                                        Log.d(ContentValues.TAG, "Coche añadido: ${car}")
+
                                     }
                                 }
                                 if (carList.isNotEmpty()) {
-                                    Log.d(ContentValues.TAG, "Número de coches en la lista: ${carList.size}")
                                     val adapter = CarAdapter(carList)
                                     binding.publicaciones.adapter = adapter
                                     adapter.notifyDataSetChanged()
@@ -113,6 +113,10 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener {
             val intent = Intent(this,AddCarActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnAdd2.setOnClickListener {
+            val intent = Intent(this,AddPostActivity::class.java)
             startActivity(intent)
         }
 

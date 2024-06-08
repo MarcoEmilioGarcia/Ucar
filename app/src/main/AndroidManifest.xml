@@ -2,15 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +17,10 @@
         android:theme="@style/Theme.Ucar_Home"
         tools:targetApi="31">
         <activity
-            android:name=".CreateEventStep2Activity"
+            android:name=".SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddPostActivity2"
             android:exported="false" />
 
         <meta-data
@@ -35,7 +32,7 @@
             android:exported="true"
             android:label="MapsFragment" />
         <activity
-            android:name=".CreateEventStep1Activity"
+            android:name=".CreateEventActivity"
             android:exported="false" />
         <activity
             android:name=".SignInGoogleStep1"
@@ -67,6 +64,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddPostActivity"
+            android:exported="false" />
         <activity
             android:name=".AddCarActivity"
             android:exported="false" />
