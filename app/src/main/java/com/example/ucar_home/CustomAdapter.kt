@@ -39,10 +39,19 @@ class CarAdapter(private val carList: List<CarObject>) : RecyclerView.Adapter<Ca
 }
 
 
-class SearchAdapter(private val postList: List<PostObject>) : RecyclerView.Adapter<SearchAdapter.PostViewHolder>() {
+class SearchAdapter(
+    private val postList: List<PostObject>,
+    private val onItemClicked: (PostObject) -> Unit
+) : RecyclerView.Adapter<SearchAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val postImageView: ImageView = itemView.findViewById(R.id.imageView)
+
+        init {
+            itemView.setOnClickListener {
+                onItemClicked(postList[adapterPosition])
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -59,7 +68,6 @@ class SearchAdapter(private val postList: List<PostObject>) : RecyclerView.Adapt
         return postList.size
     }
 }
-
 
 class PostAdapter(private var postsList: MutableMap<PostObject, User>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 

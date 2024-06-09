@@ -17,6 +17,7 @@ import com.example.ucar_home.PostObject
 import com.example.ucar_home.SearchAdapter
 import com.example.ucar_home.User
 import com.example.ucar_home.UserProfileAdapter
+import com.example.ucar_home.PostAdapter
 import com.example.ucar_home.databinding.FragmentSearchBinding
 import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
@@ -37,6 +38,8 @@ class SearchFragment : Fragment() {
     private val postReference = FirebaseDatabase.getInstance().getReference("posts")
     private var postList: MutableList<PostObject> = mutableListOf()
     private var chatsList: List<User> = listOf()
+    private lateinit var postAdapter: PostAdapter
+    private val usersReference = FirebaseDatabase.getInstance().getReference("users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,10 @@ class SearchFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         Log.d(ContentValues.TAG, "Aqui estoy")
 
+        postAdapter = PostAdapter(mutableMapOf()) // Inicializar el adaptador del nuevo RecyclerView
+
+        binding.publicaciones2.layoutManager = LinearLayoutManager(context) // Agrega esta línea
+
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(
                 variables.Email,
@@ -68,24 +75,30 @@ class SearchFragment : Fragment() {
             }
         }
 
+        binding.publicaciones2.adapter = postAdapter
+
         return binding.root
     }
 
     private fun loadPosts() {
-        val postsReference = postReference.child(auth.uid!!)
+        // Cambia la referencia para obtener todas las publicaciones
+        val postsReference = FirebaseDatabase.getInstance().getReference("posts")
         postsReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 postList.clear() // Limpiar la lista antes de agregar nuevos elementos
-                dataSnapshot.children.forEach {
-                    val car = it.getValue(PostObject::class.java)
-                    car?.let {
-                        postList.add(it)
+                dataSnapshot.children.forEach { postSnapshot ->
+                    postSnapshot.children.forEach {
+                        val post = it.getValue(PostObject::class.java)
+                        post?.let {
+                            postList.add(it)
+                        }
                     }
                 }
                 if (postList.isNotEmpty()) {
-
+                    // Barajar la lista para obtener un orden aleatorio
+                    postList = postList.shuffled().toMutableList()
                     binding.publicaciones.layoutManager = GridLayoutManager(context, 3)
-                    val adapter = SearchAdapter(postList)
+                    val adapter = SearchAdapter(postList) { post -> onPostItemClicked(post) }
                     binding.publicaciones.adapter = adapter
                     adapter.notifyDataSetChanged()
                 } else {
@@ -99,6 +112,31 @@ class SearchFragment : Fragment() {
                     "Error en la configuración del adapter",
                     databaseError.toException()
                 )
+            }
+        })
+    }
+
+    private fun onPostItemClicked(post: PostObject) {
+        // Obtener el usuario correspondiente al post
+        usersReference.child(post.idUser).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val user = dataSnapshot.getValue(User::class.java)
+                if (user != null) {
+                    // Cambiar la visibilidad de los RecyclerViews
+                    binding.publicaciones.visibility = View.GONE
+                    binding.publicaciones2.visibility = View.VISIBLE
+
+                    // Cargar las publicaciones en el nuevo RecyclerView
+                    val userPostsMap = mutableMapOf<PostObject, User>()
+                    userPostsMap[post] = user
+                    postAdapter.updatePosts(userPostsMap)
+                } else {
+                    Log.e(ContentValues.TAG, "Usuario no encontrado para el post: ${post.idPost}")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error al obtener el usuario", databaseError.toException())
             }
         })
     }
@@ -156,7 +194,6 @@ class SearchFragment : Fragment() {
             }
         })
     }
-
 
     companion object {
         @JvmStatic
