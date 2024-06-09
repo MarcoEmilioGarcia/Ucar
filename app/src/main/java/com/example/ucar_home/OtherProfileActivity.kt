@@ -41,7 +41,7 @@ class OtherProfileActivity : AppCompatActivity() {
             Log.d(ContentValues.TAG, "idUser no proporcionado en el Intent")
         }
 
-        setupFollowButton(userReference, carsReference, idUser, carList)
+        setupFollowButton(userReference, idUser)
         setupRefreshButton(idUser)
     }
 
@@ -105,13 +105,12 @@ class OtherProfileActivity : AppCompatActivity() {
         })
     }
 
-    private fun setupFollowButton(userReference: DatabaseReference, carsReference: DatabaseReference, idUser: String?, carList: MutableList<CarObject>) {
+    private fun setupFollowButton(userReference: DatabaseReference, idUser: String?) {
         binding.button3.setOnClickListener {
             if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
                 auth.signInWithEmailAndPassword(variables.Email, variables.Password).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         updateFollowStatus(userReference, idUser)
-                        loadAuthUserCars(carsReference, carList)
                     } else {
                         Log.e(ContentValues.TAG, "Error en la autenticación")
                     }
@@ -121,31 +120,60 @@ class OtherProfileActivity : AppCompatActivity() {
     }
 
     private fun updateFollowStatus(userReference: DatabaseReference, idUser: String?) {
-        userReference.orderByChild("email").equalTo(variables.Email).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val userSnapshot = dataSnapshot.children.firstOrNull()
-                if (userSnapshot != null) {
-                    val user = userSnapshot.getValue(User::class.java)
-                    user?.let {
-                        if (idUser != null) {
-                            if (user.followingList.contains(idUser)) {
-                                user.following -= 1
-                                user.followingList.remove(idUser)
-                                binding.button3.text = "Follow"
-                            } else {
-                                user.following += 1
-                                user.followingList.add(idUser)
-                                binding.button3.text = "Unfollow"
-                            }
+        val currentUserUid = auth.currentUser?.uid ?: return
+        if (idUser == null) return
 
-                            userSnapshot.ref.setValue(user)
-                                .addOnSuccessListener { Log.d(ContentValues.TAG, "Usuario actualizado exitosamente") }
-                                .addOnFailureListener { exception -> Log.e(ContentValues.TAG, "Error al actualizar el usuario", exception) }
+        val currentUserRef = userReference.child(currentUserUid)
+        val otherUserRef = userReference.child(idUser)
+
+        currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val currentUser = dataSnapshot.getValue(User::class.java) ?: return
+                val isFollowing = currentUser.followingList.contains(idUser)
+
+                otherUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(otherUserSnapshot: DataSnapshot) {
+                        val otherUser = otherUserSnapshot.getValue(User::class.java) ?: return
+
+                        if (isFollowing) {
+                            // Unfollow
+                            currentUser.following -= 1
+                            currentUser.followingList.remove(idUser)
+                            otherUser.followers -= 1
+                            otherUser.followersList.remove(currentUserUid)
+                            binding.button3.text = "Follow"
+                        } else {
+                            // Follow
+                            currentUser.following += 1
+                            currentUser.followingList.add(idUser)
+                            otherUser.followers += 1
+                            otherUser.followersList.add(currentUserUid)
+                            binding.button3.text = "Unfollow"
                         }
+
+                        val updates = hashMapOf<String, Any>(
+                            "${currentUserRef.key}/following" to currentUser.following,
+                            "${currentUserRef.key}/followingList" to currentUser.followingList,
+                            "${otherUserRef.key}/followers" to otherUser.followers,
+                            "${otherUserRef.key}/followersList" to otherUser.followersList
+                        )
+
+                        userReference.updateChildren(updates)
+                            .addOnSuccessListener {
+                                Log.d(ContentValues.TAG, "Seguimiento actualizado exitosamente")
+                                // Actualizar la vista con los nuevos valores
+                                binding.textView7.text = otherUser.followers.toString()
+                                binding.textView9.text = currentUser.following.toString()
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e(ContentValues.TAG, "Error al actualizar seguimiento", exception)
+                            }
                     }
-                } else {
-                    Log.d(ContentValues.TAG, "No se encontraron resultados para el correo electrónico proporcionado")
-                }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
+                    }
+                })
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -154,31 +182,7 @@ class OtherProfileActivity : AppCompatActivity() {
         })
     }
 
-    private fun loadAuthUserCars(carsReference: DatabaseReference, carList: MutableList<CarObject>) {
-        auth.uid?.let { uid ->
-            val userCarsReference = carsReference.child(uid)
-            userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    carList.clear()
-                    dataSnapshot.children.forEach {
-                        val car = it.getValue(CarObject::class.java)
-                        car?.let { carList.add(it) }
-                    }
-                    if (carList.isNotEmpty()) {
-                        val adapter = CarAdapter(carList)
-                        binding.publicaciones.adapter = adapter
-                        adapter.notifyDataSetChanged()
-                    } else {
-                        Log.d(ContentValues.TAG, "La lista de coches está vacía")
-                    }
-                }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
-                }
-            })
-        } ?: Log.e(ContentValues.TAG, "El UID de auth es nulo")
-    }
 
     private fun setupRefreshButton(idUser: String?) {
         binding.button4.setOnClickListener {
@@ -193,6 +197,4 @@ class OtherProfileActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
