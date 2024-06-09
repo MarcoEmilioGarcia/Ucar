@@ -106,11 +106,40 @@ class OtherProfileActivity : AppCompatActivity() {
     }
 
     private fun setupFollowButton(userReference: DatabaseReference, idUser: String?) {
+        if (idUser == null) return
+
+        val currentUserUid = auth.currentUser?.uid ?: return
+
+        val currentUserRef = userReference.child(currentUserUid)
+        val otherUserRef = userReference.child(idUser)
+
+        val followButtonListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                updateFollowButtonState(currentUserRef, otherUserRef, idUser, currentUserUid)
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                updateFollowButtonState(currentUserRef, otherUserRef, idUser, currentUserUid)
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                updateFollowButtonState(currentUserRef, otherUserRef, idUser, currentUserUid)
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
+            }
+        }
+
+        currentUserRef.child("followingList").addChildEventListener(followButtonListener)
+
         binding.button3.setOnClickListener {
             if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
                 auth.signInWithEmailAndPassword(variables.Email, variables.Password).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        updateFollowStatus(userReference, idUser)
+                        updateFollowStatus(userReference, idUser, currentUserUid, binding.button3.text.toString() == "Unfollow")
                     } else {
                         Log.e(ContentValues.TAG, "Error en la autenticación")
                     }
@@ -119,17 +148,40 @@ class OtherProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateFollowStatus(userReference: DatabaseReference, idUser: String?) {
-        val currentUserUid = auth.currentUser?.uid ?: return
-        if (idUser == null) return
+    private fun updateFollowButtonState(currentUserRef: DatabaseReference, otherUserRef: DatabaseReference, idUser: String, currentUserUid: String) {
+        currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val currentUser = dataSnapshot.getValue(User::class.java) ?: return
+                val isFollowing = currentUser.followingList.contains(idUser)
 
+                otherUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(otherUserSnapshot: DataSnapshot) {
+                        val otherUser = otherUserSnapshot.getValue(User::class.java) ?: return
+
+                        binding.button3.text = if (isFollowing) "Unfollow" else "Follow"
+                        binding.textView7.text = otherUser.followers.toString()
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
+                    }
+                })
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
+            }
+        })
+    }
+
+
+    private fun updateFollowStatus(userReference: DatabaseReference, idUser: String, currentUserUid: String, isFollowing: Boolean) {
         val currentUserRef = userReference.child(currentUserUid)
         val otherUserRef = userReference.child(idUser)
 
         currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val currentUser = dataSnapshot.getValue(User::class.java) ?: return
-                val isFollowing = currentUser.followingList.contains(idUser)
 
                 otherUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(otherUserSnapshot: DataSnapshot) {
@@ -163,7 +215,6 @@ class OtherProfileActivity : AppCompatActivity() {
                                 Log.d(ContentValues.TAG, "Seguimiento actualizado exitosamente")
                                 // Actualizar la vista con los nuevos valores
                                 binding.textView7.text = otherUser.followers.toString()
-                                binding.textView9.text = currentUser.following.toString()
                             }
                             .addOnFailureListener { exception ->
                                 Log.e(ContentValues.TAG, "Error al actualizar seguimiento", exception)
@@ -181,8 +232,6 @@ class OtherProfileActivity : AppCompatActivity() {
             }
         })
     }
-
-
 
     private fun setupRefreshButton(idUser: String?) {
         binding.button4.setOnClickListener {

@@ -112,9 +112,10 @@ class AddPostActivity2 : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
         if (description != null && imageUrl != null && likes != null) {
-            val post = PostObject(uid!!,description, imageUrl, likes)
+            val postId = database.child("posts").child(uid!!).push().key // Genera un ID único
+            val post = PostObject(postId!!, uid, description, imageUrl, likes)
             uid?.let {
-                database.child("posts").child(it).push().setValue(post)
+                database.child("posts").child(it).child(postId).setValue(post)
                     .addOnSuccessListener {
                         Log.d(ContentValues.TAG, "Post data saved successfully.")
                         // Proceed to next activity or whatever you need to do
@@ -127,6 +128,7 @@ class AddPostActivity2 : AppCompatActivity() {
             Log.d(ContentValues.TAG, "One of the parameters is null: description=$description, imageUrl=$imageUrl, likes=$likes")
         }
     }
+
 
 
 }

@@ -75,6 +75,17 @@ class MainActivity : AppCompatActivity() {
         // Establecer el listener para la selección de elementos del menú
         binding.bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+        // Cargar datos iniciales
+        loadData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Recargar datos cada vez que la actividad se reanuda
+        loadData()
+    }
+
+    private fun loadData() {
         // Autenticar y cargar datos si hay credenciales
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(variables.Email, variables.Password).addOnCompleteListener(this) { task ->
@@ -89,8 +100,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

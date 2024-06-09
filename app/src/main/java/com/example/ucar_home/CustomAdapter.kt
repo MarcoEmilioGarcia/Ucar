@@ -151,8 +151,8 @@ class ChatProfileAdapter(private var userList: List<Chat>, private val onItemCli
         val formattedTime = sdf.format(Date(chat.timestamp))
         holder.messageTime.text = formattedTime
 
-        if (chat.unreadMessages.isNotEmpty()) {
-            holder.messageCount.text = chat.unreadMessages
+        if (chat.unreadMessages > 0.toString()) { // Asumiendo que unreadMessages es un Int
+            holder.messageCount.text = chat.unreadMessages.toString()
             holder.messageCount.visibility = View.VISIBLE
         } else {
             holder.messageCount.visibility = View.GONE
@@ -172,7 +172,6 @@ class ChatProfileAdapter(private var userList: List<Chat>, private val onItemCli
         notifyDataSetChanged()
     }
 }
-
 
 class UserProfileAdapter(private var userList: List<User>, private val onItemClickListener: (User) -> Unit) : RecyclerView.Adapter<UserProfileAdapter.ViewHolder>() {
 
