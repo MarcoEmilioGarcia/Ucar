@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -228,9 +229,11 @@ class UserProfileAdapter(private var userList: List<User>, private val onItemCli
     }
 }
 
+
 class ChatAdapter(private val messagesList: List<Message>, private val currentUserId: String) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val messageCard: CardView = itemView.findViewById(R.id.comentario)
         val messageContent: TextView = itemView.findViewById(R.id.textView11)
         val messageTimestamp: TextView = itemView.findViewById(R.id.textViewTimestamp)
     }
@@ -247,13 +250,15 @@ class ChatAdapter(private val messagesList: List<Message>, private val currentUs
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         holder.messageTimestamp.text = sdf.format(Date(message.timestamp))
 
-        // Ajustar el gravity de los TextViews
+        val layoutParamsCard = holder.messageCard.layoutParams as ConstraintLayout.LayoutParams
         val layoutParamsContent = holder.messageContent.layoutParams as ConstraintLayout.LayoutParams
         val layoutParamsTimestamp = holder.messageTimestamp.layoutParams as ConstraintLayout.LayoutParams
 
         if (message.userId == currentUserId) {
             holder.messageContent.gravity = Gravity.END
             holder.messageTimestamp.gravity = Gravity.END
+            layoutParamsCard.startToStart = ConstraintLayout.LayoutParams.UNSET
+            layoutParamsCard.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParamsContent.startToStart = ConstraintLayout.LayoutParams.UNSET
             layoutParamsContent.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParamsTimestamp.startToStart = ConstraintLayout.LayoutParams.UNSET
@@ -261,6 +266,8 @@ class ChatAdapter(private val messagesList: List<Message>, private val currentUs
         } else {
             holder.messageContent.gravity = Gravity.START
             holder.messageTimestamp.gravity = Gravity.START
+            layoutParamsCard.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParamsCard.endToEnd = ConstraintLayout.LayoutParams.UNSET
             layoutParamsContent.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParamsContent.endToEnd = ConstraintLayout.LayoutParams.UNSET
             layoutParamsTimestamp.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -271,5 +278,5 @@ class ChatAdapter(private val messagesList: List<Message>, private val currentUs
         holder.messageTimestamp.layoutParams = layoutParamsTimestamp
     }
 
-    override fun getItemCount() = messagesList.size
+    override fun getItemCount(): Int = messagesList.size
 }

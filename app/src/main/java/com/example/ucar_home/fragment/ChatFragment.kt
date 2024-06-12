@@ -74,13 +74,15 @@ class ChatFragment : Fragment() {
                                 binding.recyclerViewChat.visibility = View.VISIBLE
                                 binding.messageInputContainer.visibility = View.VISIBLE
                                 binding.recyclerViewChats.visibility = View.GONE
-                                binding.tabs.visibility = View.GONE
+                                binding.chatprofilepic.visibility = View.VISIBLE
+                                binding.appname.text = "Perfil"
                             } else {
                                 Log.e(ContentValues.TAG, "idUser es nulo")
                                 binding.recyclerViewChat.visibility = View.GONE
                                 binding.messageInputContainer.visibility = View.GONE
                                 binding.recyclerViewChats.visibility = View.VISIBLE
-                                binding.tabs.visibility = View.VISIBLE
+                                binding.chatprofilepic.visibility = View.GONE
+                                binding.appname.text = "Chats"
                                 loadChats()
                             }
                         } else {
@@ -290,7 +292,8 @@ class ChatFragment : Fragment() {
         binding.recyclerViewChat.visibility = View.VISIBLE
         binding.messageInputContainer.visibility = View.VISIBLE
         binding.recyclerViewChats.visibility = View.GONE
-        binding.tabs.visibility = View.GONE
+        binding.chatprofilepic.visibility = View.VISIBLE
+        binding.appname.text = "Perfil"
     }
 
     override fun onDestroyView() {

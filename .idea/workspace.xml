@@ -80,6 +80,11 @@
           <theme>@style/Theme.Ucar_Home</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_sing_in_google_step1.xml">
+        <config>
+          <theme>@style/Theme.Ucar_Home</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_chat.xml">
         <config>
           <theme>@style/Theme.Ucar_Home</theme>
@@ -110,6 +115,11 @@
           <theme>@style/Theme.Ucar_Home</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_comentario.xml">
+        <config>
+          <theme>@style/Theme.Ucar_Home</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_home.xml">
         <config>
           <theme>@style/Theme.Ucar_Home</theme>
@@ -131,10 +141,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="93151caf-f311-4a36-9af6-0028320daf6b" name="Changes" comment="arreglo create perfil">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/icon_logo_app.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout-v31/toolbar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout-v31/toolbar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/toolbar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/toolbar.xml" afterDir="false" />
+    <list default="true" id="93151caf-f311-4a36-9af6-0028320daf6b" name="Changes" comment="cambio logo">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/CustomAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/CustomAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/fragment/ChatFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/fragment/ChatFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_chat.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_chat.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +157,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\AlumnoM\.android\avd\Pixel_3_API_UpsideDownCakePrivacySandbox.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[8973d96d]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -496,7 +509,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718186278651</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="cambio logo">
+      <option name="closed" value="true" />
+      <created>1718186847588</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1718186847588</updated>
+    </task>
+    <task id="LOCAL-00024" summary="cambio logo">
+      <option name="closed" value="true" />
+      <created>1718186974493</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1718186974494</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -518,15 +547,16 @@
     <MESSAGE value="md" />
     <MESSAGE value="..." />
     <MESSAGE value="arreglo create perfil" />
-    <option name="LAST_COMMIT_MESSAGE" value="arreglo create perfil" />
+    <MESSAGE value="cambio logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="cambio logo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/CustomAdapter.kt</url>
-          <line>95</line>
-          <properties class="com.example.ucar_home.PostAdapter.PostViewHolder" method="&lt;init&gt;">
+          <line>96</line>
+          <properties class="com.example.ucar_home.PostAdapter.PostViewHolder">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
