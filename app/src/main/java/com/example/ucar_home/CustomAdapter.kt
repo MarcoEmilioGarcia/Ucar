@@ -133,7 +133,7 @@ class PostAdapter(private var postsList: MutableMap<PostObject, User>) : Recycle
     }
 }
 
-class ChatProfileAdapter(private var userList: List<Chat>, private val onItemClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatProfileAdapter.ViewHolder>() {
+class ChatProfileAdapter(private var userList: List<Chat>, private val currentUserId: String, private val onItemClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatProfileAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val profilePic: ImageView = view.findViewById(R.id.chat_profile_pic)
@@ -144,23 +144,27 @@ class ChatProfileAdapter(private var userList: List<Chat>, private val onItemCli
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_chat, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val chat = userList[position]
-        Glide.with(holder.profilePic.context).load(chat.imageUrl).into(holder.profilePic)
-        holder.userName.text = chat.username
+        val isCurrentUserUser1 = chat.idUser1 == currentUserId
+
+        val profileImageUrl = if (isCurrentUserUser1) chat.imageUrlUser2 else chat.imageUrlUser1
+        val username = if (isCurrentUserUser1) chat.usernameUser2 else chat.usernameUser1
+
+        Glide.with(holder.profilePic.context).load(profileImageUrl).into(holder.profilePic)
+        holder.userName.text = username
         holder.lastMessage.text = chat.lastMessage
 
         val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
         val formattedTime = sdf.format(Date(chat.timestamp))
         holder.messageTime.text = formattedTime
 
-        if (chat.unreadMessages > 0.toString()) { // Asumiendo que unreadMessages es un Int
-            holder.messageCount.text = chat.unreadMessages.toString()
+        if (chat.unreadMessages.toInt() > 0) {
+            holder.messageCount.text = chat.unreadMessages
             holder.messageCount.visibility = View.VISIBLE
         } else {
             holder.messageCount.visibility = View.GONE

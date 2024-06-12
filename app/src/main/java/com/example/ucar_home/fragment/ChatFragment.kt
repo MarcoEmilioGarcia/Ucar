@@ -98,7 +98,6 @@ class ChatFragment : Fragment() {
                 sendMessage()
             }
 
-            // Configura el LinearLayoutManager para que apile desde el final
             binding.recyclerViewChat.layoutManager = LinearLayoutManager(context).apply {
                 stackFromEnd = true
             }
@@ -140,56 +139,69 @@ class ChatFragment : Fragment() {
         val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
         val targetUserId = chatId.replace("$userId-", "").replace("-$userId", "")
 
-        val userRef = FirebaseDatabase.getInstance().getReference("users").child(targetUserId)
-        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val targetUser = dataSnapshot.getValue(User::class.java)
-                if (targetUser != null) {
-                    chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(chatSnapshot: DataSnapshot) {
-                            if (!chatSnapshot.exists()) {
-                                // Crear nuevo chat
-                                val chat = Chat(
-                                    idUser1 = userId,
-                                    idUser2 = targetUser.idUser,
-                                    username = targetUser.username,
-                                    imageUrl = targetUser.imageUrl,
-                                    lastMessage = chatUpdates["lastMessage"] as String,
-                                    unreadMessages = "0",
-                                    timestamp = chatUpdates["timestamp"] as Long,
-                                    messages = mapOf() // Inicialmente no hay mensajes en el mapa
-                                )
-                                chatRef.setValue(chat).addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        Log.e(ContentValues.TAG, "Chat creado")
+        val currentUserRef = FirebaseDatabase.getInstance().getReference("users").child(userId)
+        val targetUserRef = FirebaseDatabase.getInstance().getReference("users").child(targetUserId)
+
+        currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(currentUserDataSnapshot: DataSnapshot) {
+                val currentUser = currentUserDataSnapshot.getValue(User::class.java)
+                targetUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(targetUserDataSnapshot: DataSnapshot) {
+                        val targetUser = targetUserDataSnapshot.getValue(User::class.java)
+                        if (currentUser != null && targetUser != null) {
+                            chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(chatSnapshot: DataSnapshot) {
+                                    if (!chatSnapshot.exists()) {
+                                        val chat = Chat(
+                                            idUser1 = userId,
+                                            idUser2 = targetUser.idUser,
+                                            usernameUser1 = currentUser.username,
+                                            usernameUser2 = targetUser.username,
+                                            imageUrlUser1 = currentUser.imageUrl,
+                                            imageUrlUser2 = targetUser.imageUrl,
+                                            lastMessage = chatUpdates["lastMessage"] as String,
+                                            unreadMessages = "0",
+                                            timestamp = chatUpdates["timestamp"] as Long,
+                                            messages = mapOf()
+                                        )
+                                        chatRef.setValue(chat).addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                Log.e(ContentValues.TAG, "Chat creado")
+                                            } else {
+                                                Log.e(ContentValues.TAG, "Error al crear el chat: ${task.exception?.message}")
+                                            }
+                                        }
                                     } else {
-                                        Log.e(ContentValues.TAG, "Error al crear el chat: ${task.exception?.message}")
+                                        val chatUpdatesFull = chatUpdates.toMutableMap()
+                                        chatUpdatesFull["idUser1"] = userId
+                                        chatUpdatesFull["idUser2"] = targetUser.idUser
+                                        chatUpdatesFull["usernameUser1"] = currentUser.username
+                                        chatUpdatesFull["usernameUser2"] = targetUser.username
+                                        chatUpdatesFull["imageUrlUser1"] = currentUser.imageUrl
+                                        chatUpdatesFull["imageUrlUser2"] = targetUser.imageUrl
+                                        chatUpdatesFull["unreadMessages"] = "0"
+
+                                        chatRef.updateChildren(chatUpdatesFull).addOnCompleteListener { task ->
+                                            if (!task.isSuccessful) {
+                                                Log.e(ContentValues.TAG, "Error al actualizar el chat: ${task.exception?.message}")
+                                            }
+                                        }
                                     }
                                 }
-                            } else {
-                                // Actualizar chat existente
-                                val chatUpdatesFull = chatUpdates.toMutableMap()
-                                chatUpdatesFull["idUser1"] = userId
-                                chatUpdatesFull["idUser2"] = targetUser.idUser
-                                chatUpdatesFull["username"] = targetUser.username
-                                chatUpdatesFull["imageUrl"] = targetUser.imageUrl
-                                chatUpdatesFull["unreadMessages"] = "0"
 
-                                chatRef.updateChildren(chatUpdatesFull).addOnCompleteListener { task ->
-                                    if (!task.isSuccessful) {
-                                        Log.e(ContentValues.TAG, "Error al actualizar el chat: ${task.exception?.message}")
-                                    }
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
                                 }
-                            }
+                            })
+                        } else {
+                            Log.e(ContentValues.TAG, "El usuario actual o el usuario objetivo es nulo")
                         }
+                    }
 
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
-                        }
-                    })
-                } else {
-                    Log.e(ContentValues.TAG, "El usuario con idUser2 es nulo")
-                }
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
+                    }
+                })
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -248,17 +260,13 @@ class ChatFragment : Fragment() {
                 dataSnapshot.children.forEach { snapshot ->
                     val chat = snapshot.getValue(Chat::class.java)
                     chat?.let {
-
                         chatList.add(it)
                         Log.d(ContentValues.TAG, "Chat añadido: $it")
-
                     } ?: Log.e(ContentValues.TAG, "El chat es nulo para el snapshot: ${snapshot.key}")
                 }
                 chatsList = chatList
                 if (chatsList.isNotEmpty()) {
-                    val adapter = ChatProfileAdapter(chatsList) { chat ->
-                        onChatClicked(chat)
-                    }
+                    val adapter = ChatProfileAdapter(chatsList, auth.uid!!, ::onChatClicked)
                     binding.recyclerViewChats.adapter = adapter
                     adapter.notifyDataSetChanged()
                     Log.d(ContentValues.TAG, "Chats list updated: ${chatsList.size} chats loaded")
@@ -272,6 +280,7 @@ class ChatFragment : Fragment() {
             }
         })
     }
+
 
 
     private fun onChatClicked(chat: Chat) {

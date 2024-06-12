@@ -28,13 +28,16 @@ data class User(
 data class Chat(
     var idUser1: String = "",
     var idUser2: String = "",
-    var username: String = "",
-    var imageUrl: String = "",
+    var usernameUser1: String = "",
+    var usernameUser2: String = "",
+    var imageUrlUser1: String = "",
+    var imageUrlUser2: String = "",
     var lastMessage: String = "",
     var unreadMessages: String = "",
     var timestamp: Long = System.currentTimeMillis(),
     var messages: Map<String, Message> = emptyMap()
 )
+
 
 
 data class Message(
