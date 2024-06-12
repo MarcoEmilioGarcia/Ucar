@@ -103,6 +103,7 @@ class ProfileActivity : AppCompatActivity() {
                                 Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
                             }
                         })
+                        /*
 
                         userPostsReference.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -137,6 +138,8 @@ class ProfileActivity : AppCompatActivity() {
                                 Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
                             }
                         })
+
+                         */
                     } else {
                         Log.e(ContentValues.TAG, "El UID de auth es nulo")
                     }
