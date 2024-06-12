@@ -24,7 +24,7 @@
             android:layout_width="180dp"
             android:layout_height="40dp"
             android:layout_margin="9dp"
-            android:background="@drawable/logo"
+            android:background="@drawable/icon_logo_app"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
