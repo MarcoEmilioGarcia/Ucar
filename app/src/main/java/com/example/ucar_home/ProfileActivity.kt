@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.ucar_home.add_car.AddCarActivity
 import com.example.ucar_home.add_post.AddPostActivity
 import com.example.ucar_home.databinding.ActivityProfileBinding
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -31,7 +32,9 @@ class ProfileActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val userReference = FirebaseDatabase.getInstance().getReference("users")
         val carsReference = FirebaseDatabase.getInstance().getReference("cars")
+        val postsReference = FirebaseDatabase.getInstance().getReference("posts")
         var carList: MutableList<CarObject> = mutableListOf()
+        var postList: MutableList<Pair<PostObject, User>> = mutableListOf()
 
         // Ocultar el LinearLayout con ID linnear
         binding.linnear.visibility = View.GONE
@@ -77,6 +80,7 @@ class ProfileActivity : AppCompatActivity() {
 
                     if (auth.uid != null) {
                         val userCarsReference = carsReference.child(auth.uid!!)
+                        val userPostsReference = postsReference.child(auth.uid!!)
 
                         userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -92,6 +96,40 @@ class ProfileActivity : AppCompatActivity() {
                                     adapter.notifyDataSetChanged()
                                 } else {
                                     Log.d(ContentValues.TAG, "La lista de coches está vacía")
+                                }
+                            }
+
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
+                            }
+                        })
+
+                        userPostsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val postTasks = dataSnapshot.children.map { postSnapshot ->
+                                    val post = postSnapshot.getValue(PostObject::class.java)
+                                    val userTask = userReference.child(post?.idUser ?: "").get().continueWith { userTask ->
+                                        val user = userTask.result?.getValue(User::class.java)
+                                        post?.let { post to user }
+                                    }
+                                    userTask
+                                }
+
+                                Tasks.whenAllComplete(postTasks).addOnCompleteListener { tasks ->
+                                    postTasks.forEach { task ->
+                                        val postUserPair = task.result
+                                        postUserPair?.let {
+                                            postList.add(it as Pair<PostObject, User>)
+                                        }
+                                    }
+
+                                    if (postList.isNotEmpty()) {
+                                        val adapter = PostAdapter(postList)
+                                        binding.publicaciones.adapter = adapter
+                                        adapter.notifyDataSetChanged()
+                                    } else {
+                                        Log.d(ContentValues.TAG, "La lista de publicaciones está vacía")
+                                    }
                                 }
                             }
 

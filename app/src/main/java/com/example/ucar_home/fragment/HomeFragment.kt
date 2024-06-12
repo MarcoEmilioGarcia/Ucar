@@ -14,7 +14,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var postAdapter: PostAdapter
-    private var postsList = mutableMapOf<PostObject, User>()
+    private var postsList = mutableListOf<Pair<PostObject, User>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +28,9 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view
-
     }
 
-    fun updatePosts(newPostsList: MutableMap<PostObject, User>) {
+    fun updatePosts(newPostsList: MutableList<Pair<PostObject, User>>) {
         postsList = newPostsList
         postAdapter.updatePosts(postsList)
     }
