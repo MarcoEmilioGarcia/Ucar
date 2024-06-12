@@ -26,17 +26,21 @@ class SignInStep2Activity : AppCompatActivity() {
 
         // Go Back Button
         binding.imageBtnGoBack.setOnClickListener {
-            startActivity(Intent(this, SignInStep1Activity::class.java))
+            finish()
         }
 
         // Next Button
         binding.btnNext.setOnClickListener {
-            val email = binding.editTextEmail.text.toString()
-            if (isEmailValid(email)) {
-                checkIfEmailExists(email, username, password)
-            } else {
-                showMessage(R.string.error_invalid_email)
-            }
+            handleNextButtonClick(username, password)
+        }
+    }
+
+    private fun handleNextButtonClick(username: String?, password: String?) {
+        val email = binding.editTextEmail.text.toString().trim()
+        if (isEmailValid(email)) {
+            checkIfEmailExists(email, username, password)
+        } else {
+            showMessage(R.string.error_invalid_email)
         }
     }
 
@@ -50,18 +54,8 @@ class SignInStep2Activity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val signInMethods = task.result?.signInMethods
                     if (signInMethods.isNullOrEmpty()) {
-                        // Email does not exist, proceed to the next step
-                        val phoneNumber = binding.editTextPhoneNumber.text.toString()
-                        val intent = Intent(this, SignInStep3Activity::class.java).apply {
-                            putExtra("Username", username)
-                            putExtra("Password", password)
-                            putExtra("Email", email)
-                            putExtra("PhoneNumber", phoneNumber)
-                        }
-                        Log.d(ContentValues.TAG, "Moving to the next activity with email: $email and password: $password")
-                        startActivity(intent)
+                        proceedToNextStep(email, username, password)
                     } else {
-                        // Email already exists
                         showMessage(R.string.error_email_exists)
                     }
                 } else {
@@ -69,6 +63,18 @@ class SignInStep2Activity : AppCompatActivity() {
                     showMessage(R.string.error_checking_email)
                 }
             }
+    }
+
+    private fun proceedToNextStep(email: String, username: String?, password: String?) {
+        val phoneNumber = binding.editTextPhoneNumber.text.toString().trim()
+        val intent = Intent(this, SignInStep3Activity::class.java).apply {
+            putExtra("Username", username)
+            putExtra("Password", password)
+            putExtra("Email", email)
+            putExtra("PhoneNumber", phoneNumber)
+        }
+        Log.d(ContentValues.TAG, "Moving to the next activity with email: $email and password: $password")
+        startActivity(intent)
     }
 
     private fun showMessage(messageResId: Int) {

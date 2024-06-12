@@ -23,16 +23,20 @@ class SignInStep4Activity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
-        val username = intent.getStringExtra("Username")
-        val password = intent.getStringExtra("Password")
-        val email = intent.getStringExtra("Email")
-        val phoneNumber = intent.getStringExtra("PhoneNumber")
-        val name = intent.getStringExtra("Name")
-        val imageUrl = intent.getStringExtra("ImageUrl")
+        val username = intent.getStringExtra("Username") ?: ""
+        val password = intent.getStringExtra("Password") ?: ""
+        val email = intent.getStringExtra("Email") ?: ""
+        val phoneNumber = intent.getStringExtra("PhoneNumber") ?: ""
+        val name = intent.getStringExtra("Name") ?: ""
+        val imageUrl = intent.getStringExtra("ImageUrl") ?: ""
+
+        binding.imageBtnGoBack.setOnClickListener {
+            finish()
+        }
 
         binding.btnCreate.setOnClickListener {
-            if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
-                auth.createUserWithEmailAndPassword(email.toString(), password.toString())
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val bibliography = binding.editTextBibliography.text.toString()
@@ -54,45 +58,43 @@ class SignInStep4Activity : AppCompatActivity() {
     }
 
     private fun saveUserToDatabase(
-        username: String?,
-        email: String?,
-        phoneNumber: String?,
-        name: String?,
-        imageUrl: String?,
-        bibliography: String?
+        username: String,
+        email: String,
+        phoneNumber: String,
+        name: String,
+        imageUrl: String,
+        bibliography: String
     ) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        val uid = auth.currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
 
         // Inicializa las listas de seguidores y seguidos vacías
         val followersList = mutableListOf<String>()
         val followingList = mutableListOf<String>()
 
-        if (uid != null && username != null && email != null && phoneNumber != null && name != null && imageUrl != null && bibliography != null) {
-            val user = User(
-                idUser = uid,
-                username = username,
-                email = email,
-                phoneNumber = phoneNumber,
-                name = name,
-                imageUrl = imageUrl,
-                bibliography = bibliography,
-                followers = 0,
-                following = 0,
-                followersList = followersList,
-                followingList = followingList
-            )
+        requireNotNull(uid) { "Current user UID is null." }
 
-            database.child("users").child(uid).setValue(user)
-                .addOnSuccessListener {
-                    Log.d(ContentValues.TAG, "User data saved successfully.")
-                    // Proceed to next activity or whatever you need to do
-                }
-                .addOnFailureListener { e ->
-                    Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
-                }
-        } else {
-            Log.d(ContentValues.TAG, "One or more user details are null.")
-        }
+        val user = User(
+            idUser = uid,
+            username = username,
+            email = email,
+            phoneNumber = phoneNumber,
+            name = name,
+            imageUrl = imageUrl,
+            bibliography = bibliography,
+            followers = 0,
+            following = 0,
+            followersList = followersList,
+            followingList = followingList
+        )
+
+        database.child("users").child(uid).setValue(user)
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "User data saved successfully.")
+                // Proceed to next activity or whatever you need to do
+            }
+            .addOnFailureListener { e ->
+                Log.d(ContentValues.TAG, "Error saving user data: ${e.message}")
+            }
     }
 }

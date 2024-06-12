@@ -88,8 +88,8 @@
     <string name="cyclindrated">CC</string>
 
 
-    <string name="error_password_mismatch">PRueba</string>
-    <string name="error_invalid_password">PReubaaa</string>
+    <string name="error_password_mismatch">Password must be the same</string>
+    <string name="error_invalid_password">Pasword must have a number, lower case and capital letter</string>
 
 
     <!--add post 1-->
@@ -102,6 +102,7 @@
     <string name="error_invalid_email">invalid Email</string>
     <string name="error_email_exists">Email exists</string>
     <string name="error_checking_email">Error checking Email</string>
+    <string name="error_name_required">Name is empty</string>
 
 
 </resources>

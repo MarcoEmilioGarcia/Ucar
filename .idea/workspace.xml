@@ -120,15 +120,21 @@
           <theme>@style/Theme.Ucar_Home</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/toolbar.xml">
+        <config>
+          <theme>@style/Theme.Ucar_Home</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="93151caf-f311-4a36-9af6-0028320daf6b" name="Changes" comment="...">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/ProfileActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/ProfileActivity.kt" afterDir="false" />
+    <list default="true" id="93151caf-f311-4a36-9af6-0028320daf6b" name="Changes" comment="arreglo create perfil">
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/icon_logo_app.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout-v31/toolbar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout-v31/toolbar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/toolbar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/toolbar.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +144,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[9eef7050]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\AlumnoM\.android\avd\Pixel_3_API_UpsideDownCakePrivacySandbox.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -482,23 +488,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718182608251</updated>
     </task>
-    <task id="LOCAL-00022" summary="...">
+    <task id="LOCAL-00022" summary="arreglo create perfil">
       <option name="closed" value="true" />
-      <created>1718183018345</created>
+      <created>1718186278651</created>
       <option name="number" value="00022" />
       <option name="presentableId" value="LOCAL-00022" />
       <option name="project" value="LOCAL" />
-      <updated>1718183018345</updated>
+      <updated>1718186278651</updated>
     </task>
-    <task id="LOCAL-00023" summary="...">
-      <option name="closed" value="true" />
-      <created>1718185092857</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1718185092857</updated>
-    </task>
-    <option name="localTasksCounter" value="24" />
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -519,14 +517,15 @@
     <MESSAGE value="añadido maps activity" />
     <MESSAGE value="md" />
     <MESSAGE value="..." />
-    <option name="LAST_COMMIT_MESSAGE" value="..." />
+    <MESSAGE value="arreglo create perfil" />
+    <option name="LAST_COMMIT_MESSAGE" value="arreglo create perfil" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/CustomAdapter.kt</url>
-          <line>93</line>
+          <line>95</line>
           <properties class="com.example.ucar_home.PostAdapter.PostViewHolder" method="&lt;init&gt;">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />

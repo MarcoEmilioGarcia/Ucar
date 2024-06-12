@@ -13,7 +13,6 @@ class SignInStep1Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInStep1Binding
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInStep1Binding.inflate(layoutInflater)
@@ -21,33 +20,44 @@ class SignInStep1Activity : AppCompatActivity() {
 
         // Go Back Button
         binding.imageBtnGoBack1.setOnClickListener {
-            startActivity(Intent(this, LogInActivity::class.java))
+            finish()
         }
 
         // Next Button
         binding.btnNext.setOnClickListener {
-            val username = binding.editTextUsername.text.toString()
-            val password = binding.editTextPassword.text.toString()
-            val repeatPassword = binding.editTextRepeatPassword.text.toString()
+            handleNextButtonClick()
+        }
+    }
 
-            when {
-                username.isEmpty() || password.isEmpty() -> {
-                    showMessage(R.string.error_empty_fields)
-                }
-                password != repeatPassword -> {
-                    showMessage(R.string.error_password_mismatch)
-                }
-                !isPasswordValid(password) -> {
-                    showMessage(R.string.error_invalid_password)
-                }
-                else -> {
-                    val intent = Intent(this, SignInStep2Activity::class.java).apply {
-                        putExtra("Username", username)
-                        putExtra("Password", password)
-                    }
-                    startActivity(intent)
-                }
+    private fun handleNextButtonClick() {
+        val username = binding.editTextUsername.text.toString().trim()
+        val password = binding.editTextPassword.text.toString().trim()
+        val repeatPassword = binding.editTextRepeatPassword.text.toString().trim()
+
+        if (!areFieldsValid(username, password, repeatPassword)) return
+
+        val intent = Intent(this, SignInStep2Activity::class.java).apply {
+            putExtra("Username", username)
+            putExtra("Password", password)
+        }
+        startActivity(intent)
+    }
+
+    private fun areFieldsValid(username: String, password: String, repeatPassword: String): Boolean {
+        return when {
+            username.isEmpty() || password.isEmpty() -> {
+                showMessage(R.string.error_empty_fields)
+                false
             }
+            password != repeatPassword -> {
+                showMessage(R.string.error_password_mismatch)
+                false
+            }
+            !isPasswordValid(password) -> {
+                showMessage(R.string.error_invalid_password)
+                false
+            }
+            else -> true
         }
     }
 
