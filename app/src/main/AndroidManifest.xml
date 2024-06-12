@@ -19,9 +19,7 @@
         <activity
             android:name=".postSearchActivity"
             android:exported="false" />
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
+
         <activity
             android:name=".add_post.AddPostActivity2"
             android:exported="false" />
@@ -35,8 +33,12 @@
             android:exported="true"
             android:label="MapsFragment" />
         <activity
-            android:name=".CreateEventActivity"
+            android:name=".CreateEventStep1Activity"
             android:exported="false" />
+        <activity
+            android:name=".CreateEventStep2Activity"
+            android:exported="false" />
+
         <activity
             android:name=".sign_in.SignInGoogleStep1"
             android:exported="false" />
