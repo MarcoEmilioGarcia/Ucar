@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class ChatFragment : Fragment() {
+    // Variables iniciales y FirebaseAuth
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var auth: FirebaseAuth
@@ -60,9 +61,6 @@ class ChatFragment : Fragment() {
             Log.d(ContentValues.TAG, "Traza 1")
             recyclerView = it.recyclerViewChats
             recyclerView.layoutManager = LinearLayoutManager(context)
-
-            // Clear any previous adapter to avoid issues
-            recyclerView.adapter = null
 
             val idUser = arguments?.getString("idUser")
 
@@ -107,33 +105,27 @@ class ChatFragment : Fragment() {
         } ?: Log.e(ContentValues.TAG, "Binding es nulo en onViewCreated")
     }
 
-
-
     private fun sendMessage() {
         val messageText = binding.messageInput.text.toString().trim()
         if (TextUtils.isEmpty(messageText)) {
-            // Si el mensaje está vacío, no hacer nada
             return
         }
 
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            val message = Message(content = messageText)
-            Log.d(ContentValues.TAG, "Enviando mensaje: $message")
+            val message = Message(content = messageText, userId = userId)
+
             messagesRef.push().setValue(message).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Limpiar el campo de entrada de texto después de enviar el mensaje
                     binding.messageInput.text.clear()
-                    Log.d(ContentValues.TAG, "Mensaje enviado con éxito")
 
-                    // Actualizar el último mensaje y la marca de tiempo en la referencia del chat
                     val chatUpdates = hashMapOf<String, Any>(
                         "lastMessage" to messageText,
-                        "timestamp" to message.timestamp
+                        "timestamp" to System.currentTimeMillis()
                     )
                     messagesRef.parent?.updateChildren(chatUpdates)
 
-                    // Crear un nuevo chat si no existe
+                    // Crear o actualizar el chat
                     createOrUpdateChat(userId, chatUpdates)
                 } else {
                     Log.e(ContentValues.TAG, "Error al enviar el mensaje: ${task.exception?.message}")
@@ -144,27 +136,59 @@ class ChatFragment : Fragment() {
         }
     }
 
-
     private fun createOrUpdateChat(userId: String, chatUpdates: HashMap<String, Any>) {
         val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
-        chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        val targetUserId = chatId.replace("$userId-", "").replace("-$userId", "")
+
+        val userRef = FirebaseDatabase.getInstance().getReference("users").child(targetUserId)
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    // Crear nuevo chat
-                    val chat = Chat(
-                        idUser1 = userId,
-                        idUser2 = chatId.replace("$userId-", "").replace("-$userId", ""),
-                        username = "", // Añadir nombre de usuario del otro usuario si está disponible
-                        imageUrl = "", // Añadir URL de la imagen del otro usuario si está disponible
-                        lastMessage = chatUpdates["lastMessage"] as String,
-                        unreadMessages = "0", // Inicialmente no hay mensajes no leídos
-                        timestamp = chatUpdates["timestamp"] as Long,
-                        messages = emptyMap() // Inicialmente no hay mensajes en el mapa
-                    )
-                    chatRef.setValue(chat)
+                val targetUser = dataSnapshot.getValue(User::class.java)
+                if (targetUser != null) {
+                    chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(chatSnapshot: DataSnapshot) {
+                            if (!chatSnapshot.exists()) {
+                                // Crear nuevo chat
+                                val chat = Chat(
+                                    idUser1 = userId,
+                                    idUser2 = targetUser.idUser,
+                                    username = targetUser.username,
+                                    imageUrl = targetUser.imageUrl,
+                                    lastMessage = chatUpdates["lastMessage"] as String,
+                                    unreadMessages = "0",
+                                    timestamp = chatUpdates["timestamp"] as Long,
+                                    messages = mapOf() // Inicialmente no hay mensajes en el mapa
+                                )
+                                chatRef.setValue(chat).addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Log.e(ContentValues.TAG, "Chat creado")
+                                    } else {
+                                        Log.e(ContentValues.TAG, "Error al crear el chat: ${task.exception?.message}")
+                                    }
+                                }
+                            } else {
+                                // Actualizar chat existente
+                                val chatUpdatesFull = chatUpdates.toMutableMap()
+                                chatUpdatesFull["idUser1"] = userId
+                                chatUpdatesFull["idUser2"] = targetUser.idUser
+                                chatUpdatesFull["username"] = targetUser.username
+                                chatUpdatesFull["imageUrl"] = targetUser.imageUrl
+                                chatUpdatesFull["unreadMessages"] = "0"
+
+                                chatRef.updateChildren(chatUpdatesFull).addOnCompleteListener { task ->
+                                    if (!task.isSuccessful) {
+                                        Log.e(ContentValues.TAG, "Error al actualizar el chat: ${task.exception?.message}")
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
+                        }
+                    })
                 } else {
-                    // Actualizar chat existente
-                    chatRef.updateChildren(chatUpdates)
+                    Log.e(ContentValues.TAG, "El usuario con idUser2 es nulo")
                 }
             }
 
@@ -173,7 +197,6 @@ class ChatFragment : Fragment() {
             }
         })
     }
-
 
     private fun setupChat(currentUserId: String, targetUserId: String) {
         chatId = if (currentUserId < targetUserId) {
@@ -188,7 +211,7 @@ class ChatFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context).apply {
             stackFromEnd = true
         }
-        val chatAdapter = ChatAdapter(messagesList)
+        val chatAdapter = ChatAdapter(messagesList, currentUserId)
         recyclerView.adapter = chatAdapter
 
         messagesRef.addValueEventListener(object : ValueEventListener {
@@ -210,76 +233,26 @@ class ChatFragment : Fragment() {
                 Log.e(ContentValues.TAG, "Failed to read messages", databaseError.toException())
             }
         })
-
-        val userRef = FirebaseDatabase.getInstance().getReference("users").child(targetUserId)
-        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val user = dataSnapshot.getValue(User::class.java)
-                user?.let {
-                    val chatUpdates = hashMapOf<String, Any>(
-                        "lastMessage" to "", // Inicialmente vacío
-                        "timestamp" to System.currentTimeMillis()
-                    )
-                    createOrUpdateChat(currentUserId, it.username, it.imageUrl, chatUpdates)
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(ContentValues.TAG, "Error al obtener detalles del usuario", databaseError.toException())
-            }
-        })
     }
-
-
-
-
-    private fun createOrUpdateChat(userId: String, username: String, imageUrl: String, chatUpdates: HashMap<String, Any>) {
-        val chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId)
-        chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    // Crear nuevo chat
-                    val chat = Chat(
-                        idUser1 = userId,
-                        idUser2 = chatId.replace("$userId-", "").replace("-$userId", ""),
-                        username = username, // Nombre de usuario del otro usuario
-                        imageUrl = imageUrl, // URL de la imagen del otro usuario
-                        lastMessage = chatUpdates["lastMessage"] as String,
-                        unreadMessages = "0", // Inicialmente no hay mensajes no leídos
-                        timestamp = chatUpdates["timestamp"] as Long,
-                        messages = emptyMap() // Inicialmente no hay mensajes en el mapa
-                    )
-                    chatRef.setValue(chat)
-                } else {
-                    // Actualizar chat existente
-                    chatRef.updateChildren(chatUpdates)
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(ContentValues.TAG, "Error al consultar la base de datos", databaseError.toException())
-            }
-        })
-    }
-
-
-
-
 
     private fun loadChats() {
         val userReference = FirebaseDatabase.getInstance().getReference("chats")
         userReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d(ContentValues.TAG, "DataSnapshot: ${dataSnapshot.value}")
-                val chatList = mutableListOf<Chat>()
-                dataSnapshot.children.forEach {
-                    val chat = it.getValue(Chat::class.java)
+                var chatList = mutableListOf<Chat>()
+                if (auth.uid == null) {
+                    Log.e(ContentValues.TAG, "El UID del usuario actual es nulo")
+                    return
+                }
+                dataSnapshot.children.forEach { snapshot ->
+                    val chat = snapshot.getValue(Chat::class.java)
                     chat?.let {
-                        if (it.idUser1 == auth.uid || it.idUser2 == auth.uid) {
-                            chatList.add(it)
-                            Log.d(ContentValues.TAG, "Chat añadido: $chat")
-                        }
-                    }
+
+                        chatList.add(it)
+                        Log.d(ContentValues.TAG, "Chat añadido: $it")
+
+                    } ?: Log.e(ContentValues.TAG, "El chat es nulo para el snapshot: ${snapshot.key}")
                 }
                 chatsList = chatList
                 if (chatsList.isNotEmpty()) {
@@ -300,6 +273,7 @@ class ChatFragment : Fragment() {
         })
     }
 
+
     private fun onChatClicked(chat: Chat) {
         val currentUserId = auth.currentUser?.uid ?: return
         val targetUserId = if (chat.idUser1 == currentUserId) chat.idUser2 else chat.idUser1
@@ -309,11 +283,6 @@ class ChatFragment : Fragment() {
         binding.recyclerViewChats.visibility = View.GONE
         binding.tabs.visibility = View.GONE
     }
-
-
-
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

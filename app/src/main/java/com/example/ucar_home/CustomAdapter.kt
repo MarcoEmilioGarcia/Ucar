@@ -1,12 +1,13 @@
 package com.example.ucar_home
 
-
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
@@ -37,7 +38,6 @@ class CarAdapter(private val carList: List<CarObject>) : RecyclerView.Adapter<Ca
         return carList.size
     }
 }
-
 
 class SearchAdapter(
     private val postList: List<PostObject>,
@@ -226,7 +226,7 @@ class UserProfileAdapter(private var userList: List<User>, private val onItemCli
     }
 }
 
-class ChatAdapter(private val messagesList: List<Message>) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
+class ChatAdapter(private val messagesList: List<Message>, private val currentUserId: String) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageContent: TextView = itemView.findViewById(R.id.textView11)
@@ -244,6 +244,29 @@ class ChatAdapter(private val messagesList: List<Message>) : RecyclerView.Adapte
         holder.messageContent.text = message.content
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         holder.messageTimestamp.text = sdf.format(Date(message.timestamp))
+
+        // Ajustar el gravity de los TextViews
+        val layoutParamsContent = holder.messageContent.layoutParams as ConstraintLayout.LayoutParams
+        val layoutParamsTimestamp = holder.messageTimestamp.layoutParams as ConstraintLayout.LayoutParams
+
+        if (message.userId == currentUserId) {
+            holder.messageContent.gravity = Gravity.END
+            holder.messageTimestamp.gravity = Gravity.END
+            layoutParamsContent.startToStart = ConstraintLayout.LayoutParams.UNSET
+            layoutParamsContent.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParamsTimestamp.startToStart = ConstraintLayout.LayoutParams.UNSET
+            layoutParamsTimestamp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+        } else {
+            holder.messageContent.gravity = Gravity.START
+            holder.messageTimestamp.gravity = Gravity.START
+            layoutParamsContent.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParamsContent.endToEnd = ConstraintLayout.LayoutParams.UNSET
+            layoutParamsTimestamp.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParamsTimestamp.endToEnd = ConstraintLayout.LayoutParams.UNSET
+        }
+
+        holder.messageContent.layoutParams = layoutParamsContent
+        holder.messageTimestamp.layoutParams = layoutParamsTimestamp
     }
 
     override fun getItemCount() = messagesList.size
