@@ -76,7 +76,13 @@ data class PostObject(
     var idUser: String = "",
     var description: String = "",
     var imageUrl: String = "",
-    var likes: Int = 0
+    var likes: Int = 0,
+    var comments: Map<String, Comment> = emptyMap()
 )
 
+data class Comment(
+    var timestamp: Long = System.currentTimeMillis(), // Unix timestamp
+    var content: String = "",
+    var userId: String =""
+)
 

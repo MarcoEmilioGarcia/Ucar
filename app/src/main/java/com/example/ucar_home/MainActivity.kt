@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     val postsReference = FirebaseDatabase.getInstance().getReference("posts")
     val usersReference = FirebaseDatabase.getInstance().getReference("users")
-    var postsList = mutableMapOf<CarObject, User>()
+    var postsList = mutableListOf<Pair<PostObject, User>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity() {
                 if (user != null) {
                     val followingList = user.followingList
                     if (followingList.isNotEmpty()) {
-                        val postsList = mutableMapOf<PostObject, User>()
+                        val postsList = mutableListOf<Pair<PostObject, User>>()
                         followingList.forEach { userId ->
                             postsReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity() {
                                             override fun onDataChange(userSnapshot: DataSnapshot) {
                                                 val user = userSnapshot.getValue(User::class.java)
                                                 if (post != null && user != null) {
-                                                    postsList[post] = user
+                                                    postsList.add(Pair(post, user))
                                                 }
                                                 if (postsList.isNotEmpty()) {
                                                     // Asumiendo que el fragmento actualmente visible es HomeFragment

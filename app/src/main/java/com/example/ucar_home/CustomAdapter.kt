@@ -69,7 +69,7 @@ class SearchAdapter(
     }
 }
 
-class PostAdapter(private var postsList: MutableMap<PostObject, User>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private var postsList: MutableList<Pair<PostObject, User>>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_home, parent, false)
@@ -77,9 +77,7 @@ class PostAdapter(private var postsList: MutableMap<PostObject, User>) : Recycle
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = postsList.keys.elementAt(position)
-        val user = postsList[post]
-
+        val (post, user) = postsList[position]
         holder.bind(post, user)
     }
 
@@ -87,9 +85,9 @@ class PostAdapter(private var postsList: MutableMap<PostObject, User>) : Recycle
         return postsList.size
     }
 
-    fun updatePosts(newPostsList: MutableMap<PostObject, User>) {
+    fun updatePosts(newPostsList: MutableList<Pair<PostObject, User>>) {
         postsList.clear()
-        postsList.putAll(newPostsList)
+        postsList.addAll(newPostsList)
         notifyDataSetChanged()
     }
 

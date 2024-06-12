@@ -57,7 +57,7 @@ class SearchFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         Log.d(ContentValues.TAG, "Aqui estoy")
 
-        postAdapter = PostAdapter(mutableMapOf()) // Inicializar el adaptador del nuevo RecyclerView
+        postAdapter = PostAdapter(mutableListOf()) // Inicializar el adaptador del nuevo RecyclerView con una lista mutable
 
         binding.publicaciones2.layoutManager = LinearLayoutManager(context) // Agrega esta línea
 
@@ -126,10 +126,39 @@ class SearchFragment : Fragment() {
                     binding.publicaciones.visibility = View.GONE
                     binding.publicaciones2.visibility = View.VISIBLE
 
-                    // Cargar las publicaciones en el nuevo RecyclerView
-                    val userPostsMap = mutableMapOf<PostObject, User>()
-                    userPostsMap[post] = user
-                    postAdapter.updatePosts(userPostsMap)
+                    // Cargar la publicación en la que se hizo clic como la primera
+                    val userPostsList = mutableListOf<Pair<PostObject, User>>()
+                    userPostsList.add(Pair(post, user))
+
+                    // Agregar publicaciones aleatorias a la lista
+                    val randomPosts = postList.filter { it != post }.shuffled().take(5) // Toma 5 publicaciones aleatorias distintas de la clicada
+                    val randomUsersMap = mutableMapOf<PostObject, User>()
+
+                    for (randomPost in randomPosts) {
+                        usersReference.child(randomPost.idUser).addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(randomPostSnapshot: DataSnapshot) {
+                                val randomUser = randomPostSnapshot.getValue(User::class.java)
+                                if (randomUser != null) {
+                                    randomUsersMap[randomPost] = randomUser
+                                    userPostsList.add(Pair(randomPost, randomUser))
+
+                                    // Actualiza el adaptador después de agregar cada publicación aleatoria
+                                    if (userPostsList.size == randomPosts.size + 1) {
+                                        postAdapter.updatePosts(userPostsList)
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                Log.e(ContentValues.TAG, "Error al obtener el usuario", databaseError.toException())
+                            }
+                        })
+                    }
+
+                    // Asegura que se actualice el adaptador si no hay publicaciones aleatorias
+                    if (randomPosts.isEmpty()) {
+                        postAdapter.updatePosts(userPostsList)
+                    }
                 } else {
                     Log.e(ContentValues.TAG, "Usuario no encontrado para el post: ${post.idPost}")
                 }
