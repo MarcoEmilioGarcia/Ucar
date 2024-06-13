@@ -13,8 +13,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.ucar_home.LogInActivity
 import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivitySignInStep3Binding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
