@@ -23,7 +23,7 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         recyclerView = view.findViewById(R.id.publicaciones)
-        postAdapter = PostAdapter(postsList) { post -> onPostItemClicked(post) }
+        postAdapter = PostAdapter(postsList)
         recyclerView.adapter = postAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 

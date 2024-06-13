@@ -71,8 +71,7 @@ class SearchAdapter(
 }
 
 class PostAdapter(
-    private var postsList: MutableList<Pair<PostObject, User>>,
-    private val onItemClickListener: (PostObject) -> Unit
+    private var postsList: MutableList<Pair<PostObject, User>>
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -83,9 +82,6 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val (post, user) = postsList[position]
         holder.bind(post, user)
-        holder.itemView.setOnClickListener {
-            onItemClickListener(post)
-        }
     }
 
     override fun getItemCount(): Int {

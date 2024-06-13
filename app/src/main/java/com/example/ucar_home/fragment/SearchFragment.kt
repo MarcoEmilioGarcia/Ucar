@@ -57,7 +57,7 @@ class SearchFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         Log.d(ContentValues.TAG, "Aqui estoy")
 
-        postAdapter = PostAdapter(mutableListOf()) { post -> onPostItemClicked(post) }
+        postAdapter = PostAdapter(mutableListOf())
 
         binding.publicaciones2.layoutManager = LinearLayoutManager(context)
 
@@ -88,8 +88,10 @@ class SearchFragment : Fragment() {
                 dataSnapshot.children.forEach { postSnapshot ->
                     postSnapshot.children.forEach {
                         val post = it.getValue(PostObject::class.java)
-                        post?.let {
-                            postList.add(it)
+                        if (post != null) {
+                            postList.add(post)
+                        } else {
+                            Log.e(ContentValues.TAG, "Datos inválidos en el post: ${it.value}")
                         }
                     }
                 }
