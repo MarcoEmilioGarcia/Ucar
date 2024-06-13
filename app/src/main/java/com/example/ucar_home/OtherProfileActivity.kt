@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 
-class OtherProfileActivity : AppCompatActivity() {
+class OtherProfileActivity : AppCompatActivity(), CarAdapter.OnItemClickListener {
     private lateinit var binding: ActivityProfileBinding
     private lateinit var auth: FirebaseAuth
 
@@ -91,7 +91,7 @@ class OtherProfileActivity : AppCompatActivity() {
                     car?.let { carList.add(it) }
                 }
                 if (carList.isNotEmpty()) {
-                    val adapter = CarAdapter(carList)
+                    val adapter = CarAdapter(carList, this@OtherProfileActivity)
                     binding.publicaciones.adapter = adapter
                     adapter.notifyDataSetChanged()
                 } else {
@@ -174,7 +174,6 @@ class OtherProfileActivity : AppCompatActivity() {
         })
     }
 
-
     private fun updateFollowStatus(userReference: DatabaseReference, idUser: String, currentUserUid: String, isFollowing: Boolean) {
         val currentUserRef = userReference.child(currentUserUid)
         val otherUserRef = userReference.child(idUser)
@@ -188,14 +187,14 @@ class OtherProfileActivity : AppCompatActivity() {
                         val otherUser = otherUserSnapshot.getValue(User::class.java) ?: return
 
                         if (isFollowing) {
-                            // Unfollow
+                            // Dejar de seguir
                             currentUser.following -= 1
                             currentUser.followingList.remove(idUser)
                             otherUser.followers -= 1
                             otherUser.followersList.remove(currentUserUid)
                             binding.button3.text = "Follow"
                         } else {
-                            // Follow
+                            // Seguir
                             currentUser.following += 1
                             currentUser.followingList.add(idUser)
                             otherUser.followers += 1
@@ -213,7 +212,6 @@ class OtherProfileActivity : AppCompatActivity() {
                         userReference.updateChildren(updates)
                             .addOnSuccessListener {
                                 Log.d(ContentValues.TAG, "Seguimiento actualizado exitosamente")
-                                // Actualizar la vista con los nuevos valores
                                 binding.textView7.text = otherUser.followers.toString()
                             }
                             .addOnFailureListener { exception ->
@@ -245,5 +243,12 @@ class OtherProfileActivity : AppCompatActivity() {
                 Log.d(ContentValues.TAG, "idUser es nulo")
             }
         }
+    }
+
+    override fun onItemClick(car: CarObject) {
+        val intent = Intent(this, CarProfileActivity::class.java)
+        intent.putExtra("car_title", car.title)
+        intent.putExtra("car_image_url", car.imageUrl)
+        startActivity(intent)
     }
 }

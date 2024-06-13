@@ -15,12 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity(), CarAdapter.OnItemClickListener {
     private lateinit var binding: ActivityProfileBinding
     private lateinit var auth: FirebaseAuth
-
-    // Mapa para mantener las referencias a los íconos originales
-    private val originalIconsMap = mutableMapOf<Int, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +29,7 @@ class ProfileActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val userReference = FirebaseDatabase.getInstance().getReference("users")
         val carsReference = FirebaseDatabase.getInstance().getReference("cars")
-        val postsReference = FirebaseDatabase.getInstance().getReference("posts")
         var carList: MutableList<CarObject> = mutableListOf()
-        var postList: MutableList<Pair<PostObject, User>> = mutableListOf()
 
         // Ocultar el LinearLayout con ID linnear
         binding.linnear.visibility = View.GONE
@@ -62,7 +57,6 @@ class ProfileActivity : AppCompatActivity() {
                                                 .into(binding.imageView2)
                                         }.addOnFailureListener { exception ->
                                             Log.e(ContentValues.TAG, "Error al descargar la imagen", exception)
-                                            // Mostrar mensaje de error al usuario
                                         }
                                     }
                                 } else {
@@ -80,8 +74,6 @@ class ProfileActivity : AppCompatActivity() {
 
                     if (auth.uid != null) {
                         val userCarsReference = carsReference.child(auth.uid!!)
-                        val userPostsReference = postsReference.child(auth.uid!!)
-
                         userCarsReference.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
                                 dataSnapshot.children.forEach {
@@ -91,7 +83,7 @@ class ProfileActivity : AppCompatActivity() {
                                     }
                                 }
                                 if (carList.isNotEmpty()) {
-                                    val adapter = CarAdapter(carList)
+                                    val adapter = CarAdapter(carList, this@ProfileActivity)
                                     binding.publicaciones.adapter = adapter
                                     adapter.notifyDataSetChanged()
                                 } else {
@@ -103,59 +95,15 @@ class ProfileActivity : AppCompatActivity() {
                                 Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
                             }
                         })
-                        /*
-
-                        userPostsReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val postTasks = dataSnapshot.children.map { postSnapshot ->
-                                    val post = postSnapshot.getValue(PostObject::class.java)
-                                    val userTask = userReference.child(post?.idUser ?: "").get().continueWith { userTask ->
-                                        val user = userTask.result?.getValue(User::class.java)
-                                        post?.let { post to user }
-                                    }
-                                    userTask
-                                }
-
-                                Tasks.whenAllComplete(postTasks).addOnCompleteListener { tasks ->
-                                    postTasks.forEach { task ->
-                                        val postUserPair = task.result
-                                        postUserPair?.let {
-                                            postList.add(it as Pair<PostObject, User>)
-                                        }
-                                    }
-
-                                    if (postList.isNotEmpty()) {
-                                        val adapter = PostAdapter(postList)
-                                        binding.publicaciones.adapter = adapter
-                                        adapter.notifyDataSetChanged()
-                                    } else {
-                                        Log.d(ContentValues.TAG, "La lista de publicaciones está vacía")
-                                    }
-                                }
-                            }
-
-                            override fun onCancelled(databaseError: DatabaseError) {
-                                Log.e(ContentValues.TAG, "Error en la configuración del adapter", databaseError.toException())
-                            }
-                        })
-
-                         */
                     } else {
                         Log.e(ContentValues.TAG, "El UID de auth es nulo")
                     }
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido al autenticar"
                     Log.d(ContentValues.TAG, "Error al autenticar: $errorMessage")
-                    // Mostrar mensaje de error al usuario
                 }
             }
         }
-
-        /*
-        binding.btnEditProfile.setOnClickListener {
-            val intent = Intent(this, EditProfileActivity::class.java)
-            startActivity(intent)
-        }*/
 
         binding.btnAdd.setOnClickListener {
             binding.viewOptions.visibility = View.VISIBLE
@@ -186,6 +134,13 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnLogOut.setOnClickListener {
             signOut()
         }
+    }
+
+    override fun onItemClick(car: CarObject) {
+        val intent = Intent(this, CarProfileActivity::class.java)
+        intent.putExtra("car_title", car.title)
+        intent.putExtra("car_image_url", car.imageUrl)
+        startActivity(intent)
     }
 
     private fun signOut() {

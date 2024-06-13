@@ -17,11 +17,24 @@ import java.util.Date
 import java.util.Locale
 
 
-class CarAdapter(private val carList: List<CarObject>) : RecyclerView.Adapter<CarAdapter.CarViewHolder>() {
+class CarAdapter(private val carList: List<CarObject>, private val listener: OnItemClickListener) : RecyclerView.Adapter<CarAdapter.CarViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(car: CarObject)
+    }
 
     inner class CarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val carImageView: ImageView = itemView.findViewById(R.id.imageView)
         val carNameTextView: TextView = itemView.findViewById(R.id.nombreUsuario)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(carList[position])
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
