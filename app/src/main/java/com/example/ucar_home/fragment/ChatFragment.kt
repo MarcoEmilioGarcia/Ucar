@@ -25,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class ChatFragment : Fragment() {
-    // Variables iniciales y FirebaseAuth
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var auth: FirebaseAuth
@@ -61,7 +60,6 @@ class ChatFragment : Fragment() {
             Log.d(ContentValues.TAG, "Traza 1")
             recyclerView = it.recyclerViewChats
             recyclerView.layoutManager = LinearLayoutManager(context)
-
             val idUser = arguments?.getString("idUser")
 
             if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
@@ -83,7 +81,7 @@ class ChatFragment : Fragment() {
                                 binding.recyclerViewChats.visibility = View.VISIBLE
                                 binding.chatprofilepic.visibility = View.GONE
                                 binding.appname.text = "Chats"
-                                loadChats()
+                                loadChats(userId)
                             }
                         } else {
                             Log.e(ContentValues.TAG, "userId es nulo después de la autenticación")
@@ -126,7 +124,6 @@ class ChatFragment : Fragment() {
                     )
                     messagesRef.parent?.updateChildren(chatUpdates)
 
-                    // Crear o actualizar el chat
                     createOrUpdateChat(userId, chatUpdates)
                 } else {
                     Log.e(ContentValues.TAG, "Error al enviar el mensaje: ${task.exception?.message}")
@@ -249,26 +246,28 @@ class ChatFragment : Fragment() {
         })
     }
 
-    private fun loadChats() {
+    private fun loadChats(currentUserId: String) {
         val userReference = FirebaseDatabase.getInstance().getReference("chats")
         userReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d(ContentValues.TAG, "DataSnapshot: ${dataSnapshot.value}")
                 var chatList = mutableListOf<Chat>()
-                if (auth.uid == null) {
+                if (currentUserId == null) {
                     Log.e(ContentValues.TAG, "El UID del usuario actual es nulo")
                     return
                 }
                 dataSnapshot.children.forEach { snapshot ->
                     val chat = snapshot.getValue(Chat::class.java)
                     chat?.let {
-                        chatList.add(it)
-                        Log.d(ContentValues.TAG, "Chat añadido: $it")
+                        if (it.idUser1 == currentUserId || it.idUser2 == currentUserId) {
+                            chatList.add(it)
+                            Log.d(ContentValues.TAG, "Chat añadido: $it")
+                        }
                     } ?: Log.e(ContentValues.TAG, "El chat es nulo para el snapshot: ${snapshot.key}")
                 }
                 chatsList = chatList
                 if (chatsList.isNotEmpty()) {
-                    val adapter = ChatProfileAdapter(chatsList, auth.uid!!, ::onChatClicked)
+                    val adapter = ChatProfileAdapter(chatsList, currentUserId, ::onChatClicked)
                     binding.recyclerViewChats.adapter = adapter
                     adapter.notifyDataSetChanged()
                     Log.d(ContentValues.TAG, "Chats list updated: ${chatsList.size} chats loaded")
@@ -282,8 +281,6 @@ class ChatFragment : Fragment() {
             }
         })
     }
-
-
 
     private fun onChatClicked(chat: Chat) {
         val currentUserId = auth.currentUser?.uid ?: return
