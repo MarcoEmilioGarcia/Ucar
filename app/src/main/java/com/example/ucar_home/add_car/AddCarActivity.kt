@@ -13,6 +13,7 @@ class AddCarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddCar1Binding
     private var imageUri: Uri? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddCar1Binding.inflate(layoutInflater)
@@ -43,6 +44,7 @@ class AddCarActivity : AppCompatActivity() {
             putExtra("Title", binding.editTextTitle.text.toString())
             putExtra("Brand", binding.editTextbrand.text.toString())
             putExtra("Model", binding.editTextmodel.text.toString())
+
             startActivity(this)
         }
     }

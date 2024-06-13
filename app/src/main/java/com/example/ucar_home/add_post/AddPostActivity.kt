@@ -19,9 +19,10 @@ class AddPostActivity : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
 
             if(binding.editTextDescription.text.toString().isNotEmpty() ){
-
+                val carId = intent.getStringExtra("carId")
                 val intent = Intent(this, AddPostActivity2::class.java)
-                intent.putExtra("Desescription",binding.editTextDescription.text.toString())
+                intent.putExtra("Description",binding.editTextDescription.text.toString())
+                intent.putExtra("carId", carId)
                 startActivity(intent)
 
             }else {

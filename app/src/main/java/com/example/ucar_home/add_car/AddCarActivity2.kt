@@ -33,6 +33,7 @@ class AddCarActivity2 : AppCompatActivity() {
 
 
 
+
         binding.btnNext.setOnClickListener {
             if (areFieldsValid()) {
                 Intent(this, AddCarActivity3::class.java).apply {
@@ -43,6 +44,7 @@ class AddCarActivity2 : AppCompatActivity() {
                     putExtra("Cc", binding.editcyclindrated.text.toString())
                     putExtra("Fuel", binding.editFuel.text.toString())
                     putExtra("Year", binding.edityear.text.toString())
+
                     startActivity(this)
                 }
             } else {

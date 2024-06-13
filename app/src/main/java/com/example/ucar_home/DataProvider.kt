@@ -75,6 +75,7 @@ data class CarObject(
 data class PostObject(
     var idPost: String ="",
     var idUser: String = "",
+    var idCar: String ="",
     var description: String = "",
     var imageUrl: String = "",
     var likes: Int = 0,

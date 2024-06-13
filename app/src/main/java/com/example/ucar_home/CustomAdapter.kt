@@ -147,6 +147,7 @@ class PostAdapter(
     }
 }
 
+
 class ChatProfileAdapter(private var userList: List<Chat>, private val currentUserId: String, private val onItemClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatProfileAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

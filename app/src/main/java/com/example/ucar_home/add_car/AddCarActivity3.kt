@@ -1,6 +1,5 @@
 package com.example.ucar_home.add_car
 
-
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
@@ -37,6 +36,9 @@ class AddCarActivity3 : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
+        // Generar un UUID para el nuevo coche
+        val carId = UUID.randomUUID().toString()
+
         val title = intent.getStringExtra("Title")
         val brand = intent.getStringExtra("Brand")
         val model = intent.getStringExtra("Model")
@@ -44,7 +46,6 @@ class AddCarActivity3 : AppCompatActivity() {
         val cc = intent.getStringExtra("Cc")?.toIntOrNull() ?: 0
         val year = intent.getStringExtra("Year")?.toIntOrNull() ?: 0
         val fuel = intent.getStringExtra("Fuel")
-
 
         binding.btnCamera.setOnClickListener {
             openCamera()
@@ -64,9 +65,9 @@ class AddCarActivity3 : AppCompatActivity() {
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             if (imageUri != null) {
-                                uploadImageToFirebaseStorage(title, brand, model, cv, cc, year, fuel)
+                                uploadImageToFirebaseStorage(carId, title, brand, model, cv, cc, year, fuel)
                             } else {
-                                saveCarToDatabase(title, brand, model, cv, cc, year, fuel, null, null)
+                                saveCarToDatabase(carId, title, brand, model, cv, cc, year, fuel, null, null)
                                 val intent = Intent(this, CarProfileActivity::class.java)
                                 startActivity(intent)
                             }
@@ -121,6 +122,7 @@ class AddCarActivity3 : AppCompatActivity() {
     }
 
     private fun uploadImageToFirebaseStorage(
+        carId: String,
         title: String?,
         brand: String?,
         model: String?,
@@ -138,7 +140,7 @@ class AddCarActivity3 : AppCompatActivity() {
         val uploadTask = storageReference.putBytes(imageData)
         uploadTask.addOnSuccessListener { taskSnapshot ->
             storageReference.downloadUrl.addOnSuccessListener { uri ->
-                saveCarToDatabase(title, brand, model, cv, cc, year, fuel, uri.toString(), binding.editTextCarDescription.text.toString())
+                saveCarToDatabase(carId, title, brand, model, cv, cc, year, fuel, uri.toString(), binding.editTextCarDescription.text.toString())
                 val intent = Intent(this, CarProfileActivity::class.java)
                 startActivity(intent)
             }
@@ -148,6 +150,7 @@ class AddCarActivity3 : AppCompatActivity() {
     }
 
     private fun saveCarToDatabase(
+        carId: String,
         title: String?,
         brand: String?,
         model: String?,
@@ -161,9 +164,7 @@ class AddCarActivity3 : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance().reference
 
-        // Verifica que el UID no sea nulo antes de continuar
         if (uid != null) {
-            val carId = UUID.randomUUID().toString() // Genera un ID único para el coche
             val car = CarObject(
                 idUser = uid,
                 carId = carId,
@@ -178,11 +179,9 @@ class AddCarActivity3 : AppCompatActivity() {
                 description = description ?: ""
             )
 
-            // Guarda el objeto de coche en la base de datos bajo el nodo "cars" con el UID del usuario
-            database.child("cars").child(uid).child(carId).setValue(car)
+            database.child("cars").child(uid).child(car.carId).setValue(car)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Car data saved successfully.")
-                    // Proceed to next activity or whatever you need to do
                 }
                 .addOnFailureListener { e ->
                     Log.e(ContentValues.TAG, "Error saving car data", e)
