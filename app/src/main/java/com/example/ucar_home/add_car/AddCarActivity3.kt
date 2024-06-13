@@ -1,5 +1,6 @@
 package com.example.ucar_home.add_car
 
+
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
@@ -21,7 +22,9 @@ import com.example.ucar_home.databinding.ActivityAddCar3Binding
 import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
+import java.util.UUID
 
 class AddCarActivity3 : AppCompatActivity() {
 
@@ -42,7 +45,7 @@ class AddCarActivity3 : AppCompatActivity() {
         val cc = intent.getStringExtra("Cc")?.toIntOrNull() ?: 0
         val year = intent.getStringExtra("Year")?.toIntOrNull() ?: 0
         val fuel = intent.getStringExtra("Fuel")
-        val imageUrl = intent.getStringExtra("ImageUrl")
+
 
         binding.btnCamera.setOnClickListener {
             openCamera()
@@ -61,10 +64,13 @@ class AddCarActivity3 : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(variables.Email, variables.Password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            val description = binding.editTextCarDescription.text.toString()
-                            saveCarToDatabase(title, brand, model, cv, cc, year, fuel, imageUrl, description)
-                            val intent = Intent(this, CarProfileActivity::class.java)
-                            startActivity(intent)
+                            if (imageUri != null) {
+                                uploadImageToFirebaseStorage(title, brand, model, cv, cc, year, fuel)
+                            } else {
+                                saveCarToDatabase(title, brand, model, cv, cc, year, fuel, null, null)
+                                val intent = Intent(this, CarProfileActivity::class.java)
+                                startActivity(intent)
+                            }
                         } else {
                             Log.d(ContentValues.TAG, "User registration failed.")
                         }
@@ -115,6 +121,33 @@ class AddCarActivity3 : AppCompatActivity() {
         }
     }
 
+    private fun uploadImageToFirebaseStorage(
+        title: String?,
+        brand: String?,
+        model: String?,
+        cv: Int?,
+        cc: Int?,
+        year: Int?,
+        fuel: String?
+    ) {
+        val storageReference = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}")
+        val imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        val baos = ByteArrayOutputStream()
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageData = baos.toByteArray()
+
+        val uploadTask = storageReference.putBytes(imageData)
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            storageReference.downloadUrl.addOnSuccessListener { uri ->
+                saveCarToDatabase(title, brand, model, cv, cc, year, fuel, uri.toString(), binding.editTextCarDescription.text.toString())
+                val intent = Intent(this, CarProfileActivity::class.java)
+                startActivity(intent)
+            }
+        }.addOnFailureListener { exception ->
+            Log.e(ContentValues.TAG, "Error uploading image", exception)
+        }
+    }
+
     private fun saveCarToDatabase(
         title: String?,
         brand: String?,
@@ -131,8 +164,10 @@ class AddCarActivity3 : AppCompatActivity() {
 
         // Verifica que el UID no sea nulo antes de continuar
         if (uid != null) {
+            val carId = UUID.randomUUID().toString() // Genera un ID único para el coche
             val car = CarObject(
                 idUser = uid,
+                carId = carId,
                 title = title ?: "",
                 brand = brand ?: "",
                 model = model ?: "",
@@ -145,7 +180,7 @@ class AddCarActivity3 : AppCompatActivity() {
             )
 
             // Guarda el objeto de coche en la base de datos bajo el nodo "cars" con el UID del usuario
-            database.child("cars").child(uid).push().setValue(car)
+            database.child("cars").child(uid).child(carId).setValue(car)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Car data saved successfully.")
                     // Proceed to next activity or whatever you need to do
