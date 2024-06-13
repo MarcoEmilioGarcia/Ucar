@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/add_location/baseline_add_location_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/arrow_upward/baseline_arrow_upward_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="icon_add_location" />
+                            <entry key="outputName" value="baseline_arrow_upward_24" />
                             <entry key="sourceFile" value="C:\Users\34691\AndroidStudioProjects\Ucar_HomeVF" />
                           </map>
                         </option>

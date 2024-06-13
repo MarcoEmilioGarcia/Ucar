@@ -23,15 +23,22 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         recyclerView = view.findViewById(R.id.publicaciones)
-        postAdapter = PostAdapter(postsList)
+        postAdapter = PostAdapter(postsList) { post -> onPostItemClicked(post) }
         recyclerView.adapter = postAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view
     }
 
+    private fun onPostItemClicked(post: PostObject) {
+        // Aquí puedes definir lo que sucede cuando se hace clic en un elemento de la lista
+        Log.d(ContentValues.TAG, "Post clicked: ${post.idPost}")
+    }
+
+    // Method to update the list of posts
     fun updatePosts(newPostsList: MutableList<Pair<PostObject, User>>) {
-        postsList = newPostsList
-        postAdapter.updatePosts(postsList)
+        postsList.clear() // Clear the existing list
+        postsList.addAll(newPostsList) // Add new posts
+        postAdapter.notifyDataSetChanged() // Notify adapter of data change
     }
 }

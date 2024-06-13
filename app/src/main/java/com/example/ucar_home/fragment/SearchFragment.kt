@@ -1,4 +1,4 @@
-package  com.example.ucar_home.fragment
+package com.example.ucar_home.fragment
 
 import android.content.ContentValues
 import android.content.Intent
@@ -57,9 +57,9 @@ class SearchFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         Log.d(ContentValues.TAG, "Aqui estoy")
 
-        postAdapter = PostAdapter(mutableListOf()) // Inicializar el adaptador del nuevo RecyclerView con una lista mutable
+        postAdapter = PostAdapter(mutableListOf()) { post -> onPostItemClicked(post) }
 
-        binding.publicaciones2.layoutManager = LinearLayoutManager(context) // Agrega esta línea
+        binding.publicaciones2.layoutManager = LinearLayoutManager(context)
 
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(
@@ -81,11 +81,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun loadPosts() {
-        // Cambia la referencia para obtener todas las publicaciones
         val postsReference = FirebaseDatabase.getInstance().getReference("posts")
         postsReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                postList.clear() // Limpiar la lista antes de agregar nuevos elementos
+                postList.clear()
                 dataSnapshot.children.forEach { postSnapshot ->
                     postSnapshot.children.forEach {
                         val post = it.getValue(PostObject::class.java)
@@ -95,7 +94,6 @@ class SearchFragment : Fragment() {
                     }
                 }
                 if (postList.isNotEmpty()) {
-                    // Barajar la lista para obtener un orden aleatorio
                     postList = postList.shuffled().toMutableList()
                     binding.publicaciones.layoutManager = GridLayoutManager(context, 3)
                     val adapter = SearchAdapter(postList) { post -> onPostItemClicked(post) }
@@ -117,21 +115,17 @@ class SearchFragment : Fragment() {
     }
 
     private fun onPostItemClicked(post: PostObject) {
-        // Obtener el usuario correspondiente al post
         usersReference.child(post.idUser).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(User::class.java)
                 if (user != null) {
-                    // Cambiar la visibilidad de los RecyclerViews
                     binding.publicaciones.visibility = View.GONE
                     binding.publicaciones2.visibility = View.VISIBLE
 
-                    // Cargar la publicación en la que se hizo clic como la primera
                     val userPostsList = mutableListOf<Pair<PostObject, User>>()
                     userPostsList.add(Pair(post, user))
 
-                    // Agregar publicaciones aleatorias a la lista
-                    val randomPosts = postList.filter { it != post }.shuffled().take(5) // Toma 5 publicaciones aleatorias distintas de la clicada
+                    val randomPosts = postList.filter { it != post }.shuffled().take(5)
                     val randomUsersMap = mutableMapOf<PostObject, User>()
 
                     for (randomPost in randomPosts) {
@@ -142,7 +136,6 @@ class SearchFragment : Fragment() {
                                     randomUsersMap[randomPost] = randomUser
                                     userPostsList.add(Pair(randomPost, randomUser))
 
-                                    // Actualiza el adaptador después de agregar cada publicación aleatoria
                                     if (userPostsList.size == randomPosts.size + 1) {
                                         postAdapter.updatePosts(userPostsList)
                                     }
@@ -155,7 +148,6 @@ class SearchFragment : Fragment() {
                         })
                     }
 
-                    // Asegura que se actualice el adaptador si no hay publicaciones aleatorias
                     if (randomPosts.isEmpty()) {
                         postAdapter.updatePosts(userPostsList)
                     }
@@ -181,7 +173,7 @@ class SearchFragment : Fragment() {
                 if (query.isNotEmpty()) {
                     searchUsers(query, usersReference)
                 } else {
-                    loadPosts() // Volver a cargar las publicaciones si el campo de búsqueda está vacío
+                    loadPosts()
                 }
             }
 
