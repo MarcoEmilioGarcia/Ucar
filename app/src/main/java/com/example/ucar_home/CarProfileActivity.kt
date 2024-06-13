@@ -36,7 +36,6 @@ class CarProfileActivity : AppCompatActivity() {
                         val car = dataSnapshot.getValue(CarObject::class.java)
                         if (car != null) {
                             Log.d(ContentValues.TAG, "Coche obtenido: $car")
-
                             binding.textViewName.text = car.title
                             binding.textViewBrand.text = car.brand
                             binding.textViewModel.text = car.model
