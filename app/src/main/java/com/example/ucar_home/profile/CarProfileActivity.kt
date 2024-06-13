@@ -82,7 +82,8 @@ class CarProfileActivity : AppCompatActivity() {
         }
 
         binding.imageBtnGoBack.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java )
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
         }
 
         binding.btnEditProfile.setOnClickListener {
