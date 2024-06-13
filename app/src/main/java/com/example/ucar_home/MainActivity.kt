@@ -2,11 +2,11 @@ package com.example.ucar_home
 
 import android.content.ContentValues
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -15,11 +15,11 @@ import com.example.ucar_home.fragment.ChatFragment
 import com.example.ucar_home.fragment.MapsFragment
 import com.example.ucar_home.fragment.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +43,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
+
+        if (auth.currentUser == null) {
+            // Redirigir a la pantalla de inicio de sesión si no hay usuario autenticado
+            val intent = Intent(this, LogInActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         // Inicializar los íconos originales
         originalIconsMap[R.id.homeFragment] = R.drawable.icon_home

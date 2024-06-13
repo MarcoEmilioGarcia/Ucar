@@ -27,6 +27,7 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.publicaciones.layoutManager = LinearLayoutManager(this)
 
         auth = FirebaseAuth.getInstance()
@@ -155,6 +156,7 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, AddCarActivity::class.java)
             startActivity(intent)
         }
+
         binding.btnAdd2.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
             startActivity(intent)
@@ -164,5 +166,16 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
+        binding.imageBtnSignOut.setOnClickListener {
+            signOut()
+        }
+    }
+
+    private fun signOut() {
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, LogInActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

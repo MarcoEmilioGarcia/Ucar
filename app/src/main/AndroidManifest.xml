@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -39,9 +40,11 @@
             android:name=".fragment.MapsFragment"
             android:exported="true"
             android:label="MapsFragment" />
+
         <activity
             android:name=".CreateEventStep1Activity"
             android:exported="false" />
+
         <activity
             android:name=".CreateEventStep2Activity"
             android:exported="false" />
@@ -49,33 +52,36 @@
         <activity
             android:name=".sign_in.SignInGoogleStep1"
             android:exported="false" />
+
         <activity
             android:name=".sign_in.SignInStep4Activity"
             android:exported="false" />
+
         <activity
             android:name=".sign_in.SignInStep3Activity"
             android:exported="false" />
+
         <activity
             android:name=".sign_in.SignInStep2Activity"
             android:exported="false" />
+
         <activity
             android:name=".sign_in.SignInStep1Activity"
             android:exported="false" />
+
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
+
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+
         <activity
             android:name=".LogInActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
         <activity
             android:name=".add_post.AddPostActivity"
             android:exported="false" />
@@ -96,7 +102,13 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

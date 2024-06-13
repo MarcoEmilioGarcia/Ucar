@@ -31,6 +31,7 @@ class LogInActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var googleSignInClient: GoogleSignInClient
     private val GOOGLE_SIGN_IN = 100
+    private lateinit var authListener: FirebaseAuth.AuthStateListener
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,17 @@ class LogInActivity : AppCompatActivity() {
         session()
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+
+
+        authListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user != null) {
+                // Usuario autenticado
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
 
         //LOGIN GOOGLE
         binding.btnLoginGoogle.setOnClickListener {
@@ -216,5 +228,15 @@ class LogInActivity : AppCompatActivity() {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        auth.addAuthStateListener(authListener)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        auth.removeAuthStateListener(authListener)
     }
 }
