@@ -161,21 +161,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="93151caf-f311-4a36-9af6-0028320daf6b" name="Changes" comment="cambio logo">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/profile/CarProfileActivity.kt" afterDir="false" />
+    <list default="true" id="93151caf-f311-4a36-9af6-0028320daf6b" name="Changes" comment="...">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/CarProfileActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/OtherProfileActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/profile/OtherProfileActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/ProfileActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/profile/ProfileActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/add_car/AddCarActivity3.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/add_car/AddCarActivity3.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/add_post/AddPostActivity2.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/add_post/AddPostActivity2.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/create_event/CreateEventStep1Activity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/create_event/CreateEventStep1Activity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/create_event/CreateEventStep2Activity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/create_event/CreateEventStep2Activity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/fragment/SearchFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/fragment/SearchFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_car_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_car_profile.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/CarProfileActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/ucar_home/CarProfileActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +173,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[8973d96d]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[9eef7050]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -245,26 +233,23 @@
     <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2g2qEPNP81TIjP3Hc8scJwqNfDr" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ResourceManagerPrefKey.ResourceType": "DRAWABLE",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_directory_selection": "C:/Users/AlumnoM/AndroidStudioProjects/Ucar_HomeV/app/src/main/java",
-    "last_opened_file_path": "C:/Users/sgtma/AndroidStudioProjects/Ucar_Home2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ResourceManagerPrefKey.ResourceType&quot;: &quot;DRAWABLE&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/AlumnoM/AndroidStudioProjects/Ucar_HomeV/app/src/main/java&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/sgtma/AndroidStudioProjects/Ucar_Home2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="android.template.898882943">
       <recent name="com.example.ucar_home" />
@@ -570,7 +555,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718291514398</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="...">
+      <option name="closed" value="true" />
+      <created>1718292187937</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1718292187937</updated>
+    </task>
+    <task id="LOCAL-00027" summary="...">
+      <option name="closed" value="true" />
+      <created>1718295718844</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1718295718844</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -585,17 +586,16 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Arreglado el Login inicio" />
     <MESSAGE value="agrego events" />
     <MESSAGE value="funcion maps" />
     <MESSAGE value="añadido maps activity" />
     <MESSAGE value="md" />
-    <MESSAGE value="..." />
     <MESSAGE value="arreglo create perfil" />
     <MESSAGE value=".." />
     <MESSAGE value="cambio logo" />
-    <option name="LAST_COMMIT_MESSAGE" value="cambio logo" />
+    <MESSAGE value="..." />
+    <option name="LAST_COMMIT_MESSAGE" value="..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
