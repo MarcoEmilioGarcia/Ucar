@@ -1,4 +1,4 @@
-package com.example.ucar_home
+package com.example.ucar_home.create_event
 
 import android.app.Activity
 import android.content.Intent
@@ -12,8 +12,10 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.example.ucar_home.Event
+import com.example.ucar_home.ProfileActivity
+import com.example.ucar_home.R
+import com.example.ucar_home.add_car.AddCarActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.io.ByteArrayOutputStream
@@ -83,6 +85,8 @@ class CreateEventStep2Activity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please fill in the description", Toast.LENGTH_SHORT).show()
             }
+
+
         }
     }
 
@@ -142,6 +146,9 @@ class CreateEventStep2Activity : AppCompatActivity() {
                 // Error al guardar el evento
                 println("Error al guardar el evento en Firebase: $e")
             }
+
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
     }
 }
 

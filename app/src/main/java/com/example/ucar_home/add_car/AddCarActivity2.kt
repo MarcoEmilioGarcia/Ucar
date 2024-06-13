@@ -17,77 +17,55 @@ class AddCarActivity2 : AppCompatActivity() {
     private lateinit var binding: ActivityAddCar2Binding
     private var imageUri: Uri? = null
 
-    companion object {
-        const val REQUEST_IMAGE_PICK = 1 // Definir constante para la solicitud de selección de imagen
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddCar2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnGallery.setOnClickListener {
-            pickImageFromGallery()
-        }
+        // Retrieve data from intent
+        val title = intent.getStringExtra("Title") ?: ""
+        val brand = intent.getStringExtra("Brand") ?: ""
+        val model = intent.getStringExtra("Model") ?: ""
+        val hp = intent.getStringExtra("Hp") ?: ""
+        val fuel = intent.getStringExtra("Fuel") ?: ""
+        val cyclindrated = intent.getStringExtra("Cyclindrated") ?: ""
+        val year = intent.getStringExtra("Year") ?: ""
+
+
 
         binding.btnNext.setOnClickListener {
-            if (imageUri != null) {
-                uploadImageToFirebaseStorage()
+            if (areFieldsValid()) {
+                Intent(this, AddCarActivity3::class.java).apply {
+                    putExtra("Title", title)
+                    putExtra("Brand", brand)
+                    putExtra("Model", model)
+                    putExtra("Hp", binding.editCV.text.toString())
+                    putExtra("Cc", binding.editcyclindrated.text.toString())
+                    putExtra("Fuel", binding.editFuel.text.toString())
+                    putExtra("Year", binding.edityear.text.toString())
+                    startActivity(this)
+                }
             } else {
-                binding.textViewResult.setTextColor(ContextCompat.getColor(this, R.color.warning))
-                binding.textViewResult.text = "You have to put your name."
+                showValidationError()
             }
+        }
+
+        binding.imageBtnGoBack.setOnClickListener {
+            finish()
         }
     }
 
-    private fun pickImageFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_IMAGE_PICK)
+    private fun areFieldsValid(): Boolean {
+        return binding.editCV.text.toString().isNotEmpty() &&
+                binding.editcyclindrated.text.toString().isNotEmpty() &&
+                binding.editFuel.text.toString().isNotEmpty() &&
+                binding.edityear.text.toString().isNotEmpty()
     }
 
-    private fun uploadImageToFirebaseStorage() {
-        val storageReference = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}")
-        val imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-        val baos = ByteArrayOutputStream()
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val imageData = baos.toByteArray()
-
-        val uploadTask = storageReference.putBytes(imageData)
-        uploadTask.addOnSuccessListener { taskSnapshot ->
-            storageReference.downloadUrl.addOnSuccessListener { uri ->
-
-                val title = intent.getStringExtra("Title")
-                val brand = intent.getStringExtra("Brand")
-                val model = intent.getStringExtra("Model")
-                val cv = binding.editCV.text.toString().toIntOrNull() ?: 0
-                val cc = binding.editcyclindrated.text.toString().toIntOrNull() ?: 0
-                val fuel = binding.editFuel.text.toString()
-                val year = binding.edityear.text.toString().toIntOrNull() ?: 0
-
-                val intent = Intent(this, AddCarActivity3::class.java)
-                intent.putExtra("Title", title)
-                intent.putExtra("Brand", brand)
-                intent.putExtra("Model", model)
-                intent.putExtra("Cv", cv)
-                intent.putExtra("Cc", cc)
-                intent.putExtra("Fuel", fuel)
-                intent.putExtra("Year", year)
-                intent.putExtra("ImageUrl", uri.toString())
-                startActivity(intent)
-            }
-        }.addOnFailureListener { exception ->
-            // Handle failure
-            // You can display a toast or log the error
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK) {
-            data?.data?.let { uri ->
-                imageUri = uri
-                binding.imageUser.setImageURI(uri)
-            }
+    private fun showValidationError() {
+        binding.textViewResult.apply {
+            setTextColor(ContextCompat.getColor(this@AddCarActivity2, R.color.warning))
+            text = "Fill in all the fields."
         }
     }
 }

@@ -32,7 +32,7 @@ class OtherProfileActivity : AppCompatActivity() {
 
         // Ocultar los botones de añadir y editar
         binding.btnAdd.visibility = View.GONE
-        binding.btnAdd2.visibility = View.GONE
+        binding.imageBtnSignOut.visibility = View.GONE
         binding.btnEditProfile.visibility = View.GONE
 
         if (idUser != null) {

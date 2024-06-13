@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CarProfileActivity">
+
+<ImageButton
+    android:id="@+id/imageBtnGoBack"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/rounded_button"
+    android:elevation="3dp"
+    android:src="@drawable/go_back_button_"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:ignore="SpeakableTextPresentCheck" />
+
+<ImageView
+    android:id="@+id/imgCarProfile"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:background="@color/white"
+    android:scaleType="centerCrop"
+    android:src="@drawable/bmw"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:layout_editor_absoluteX="0dp"
+    />
+
+    <androidx.cardview.widget.CardView
+    android:id="@+id/profile_container"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="3dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/imgCarProfile"
+    android:layout_marginTop="-30dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="28dp"
+            android:padding="5dp"
+            android:text="El rapaz"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0.125"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewCarDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="37dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:text="La cobardia es asunto de los hombres no de los amantes. La cobardia es para los humanos no para los amantes."
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewYear" />
+
+        <ImageButton
+            android:id="@+id/btnEditProfile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/background_circle"
+            android:clipToOutline="true"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_edit"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <ImageButton
+            android:id="@+id/btnAdd"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/background_circle"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
+            app:srcCompat="@drawable/icon_add"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCarDescription" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/publicaciones"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view2"
+            app:strokeColor="@color/white" />
+
+        <TextView
+            android:id="@+id/textViewModelTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="40dp"
+            android:elevation="3dp"
+            android:text="Model:"
+            android:textColor="#717171"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewBrandTitle" />
+
+        <TextView
+            android:id="@+id/textViewHpTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:elevation="3dp"
+            android:text="HP:"
+            android:textColor="#717171"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textViewModel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewFuelTitle" />
+
+        <TextView
+            android:id="@+id/textViewCcTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:elevation="3dp"
+            android:text="CC:"
+            android:textColor="#717171"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textViewYear"
+            app:layout_constraintTop_toBottomOf="@+id/textViewHpTitle" />
+
+        <TextView
+            android:id="@+id/textViewYearTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="40dp"
+            android:elevation="3dp"
+            android:text="Year:"
+            android:textColor="#717171"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewModelTitle" />
+
+        <TextView
+            android:id="@+id/textViewBrand"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="12dp"
+            android:elevation="3dp"
+            android:text="BMW"
+            android:textColor="#272727"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+
+        <TextView
+            android:id="@+id/textViewFuelTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="12dp"
+            android:elevation="3dp"
+            android:text="Fuel:"
+            android:textColor="#717171"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/textViewBrand"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+
+        <TextView
+            android:id="@+id/textViewFuel"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="248dp"
+            android:layout_marginTop="12dp"
+            android:elevation="3dp"
+            android:text="Diesel"
+            android:textColor="#272727"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+
+        <TextView
+            android:id="@+id/textViewBrandTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="12dp"
+            android:elevation="3dp"
+            android:text="Brand:"
+            android:textColor="#717171"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+
+        <TextView
+            android:id="@+id/textViewModel"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="100dp"
+            android:elevation="3dp"
+            android:text="Serie3 e46"
+            android:textColor="#272727"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewBrand" />
+
+        <TextView
+            android:id="@+id/textViewYear"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="100dp"
+            android:elevation="3dp"
+            android:text="2003"
+            android:textColor="#272727"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewModel" />
+
+        <TextView
+            android:id="@+id/textViewHp"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="250dp"
+            android:elevation="3dp"
+            android:text="240"
+            android:textColor="#272727"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewFuel" />
+
+        <TextView
+            android:id="@+id/textViewCc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="250dp"
+            android:elevation="3dp"
+            android:text="2.000"
+            android:textColor="#272727"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewHp" />
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/viewOptions"
+    android:background="@color/white"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="195dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="180dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:visibility="gone"
+    android:elevation="10dp">
+
+    <!--GO BACK BUTTON-->
+    <ImageButton
+        android:id="@+id/imageBtnGoBack2"
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/go_back_button_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnNewCar"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="155dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/primaryColor"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="ADD NEW CAR"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:strokeColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnCreateEvent"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="155dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="@color/primaryColor"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="CREATE EVENT"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:strokeColor="#FFFFFF" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/viewLogOut"
+    android:background="@color/white"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="195dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="300dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:visibility="gone"
+    android:elevation="10dp">
+
+    <!--GO BACK BUTTON-->
+    <ImageButton
+        android:id="@+id/imageBtnGoBack3"
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/go_back_button_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/textViewLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:elevation="3dp"
+        android:text="Are you sure you want to log out?"
+        android:textColor="#333"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnLogOut"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/primaryColor"
+        android:elevation="2dp"
+        android:shadowColor="#5C5C5C"
+        android:text="LOG OUT"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#FFFFFF" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,6 +49,10 @@ class AddPostActivity2 : AppCompatActivity() {
             }
         }
 
+        binding.imageBtnGoBack.setOnClickListener {
+            finish()
+        }
+
     }
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

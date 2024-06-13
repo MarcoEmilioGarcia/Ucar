@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sign_in.SignInStep3Activity">
+    tools:context=".sign_in.SignInStep3Activity"
+    android:background="@color/white">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
@@ -56,60 +57,18 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="40dp"
-            android:text="@string/title3"
+            android:text="Make other user know the especifications:"
             android:textSize="25sp"
             android:textStyle="bold" />
 
 
 
         <!--IMAGEN-->
-        <ImageView
-            android:id="@+id/imageUser"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="15dp"
-            android:layout_gravity="center"
-            android:background="@drawable/background_circle"
-            android:scaleType="fitCenter"
-            android:clipToOutline="true"
-            android:src="@drawable/icon_home"
-            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <!--CAMERA BUTTON-->
-            <ImageButton
-                android:id="@+id/btnCamera"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginStart="110dp"
-                android:layout_marginEnd="30dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/primaryColor"
-                android:src="@drawable/icon_camera"
-                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
-
-            <!--GALLERY BUTTON-->
-            <ImageButton
-                android:id="@+id/btnGallery"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginEnd="110dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/primaryColor"
-                android:src="@drawable/icon_gallery"
-                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="100dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -124,9 +83,9 @@
                     android:id="@+id/editCV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/icon_user"
+                    android:drawableStart="@drawable/icon_lock"
                     android:drawablePadding="10dp"
-                    android:hint="@string/cv"
+                    android:hint="HP"
                     android:importantForAutofill="no"
                     android:inputType="number"
                     tools:ignore="TextContrastCheck" />
@@ -145,7 +104,7 @@
                     android:id="@+id/editFuel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/icon_user"
+                    android:drawableStart="@drawable/icon_lock"
                     android:drawablePadding="10dp"
                     android:hint="@string/fuel"
                     android:importantForAutofill="no"
@@ -158,7 +117,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
@@ -172,7 +132,7 @@
                     android:id="@+id/editcyclindrated"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/icon_user"
+                    android:drawableStart="@drawable/icon_lock"
                     android:drawablePadding="10dp"
                     android:hint="@string/cyclindrated"
                     android:importantForAutofill="no"
@@ -193,7 +153,7 @@
                     android:id="@+id/edityear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/icon_user"
+                    android:drawableStart="@drawable/icon_calendar"
                     android:drawablePadding="10dp"
                     android:hint="@string/year"
                     android:importantForAutofill="no"
@@ -211,7 +171,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="100dp"
             android:layout_marginEnd="60dp"
             android:text="@string/change_preferences"
             android:textAlignment="center" />

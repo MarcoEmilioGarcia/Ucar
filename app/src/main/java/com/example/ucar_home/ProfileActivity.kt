@@ -9,9 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.ucar_home.add_car.AddCarActivity
-import com.example.ucar_home.add_post.AddPostActivity
+import com.example.ucar_home.create_event.CreateEventStep1Activity
 import com.example.ucar_home.databinding.ActivityProfileBinding
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -152,22 +151,39 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
+        /*
+        binding.btnEditProfile.setOnClickListener {
+            val intent = Intent(this, EditProfileActivity::class.java)
+            startActivity(intent)
+        }*/
+
         binding.btnAdd.setOnClickListener {
+            binding.viewOptions.visibility = View.VISIBLE
+        }
+
+        binding.imageBtnGoBack2.setOnClickListener {
+            binding.viewOptions.visibility = View.GONE
+        }
+
+        binding.btnNewCar.setOnClickListener {
             val intent = Intent(this, AddCarActivity::class.java)
             startActivity(intent)
         }
 
-        binding.btnAdd2.setOnClickListener {
-            val intent = Intent(this, AddPostActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.imageBtnGoBack.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+        binding.btnCreateEvent.setOnClickListener {
+            val intent = Intent(this, CreateEventStep1Activity::class.java)
             startActivity(intent)
         }
 
         binding.imageBtnSignOut.setOnClickListener {
+            binding.viewLogOut.visibility = View.VISIBLE
+        }
+
+        binding.imageBtnGoBack3.setOnClickListener {
+            binding.viewLogOut.visibility = View.GONE
+        }
+
+        binding.btnLogOut.setOnClickListener {
             signOut()
         }
     }

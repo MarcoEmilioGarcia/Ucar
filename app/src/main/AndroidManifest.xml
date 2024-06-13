@@ -9,9 +9,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApp"
@@ -25,9 +25,11 @@
         android:theme="@style/Theme.Ucar_Home"
         tools:targetApi="31">
         <activity
+            android:name=".CarProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".postSearchActivity"
             android:exported="false" />
-
         <activity
             android:name=".add_post.AddPostActivity2"
             android:exported="false" />
@@ -40,48 +42,36 @@
             android:name=".fragment.MapsFragment"
             android:exported="true"
             android:label="MapsFragment" />
-
         <activity
-            android:name=".CreateEventStep1Activity"
+            android:name=".create_event.CreateEventStep1Activity"
             android:exported="false" />
-
         <activity
-            android:name=".CreateEventStep2Activity"
+            android:name=".create_event.CreateEventStep2Activity"
             android:exported="false" />
-
         <activity
             android:name=".sign_in.SignInGoogleStep1"
             android:exported="false" />
-
         <activity
             android:name=".sign_in.SignInStep4Activity"
             android:exported="false" />
-
         <activity
             android:name=".sign_in.SignInStep3Activity"
             android:exported="false" />
-
         <activity
             android:name=".sign_in.SignInStep2Activity"
             android:exported="false" />
-
         <activity
             android:name=".sign_in.SignInStep1Activity"
             android:exported="false" />
-
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
-
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
-
         <activity
             android:name=".LogInActivity"
             android:exported="false" />
-
-
         <activity
             android:name=".add_post.AddPostActivity"
             android:exported="false" />

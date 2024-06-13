@@ -85,15 +85,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="88dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
                 android:padding="5dp"
                 android:text="La cobardia es asunto de los hombres no de los amantes. La cobardia es para los humanos no para los amantes."
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/linnear" />
 
             <ImageButton
                 android:id="@+id/btnEditProfile"
@@ -124,31 +124,16 @@
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageButton
-                android:id="@+id/btnAdd2"
-                android:layout_width="27dp"
-                android:layout_height="27dp"
-                android:layout_marginTop="45dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/background_circle"
-                android:clipToOutline="true"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
-                app:srcCompat="@drawable/icon_add"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <ImageButton
                 android:id="@+id/imageBtnSignOut"
-                android:layout_width="27dp"
-                android:layout_height="27dp"
-                android:layout_marginTop="84dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/background_circle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/icon_logout"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
-                app:srcCompat="@drawable/icon_add"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <View
@@ -228,16 +213,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Following"
-                    android:textColor="@color/grey"/>
+                    android:textColor="@color/grey" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linnear"
                 android:layout_width="match_parent"
-                android:layout_height="66dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="60dp"
-                android:layout_marginEnd="60dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="60dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -292,14 +277,156 @@
                 android:layout_height="wrap_content"
                 android:elevation="3dp"
                 android:text="username_name"
-                android:textSize="18sp"
                 android:textColor="@color/grey"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewOptions"
+        android:background="@color/white"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="195dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="180dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:elevation="10dp">
+
+        <!--GO BACK BUTTON-->
+        <ImageButton
+            android:id="@+id/imageBtnGoBack2"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/go_back_button_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/btnNewCar"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="155dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/primaryColor"
+                android:elevation="2dp"
+                android:shadowColor="#5C5C5C"
+                android:text="ADD NEW CAR"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:strokeColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnCreateEvent"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="155dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/primaryColor"
+                android:elevation="2dp"
+                android:shadowColor="#5C5C5C"
+                android:text="CREATE EVENT"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                app:strokeColor="#FFFFFF" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewLogOut"
+        android:background="@color/white"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="195dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:elevation="10dp">
+
+        <!--GO BACK BUTTON-->
+        <ImageButton
+            android:id="@+id/imageBtnGoBack3"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/go_back_button_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+        <TextView
+            android:id="@+id/textViewLogOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:elevation="3dp"
+            android:text="Are you sure you want to log out?"
+            android:textColor="#333"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnLogOut"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="80dp"
+            android:layout_marginTop="60dp"
+            android:backgroundTint="@color/primaryColor"
+            android:elevation="2dp"
+            android:shadowColor="#5C5C5C"
+            android:text="LOG OUT"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="#FFFFFF" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

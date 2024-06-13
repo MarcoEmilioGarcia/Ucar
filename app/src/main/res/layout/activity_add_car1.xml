@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addCarActivity">
+    tools:context=".AddCarActivity"
+    android:background="@color/white">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
@@ -29,7 +30,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageBtnGoBack1"
+                android:id="@+id/imageBtnGoBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/transparent"
@@ -57,7 +58,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="40dp"
-            android:text="@string/addtextcar1"
+            android:text="Add new car:"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -68,7 +69,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="40dp"
-            android:text="@string/subtitle1"
+            android:text="Select a title for your car for identify it. Put the brand and model of it."
             android:textSize="16sp" />
 
         <!--USERNAME-->
@@ -82,9 +83,8 @@
                 android:id="@+id/editTextTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_home"
                 android:drawablePadding="10dp"
-                android:hint="@string/addcartitle"
+                android:hint="Title"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                  />
@@ -100,9 +100,8 @@
                 android:id="@+id/editTextbrand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_home"
                 android:drawablePadding="10dp"
-                android:hint="@string/brand"
+                android:hint="Brand"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                 />
@@ -118,9 +117,8 @@
                 android:id="@+id/editTextmodel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_home"
                 android:drawablePadding="10dp"
-                android:hint="@string/model"
+                android:hint="Model"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                 />
@@ -132,9 +130,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="33dp"
+            android:layout_marginTop="63dp"
             android:layout_marginEnd="60dp"
-            android:text="@string/change_preferences"
+            android:text="Then you can changes your choices in settings"
             android:textAlignment="center" />
 
         <!--NEXT BUTTON-->
