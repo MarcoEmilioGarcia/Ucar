@@ -59,7 +59,8 @@
         android:textColor="@color/grey"
         android:paddingLeft="20dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"/>
+        android:paddingBottom="5dp"
+        android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -83,7 +84,8 @@
         android:textSize="15sp"
         android:paddingLeft="20dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"/>
+        android:paddingBottom="5dp"
+        android:visibility="visible"/>
 
     <ImageButton
         android:id="@+id/btnLike"
@@ -95,7 +97,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
         app:srcCompat="@drawable/icon_like"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:visibility="visible"/>
 
     <ImageButton
         android:id="@+id/btnSend"
@@ -107,7 +110,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLike"
         app:srcCompat="@drawable/icon_send"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:visibility="visible"/>
 
     <View
         android:id="@+id/comentar"
@@ -167,6 +171,19 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/comentarios"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:elevation="2dp"
+        android:shadowColor="#5C5C5C"
+        app:layout_constraintEnd_toEndOf="@id/item"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/item"
+        app:layout_constraintTop_toBottomOf="@+id/comentar"
+        app:strokeColor="@color/white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comentarios2"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:backgroundTint="@color/white"

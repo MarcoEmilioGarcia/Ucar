@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity() {
             HomeFragment::class.java.name -> homeFragment
             SearchFragment::class.java.name -> searchFragment
             MapsFragment::class.java.name -> mapsFragment
-            ChatFragment::class.java.name -> chatFragment
             else -> homeFragment // Fragmento por defecto
         }
         loadFragment(selectedFragment)
