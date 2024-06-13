@@ -1,4 +1,4 @@
-package com.example.ucar_home
+package com.example.ucar_home.profile
 
 import android.content.ContentValues
 import android.content.Intent
@@ -8,8 +8,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.ucar_home.CarAdapter
+import com.example.ucar_home.CarObject
+import com.example.ucar_home.MainActivity
+import com.example.ucar_home.User
 import com.example.ucar_home.databinding.ActivityProfileBinding
 import com.example.ucar_home.fragment.ChatFragment
+import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -137,7 +142,10 @@ class OtherProfileActivity : AppCompatActivity(), CarAdapter.OnItemClickListener
 
         binding.button3.setOnClickListener {
             if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
-                auth.signInWithEmailAndPassword(variables.Email, variables.Password).addOnCompleteListener(this) { task ->
+                auth.signInWithEmailAndPassword(
+                    variables.Email,
+                    variables.Password
+                ).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         updateFollowStatus(userReference, idUser, currentUserUid, binding.button3.text.toString() == "Unfollow")
                     } else {

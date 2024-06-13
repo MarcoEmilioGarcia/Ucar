@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ucar_home.OtherProfileActivity
+import com.example.ucar_home.profile.OtherProfileActivity
 import com.example.ucar_home.PostObject
 import com.example.ucar_home.SearchAdapter
 import com.example.ucar_home.User

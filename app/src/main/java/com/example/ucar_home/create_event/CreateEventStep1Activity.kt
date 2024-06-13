@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.ucar_home.Event
-import com.example.ucar_home.ProfileActivity
+import com.example.ucar_home.profile.ProfileActivity
 import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivityCreateEventStep1Binding
 import com.google.firebase.auth.FirebaseAuth

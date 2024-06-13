@@ -13,9 +13,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ucar_home.Event
-import com.example.ucar_home.ProfileActivity
+import com.example.ucar_home.profile.ProfileActivity
 import com.example.ucar_home.R
-import com.example.ucar_home.add_car.AddCarActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.io.ByteArrayOutputStream

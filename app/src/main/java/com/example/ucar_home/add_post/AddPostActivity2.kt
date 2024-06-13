@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.ucar_home.MainActivity
 import com.example.ucar_home.PostObject
-import com.example.ucar_home.ProfileActivity
+import com.example.ucar_home.profile.ProfileActivity
 import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivityAddPost2Binding
 import com.example.ucar_home.variables

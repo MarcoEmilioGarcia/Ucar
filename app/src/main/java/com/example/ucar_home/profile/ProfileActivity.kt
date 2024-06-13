@@ -1,4 +1,4 @@
-package com.example.ucar_home
+package com.example.ucar_home.profile
 
 import android.content.ContentValues
 import android.content.Intent
@@ -8,9 +8,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.ucar_home.CarAdapter
+import com.example.ucar_home.CarObject
+import com.example.ucar_home.LogInActivity
+import com.example.ucar_home.User
 import com.example.ucar_home.add_car.AddCarActivity
 import com.example.ucar_home.create_event.CreateEventStep1Activity
 import com.example.ucar_home.databinding.ActivityProfileBinding
+import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -138,7 +143,7 @@ class ProfileActivity : AppCompatActivity(), CarAdapter.OnItemClickListener {
 
     override fun onItemClick(car: CarObject) {
         val intent = Intent(this, CarProfileActivity::class.java)
-        Log.d(ContentValues.TAG, "El ID del coche es: $car.carId")
+        Log.d(ContentValues.TAG, "El ID del coche es: ${car.carId}")
         intent.putExtra("carId", car.carId)
         startActivity(intent)
     }
