@@ -138,8 +138,8 @@ class ProfileActivity : AppCompatActivity(), CarAdapter.OnItemClickListener {
 
     override fun onItemClick(car: CarObject) {
         val intent = Intent(this, CarProfileActivity::class.java)
-        intent.putExtra("car_title", car.title)
-        intent.putExtra("car_image_url", car.imageUrl)
+        Log.d(ContentValues.TAG, "El ID del coche es: $car.carId")
+        intent.putExtra("carId", car.carId)
         startActivity(intent)
     }
 

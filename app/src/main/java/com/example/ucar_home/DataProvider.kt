@@ -60,6 +60,7 @@ data class Event(
 )
 data class CarObject(
     var idUser: String = "",
+    var carId: String = "",
     var title: String = "",
     var brand: String = "",
     var model: String = "",
