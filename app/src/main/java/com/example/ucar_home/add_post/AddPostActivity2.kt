@@ -127,14 +127,14 @@ class AddPostActivity2 : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
         if (description != null && imageUrl != null && likes != null && carId != null) {
             Log.d(ContentValues.TAG, "Traza 2: Todos los parámetros no son nulos")
-            val postId = database.child("posts").child(uid!!).push().key
+            val postId = database.child("posts").push().key
             Log.d(ContentValues.TAG, "Traza 2.1: postId = $postId")
 
             if (postId != null) {
-                val post = PostObject(postId, uid, carId, description, imageUrl, likes)
+                val post = uid?.let { PostObject(postId, it, carId, description, imageUrl, likes) }
                 uid?.let {
                     Log.d(ContentValues.TAG, "Traza 3: uid no es nulo")
-                    database.child("posts").child(it).child(postId).setValue(post)
+                    database.child("posts").child(postId).setValue(post)
                         .addOnSuccessListener {
                             Log.d(ContentValues.TAG, "Post data saved successfully.")
                         }
@@ -154,5 +154,4 @@ class AddPostActivity2 : AppCompatActivity() {
             Log.d(ContentValues.TAG, "One of the parameters is null: description=$description, imageUrl=$imageUrl, likes=$likes, carId=$carId")
         }
     }
-
 }
