@@ -1,5 +1,6 @@
 package com.example.ucar_home.add_car
 
+
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
@@ -15,8 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.ucar_home.CarObject
-import com.example.ucar_home.profile.CarProfileActivity
+
 import com.example.ucar_home.databinding.ActivityAddCar3Binding
+import com.example.ucar_home.profile.CarProfileActivity
 import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase

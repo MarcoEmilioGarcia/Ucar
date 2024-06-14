@@ -1,6 +1,5 @@
-package com.example.ucar_home.profile
 
-import android.content.ContentValues
+package com.example.ucar_home.profile
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +11,16 @@ import com.example.ucar_home.*
 import com.example.ucar_home.add_car.AddCarActivity
 import com.example.ucar_home.add_post.AddPostActivity
 import com.example.ucar_home.databinding.ActivityCarProfileBinding
+import com.example.ucar_home.profile.ProfileActivity
 import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.concurrent.CountDownLatch
 
 class CarProfileActivity : AppCompatActivity() {
@@ -48,7 +53,7 @@ class CarProfileActivity : AppCompatActivity() {
                                     val car = dataSnapshot.getValue(CarObject::class.java)
                                     car?.let {
                                         updateUIWithCarDetails(it)
-                                       // loadCarPosts(id)
+                                        loadCarPosts(id)
                                     }
                                 }
 
@@ -110,56 +115,50 @@ class CarProfileActivity : AppCompatActivity() {
     }
 
     private fun loadCarPosts(carId: String?) {
-        Log.d(TAG, "Iniciando loadCarPosts con carId: $carId")
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d(TAG, "Iniciando loadCarPosts con carId: $carId")
 
-        val postsList = mutableListOf<Pair<PostObject, User>>()
-        postsReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d(TAG, "Número de posts obtenidos: ${dataSnapshot.childrenCount}")
-                postsList.clear()
-                val countDownLatch = CountDownLatch(dataSnapshot.childrenCount.toInt())
-                dataSnapshot.children.forEach { snapshot ->
-                    val post = snapshot.getValue(PostObject::class.java)
-                    if (post != null) {
-                        Log.d(TAG, "Post obtenido: $post")
-                        if (carId == null || post.idCar == carId) {
-                            Log.d(TAG, "Post coincide con el carId: $carId")
-                            userReference.child(post.idUser ?: "").addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(userSnapshot: DataSnapshot) {
-                                    val user = userSnapshot.getValue(User::class.java)
-                                    if (user != null) {
-                                        Log.d(TAG, "Usuario obtenido: $user")
-                                        postsList.add(Pair(post, user))
-                                    } else {
-                                        Log.e(TAG, "Usuario inválido para el post: ${snapshot.value}")
-                                    }
-                                    countDownLatch.countDown()
-                                }
+            val postsList = mutableListOf<Pair<PostObject, User>>()
+            val dataSnapshot = postsReference.get().await()
 
-                                override fun onCancelled(userDatabaseError: DatabaseError) {
-                                    Log.e(TAG, "Error al obtener el usuario", userDatabaseError.toException())
-                                    countDownLatch.countDown()
-                                }
-                            })
+            Log.d(TAG, "Número de posts obtenidos: ${dataSnapshot.childrenCount}")
+            val countDownLatch = CountDownLatch(dataSnapshot.childrenCount.toInt())
+
+            dataSnapshot.children.forEach { snapshot ->
+                val post = snapshot.getValue(PostObject::class.java)
+                if (post != null) {
+                    Log.d(TAG, "Post obtenido: $post")
+                    if (carId == null || post.idCar == carId) {
+                        Log.d(TAG, "Post coincide con el carId: $carId")
+                        val userSnapshot = userReference.child(post.idUser ?: "").get().await()
+                        val user = userSnapshot.getValue(User::class.java)
+                        if (user != null) {
+                            Log.d(TAG, "Usuario obtenido: $user")
+                            postsList.add(Pair(post, user))
                         } else {
-                            Log.d(TAG, "Post no coincide con el carId: $carId")
-                            countDownLatch.countDown()
+                            Log.e(TAG, "Usuario inválido para el post: ${snapshot.value}")
                         }
+                        countDownLatch.countDown()
                     } else {
-                        Log.e(TAG, "Datos inválidos en el post: ${snapshot.value}")
+                        Log.d(TAG, "Post no coincide con el carId: $carId")
                         countDownLatch.countDown()
                     }
+                } else {
+                    Log.e(TAG, "Datos inválidos en el post: ${snapshot.value}")
+                    countDownLatch.countDown()
                 }
+            }
 
-                try {
-                    countDownLatch.await() // Esperar a que todos los usuarios sean cargados antes de continuar
-                } catch (e: InterruptedException) {
-                    Log.e(TAG, "Error al esperar que todos los usuarios sean cargados", e)
-                }
+            try {
+                countDownLatch.await() // Esperar a que todos los usuarios sean cargados antes de continuar
+            } catch (e: InterruptedException) {
+                Log.e(TAG, "Error al esperar que todos los usuarios sean cargados", e)
+            }
 
+            withContext(Dispatchers.Main) {
                 if (postsList.isNotEmpty()) {
                     Log.d(TAG, "Número de posts en la lista: ${postsList.size}")
-                    binding.publicaciones.layoutManager = GridLayoutManager(this@CarProfileActivity, 3)
+                    binding.publicaciones.layoutManager = GridLayoutManager(this@CarProfileActivity, 2)
                     val adapter = PostAdapter(postsList)
                     binding.publicaciones.adapter = adapter
                     adapter.notifyDataSetChanged()
@@ -167,11 +166,6 @@ class CarProfileActivity : AppCompatActivity() {
                     Log.d(TAG, "La lista de posts está vacía")
                 }
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(TAG, "Error al obtener los posts", databaseError.toException())
-            }
-        })
+        }
     }
-
 }

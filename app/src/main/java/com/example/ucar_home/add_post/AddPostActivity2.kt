@@ -16,7 +16,7 @@ import com.example.ucar_home.PostObject
 import com.example.ucar_home.profile.ProfileActivity
 import com.example.ucar_home.R
 import com.example.ucar_home.databinding.ActivityAddPost2Binding
-import com.example.ucar_home.profile.CarProfileActivity
+
 import com.example.ucar_home.variables
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -131,7 +131,14 @@ class AddPostActivity2 : AppCompatActivity() {
             Log.d(ContentValues.TAG, "Traza 2.1: postId = $postId")
 
             if (postId != null) {
-                val post = uid?.let { PostObject(postId, it, carId, description, imageUrl, likes) }
+                val post = hashMapOf(
+                    "idPost" to postId,
+                    "idUser" to uid,
+                    "idCar" to carId,
+                    "description" to description,
+                    "imageUrl" to imageUrl,
+                    "likes" to likes
+                )
                 uid?.let {
                     Log.d(ContentValues.TAG, "Traza 3: uid no es nulo")
                     database.child("posts").child(postId).setValue(post)
