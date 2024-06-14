@@ -86,13 +86,11 @@ class SearchFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 postList.clear()
                 dataSnapshot.children.forEach { postSnapshot ->
-                    postSnapshot.children.forEach {
-                        val post = it.getValue(PostObject::class.java)
-                        if (post != null) {
-                            postList.add(post)
-                        } else {
-                            Log.e(ContentValues.TAG, "Datos inválidos en el post: ${it.value}")
-                        }
+                    val post = postSnapshot.getValue(PostObject::class.java)
+                    if (post != null) {
+                        postList.add(post)
+                    } else {
+                        Log.e(ContentValues.TAG, "Datos inválidos en el post: ${postSnapshot.value}")
                     }
                 }
                 if (postList.isNotEmpty()) {
@@ -115,6 +113,7 @@ class SearchFragment : Fragment() {
             }
         })
     }
+
 
     private fun onPostItemClicked(post: PostObject) {
         usersReference.child(post.idUser).addListenerForSingleValueEvent(object : ValueEventListener {
