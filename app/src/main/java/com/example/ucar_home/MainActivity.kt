@@ -14,6 +14,7 @@ import com.example.ucar_home.databinding.ActivityMainBinding
 import com.example.ucar_home.fragment.ChatFragment
 import com.example.ucar_home.fragment.MapsFragment
 import com.example.ucar_home.fragment.SearchFragment
+
 import com.example.ucar_home.profile.ProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -97,7 +98,6 @@ class MainActivity : AppCompatActivity() {
         if (variables.Email.isNotEmpty() && variables.Password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(variables.Email, variables.Password).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Log.d(ContentValues.TAG, "Autenticación exitosa, uid: ${auth.uid}")
                     auth.uid?.let { uid ->
                         loadFollowingUserPosts(uid)
                     } ?: Log.e(ContentValues.TAG, "El UID de auth es nulo")
@@ -113,25 +113,25 @@ class MainActivity : AppCompatActivity() {
             R.id.homeFragment -> {
                 loadFragment(homeFragment)
                 item.setIcon(R.drawable.icon_home_bold)
-                restoreOriginalIcon(item)
+                restoreOriginalIcons(item)
                 true
             }
             R.id.searchFragment -> {
                 loadFragment(searchFragment)
                 item.setIcon(R.drawable.icon_search_bold)
-                restoreOriginalIcon(item)
+                restoreOriginalIcons(item)
                 true
             }
             R.id.mapsFragment -> {
                 loadFragment(mapsFragment)
                 item.setIcon(R.drawable.icon_maps_bold)
-                restoreOriginalIcon(item)
+                restoreOriginalIcons(item)
                 true
             }
             R.id.chatFragment -> {
                 loadFragment(chatFragment)
                 item.setIcon(R.drawable.icon_chat_bold)
-                restoreOriginalIcon(item)
+                restoreOriginalIcons(item)
                 true
             }
             else -> false
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
     }
 
-    private fun restoreOriginalIcon(selectedItem: MenuItem) {
+    private fun restoreOriginalIcons(selectedItem: MenuItem) {
         val itemId = selectedItem.itemId
         originalIconsMap.keys.forEach { id ->
             if (id != itemId) {
@@ -152,7 +152,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        Log.d(ContentValues.TAG, "empiezo funcion toolbar")
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -203,36 +202,53 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFollowingUserPosts(uid: String) {
+        Log.d(ContentValues.TAG, "Empiezo a cargar las publicaciones de los usuarios seguidos")
         usersReference.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(User::class.java)
+
                 if (user != null) {
                     val followingList = user.followingList
+                    Log.d(ContentValues.TAG, "Usuario sigue a: ${followingList.size} usuarios")
                     if (followingList.isNotEmpty()) {
                         val postsList = mutableListOf<Pair<PostObject, User>>()
                         followingList.forEach { userId ->
-                            postsReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                            Log.d(ContentValues.TAG, "Cargando publicaciones del usuario: $userId")
+                            postsReference.orderByChild("idUser").equalTo(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    Log.d(ContentValues.TAG, "Publicaciones del usuario: $userId cargadas")
+
                                     dataSnapshot.children.forEach { snapshot ->
                                         val post = snapshot.getValue(PostObject::class.java)
-                                        usersReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
-                                            override fun onDataChange(userSnapshot: DataSnapshot) {
-                                                val user = userSnapshot.getValue(User::class.java)
-                                                if (post != null && user != null) {
-                                                    postsList.add(Pair(post, user))
+                                        if (post != null) {
+                                            Log.d(ContentValues.TAG, "Publicación encontrada: ${post.idPost}")
+                                            usersReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                                override fun onDataChange(userSnapshot: DataSnapshot) {
+                                                    val user = userSnapshot.getValue(User::class.java)
+                                                    if (user != null) {
+                                                        postsList.add(Pair(post, user))
+                                                        Log.d(ContentValues.TAG, "Post añadido a la lista: ${post.idPost}")
+                                                    } else {
+                                                        Log.d(ContentValues.TAG, "Usuario no encontrado para la publicación: ${post.idPost}")
+                                                    }
+                                                    // Mover la actualización de la UI aquí
+                                                    if (postsList.isNotEmpty()) {
+                                                        Log.d(ContentValues.TAG, "Posts list size: ${postsList.size}")
+                                                        val homeFragment = supportFragmentManager.findFragmentById(R.id.frame_container) as? HomeFragment
+                                                        homeFragment?.updatePosts(postsList)
+                                                        Log.d(ContentValues.TAG, "Posts actualizados en HomeFragment")
+                                                    } else {
+                                                        Log.d(ContentValues.TAG, "La lista de publicaciones está vacía")
+                                                    }
                                                 }
-                                                if (postsList.isNotEmpty()) {
-                                                    // Asumiendo que el fragmento actualmente visible es HomeFragment
-                                                    (supportFragmentManager.findFragmentById(R.id.frame_container) as? HomeFragment)?.updatePosts(postsList)
-                                                } else {
-                                                    Log.d(ContentValues.TAG, "La lista de publicaciones está vacía")
-                                                }
-                                            }
 
-                                            override fun onCancelled(databaseError: DatabaseError) {
-                                                Log.e(ContentValues.TAG, "Error al obtener el usuario", databaseError.toException())
-                                            }
-                                        })
+                                                override fun onCancelled(databaseError: DatabaseError) {
+                                                    Log.e(ContentValues.TAG, "Error al obtener el usuario", databaseError.toException())
+                                                }
+                                            })
+                                        } else {
+                                            Log.d(ContentValues.TAG, "Publicación nula para el usuario: $userId")
+                                        }
                                     }
                                 }
 
@@ -254,5 +270,4 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
 }
