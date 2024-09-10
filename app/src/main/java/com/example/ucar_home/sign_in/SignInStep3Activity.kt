@@ -27,6 +27,9 @@ class SignInStep3Activity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInStep3Binding
     private lateinit var auth: FirebaseAuth
     private var imageUri: Uri? = null
+    val username = intent.getStringExtra("Username")
+    val password = intent.getStringExtra("Password")
+    val email = intent.getStringExtra("Email")
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,9 +161,7 @@ class SignInStep3Activity : AppCompatActivity() {
     }
 
     private fun proceedToNextStep(imageUrl: String) {
-        val username = intent.getStringExtra("Username")
-        val password = intent.getStringExtra("Password")
-        val email = intent.getStringExtra("Email")
+
         val phoneNumber = intent.getStringExtra("PhoneNumber")
         val name = binding.editTextName.text.toString()
 

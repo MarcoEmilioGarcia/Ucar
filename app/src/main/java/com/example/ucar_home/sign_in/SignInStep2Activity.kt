@@ -31,6 +31,7 @@ class SignInStep2Activity : AppCompatActivity() {
 
         // Next Button
         binding.btnNext.setOnClickListener {
+
             handleNextButtonClick(username, password)
         }
     }
